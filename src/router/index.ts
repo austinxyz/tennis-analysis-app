@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Line from "../views/Line.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,6 +12,11 @@ const router = createRouter({
       path: "/team",
       name: "team",
       component: () => import("../views/TeamView.vue"),
+    },
+    {
+      path: "/analysis",
+      name: "Analysis",
+      component: () => import("../views/TeamComparationView.vue"),
     },
   ],
 });
