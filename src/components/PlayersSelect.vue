@@ -11,19 +11,12 @@ export default {
 
     emits: ['update:player1','update:player2'],
 
-    data() {
-        return {
-            d_player2: '',
-            d_player1: '',
-        };
-    },
-
     methods: {
         setPlayer1(value) {
-            this.$emit('update:player1', this.d_player1);
+            this.$emit('update:player1', value.name);
         },
         setPlayer2(value) {
-            this.$emit('update:player2', this.d_player2);
+            this.$emit('update:player2', value.name);
         },
     },
 };
@@ -37,9 +30,9 @@ export default {
       </label>
       <div class="block tracking-wide  text-grey-darker text-xs font-bold mb-2">
         <v-select label="label"
-            v-model="d_player1"
             :reduce="(option) => option.name"
             :options="players"
+            :value="player1"
             @option:selected="setPlayer1"
            ></v-select>
       </div>
@@ -50,9 +43,9 @@ export default {
       </label>
       <div class="block tracking-wide text-grey-darker text-xs font-bold mb-2">
         <v-select label="label"
-          v-model="d_player2"
           :reduce="(option) => option.name"
           :options="players"
+          :value="player2"
           @option:selected="setPlayer2"
          >
          </v-select>

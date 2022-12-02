@@ -32,6 +32,10 @@ export default {
                     this.players.map(function (x){
                        return x.label = x.name + '(' + x.gender + ')-' + x.utr;
                     });
+                    this.players.push({label:"Any", name:""});
+                    this.$emit('update:vTeamName', this.teamName);
+                    this.reset();
+                    this.$emit('update:vLineup', this.lineup);
                 })
         },
 
@@ -55,7 +59,6 @@ export default {
                 )
                 .then(response => {
                    this.lineups = response.data;
-                   this.$emit('update:vTeamName', this.teamName);
                    if (this.lineups !=null && this.lineups.length > 0) {
                     this.lineup = this.lineups[0];
                     this.$emit('update:vLineup', this.lineup);
@@ -91,6 +94,28 @@ export default {
                 pairString = pairString + " WD: " + wd;
             }
             return pairString;
+        },
+
+        reset() {
+            this.lineups= [];
+            this.lineup={
+                D1: {pair: {pairInfo: ''}},
+                D2: {pair: {pairInfo: ''}},
+                D3: {pair: {pairInfo: ''}},
+                WD: {pair: {pairInfo: ''}},
+                MD: {pair: {pairInfo: ''}},
+            };
+            this.d1player1= '';
+            this.d1player2= '';
+            this.d2player1= '';
+            this.d2player2= '';
+            this.d3player1= '';
+            this.d3player2= '';
+            this.mdplayer1= '';
+            this.mdplayer2= '';
+            this.wdplayer1= '';
+            this.wdplayer2= '';
+            this.selectedPairs= '';
         }
     },
 
@@ -102,6 +127,7 @@ export default {
                 this.players.map(function (x){
                    return x.label = x.name + '(' + x.gender + ')-' + x.utr;
                 });
+                this.players.push({label:"Any", name:""});
             })
     },
 
@@ -178,8 +204,8 @@ export default {
               }
 	        ],
 	        team: 'ZJU_BYD',
-	        d1player1: 'Any',
-	        d1player2: 'Any',
+	        d1player1: '',
+	        d1player2: '',
 	        d2player1: '',
 	        d2player2: '',
 	        d3player1: '',
