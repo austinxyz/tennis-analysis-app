@@ -2,10 +2,26 @@
 
 export default {
 
-  props: {
-    lineups: { type: Array},
-  },
+    props: {
+        lineups: { type: Array},
+        lineup: {type: Object},
+    },
 
+    emits: ['update:lineup', "change"],
+
+    data() {
+        return {
+            d_lineupindex: 0,
+        };
+    },
+
+    methods: {
+        onChange(value) {
+            let lineup = this.lineups[this.d_lineupindex];
+            this.$emit('update:lineup', lineup);
+            this.$emit('change', value);
+        },
+    },
 };
 </script>
 
@@ -42,7 +58,7 @@ export default {
           <tbody>
              <tr v-for="(lineup, index) in lineups" class="even:bg-slate-50 odd:bg-slate-400">
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ index+1 }}
+                    <input type="radio" :value="index" v-model="d_lineupindex" @change="onChange"/>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     {{ lineup.D1.pair.pairInfo }}

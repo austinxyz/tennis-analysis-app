@@ -8,10 +8,10 @@ export default {
 
     props: {
         vTeamName: {type: String},
-        vLineups: {type: Array},
+        vLineup: {type: Object},
     },
 
-    emits: ['update:vTeamName','update:vLineups'],
+    emits: ['update:vTeamName', 'update:vLineup'],
 
     methods: {
         getLineString(player1, player2) {
@@ -34,6 +34,11 @@ export default {
                     });
                 })
         },
+
+        setLineup(value) {
+            this.$emit('update:vLineup', this.lineup);
+        },
+
         analysisLineup() {
            let D1 = this.getLineString(this.d1player1, this.d1player2);
            let D2 = this.getLineString(this.d2player1, this.d2player2);
@@ -51,7 +56,10 @@ export default {
                 .then(response => {
                    this.lineups = response.data;
                    this.$emit('update:vTeamName', this.teamName);
-                   this.$emit('update:vLineups', this.lineups);
+                   if (this.lineups !=null && this.lineups.length > 0) {
+                    this.lineup = this.lineups[0];
+                    this.$emit('update:vLineup', this.lineup);
+                   }
                 })
         },
 
@@ -102,6 +110,7 @@ export default {
             teamName: '',
             players: [],
             lineups: [],
+            lineup:{},
 	        teams: [
               {
                 id: 'BD',
@@ -244,7 +253,7 @@ export default {
     <span class="border-transparent rounded-lg text-center px-4 py-2 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
      {{ selectedPairs }}
     </span>
-    <Lineups :lineups="lineups" />
+    <Lineups :lineups="lineups" v-model:lineup="lineup" @change="setLineup"/>
 </div>
 
 </template>
