@@ -120,9 +120,13 @@ export default {
     },
 
     mounted() {
+        axios.get("http://localhost:8080/teams")
+            .then(response => {
+                this.teams = response.data;
+            })
         axios.get("http://localhost:8080/team?team=" + this.team)
             .then(response => {
-                this.teamName = response.data.name;
+                this.teamName = response.data.displayName;
                 this.players = response.data.players;
                 this.players.map(function (x){
                    return x.label = x.name + '(' + x.gender + ')-' + x.utr;
@@ -137,73 +141,8 @@ export default {
             players: [],
             lineups: [],
             lineup:{},
-	        teams: [
-              {
-                id: 'BD',
-                name: '北大',
-              },
-              {
-                id: 'BFB',
-                name: '北复伯',
-              },
-              {
-                id: 'DHF',
-                name: '大华附',
-              },
-              {
-                id: 'DQH',
-                name: '两岸清华',
-              },
-              {
-                name: '华山',
-                id: 'HS',
-              },
-              {
-                name: '航燕伯',
-                id: 'HYB',
-              },
-              {
-                name: '交大',
-                id: 'JD',
-              },
-              {
-                name: '交吉队',
-                id: 'JJ',
-              },
-              {
-                name: '科大南加伯克利',
-                id: 'KDB',
-              },
-              {
-                name: '科大侨大Rutgers',
-                id: 'KDQ',
-              },
-              {
-                name: '清华MIT',
-                id: 'QHM',
-              },
-              {
-                name: '圣吉伯爱之星',
-                id: 'SJB',
-              },
-              {
-                name: '天南南',
-                id: 'TNN',
-              },
-              {
-                name: '台湾阿交伯',
-                id: 'TW',
-              },
-              {
-                name: '中大UCBD',
-                id: 'ZDBD',
-              },	              
-	          {
-                name: '浙大北高',
-                id: 'ZJU_BYD',
-              }
-	        ],
-	        team: 'ZJU_BYD',
+	        teams: [],
+	        team: 'ZJU-BYD',
 	        d1player1: '',
 	        d1player2: '',
 	        d2player1: '',
@@ -235,9 +174,9 @@ export default {
                             Team {{ teamName}}
                         </label>
                         <div class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
-                            <v-select label="name"
+                            <v-select label="displayName"
                                 v-model="team"
-                                :reduce="(option) => option.id"
+                                :reduce="(option) => option.name"
                                 :options="teams"
                                 @option:selected="setTeam"></v-select>
                         </div>

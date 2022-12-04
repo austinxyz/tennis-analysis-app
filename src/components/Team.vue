@@ -21,12 +21,12 @@ export default {
     let teamId = this.$route.query.team;
 
     if (teamId == null) {
-        teamId = "ZJU_BYD";
+        teamId = "ZJU-BYD";
     }
 
     axios.get("http://localhost:8080/team?team=" + teamId)
         .then(response => {
-            this.teamName = response.data.name;
+            this.teamName = response.data.displayName;
             this.players = response.data.players;
             this.d1 = response.data.d1.topPairs;
             this.d2 = response.data.d2.topPairs;

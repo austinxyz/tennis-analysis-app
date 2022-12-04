@@ -1,73 +1,19 @@
 <script>
+
+import axios from "axios";
+
 export default {
+
+    mounted() {
+        axios.get("http://localhost:8080/teams")
+            .then(response => {
+                this.teams = response.data;
+            })
+    },
+
     data() {
   	    return {
-	        teams: [
-              {
-                id: 'BD',
-                name: '北大',
-              },
-              {
-                id: 'BFB',
-                name: '北复伯',
-              },
-              {
-                id: 'DHF',
-                name: '大华附',
-              },
-              {
-                id: 'DQH',
-                name: '两岸清华',
-              },
-              {
-                name: '华山',
-                id: 'HS',
-              },
-              {
-                name: '航燕伯',
-                id: 'HYB',
-              },
-              {
-                name: '交大',
-                id: 'JD',
-              },
-              {
-                name: '交吉队',
-                id: 'JJ',
-              },
-              {
-                name: '科大南加伯克利',
-                id: 'KDB',
-              },
-              {
-                name: '科大侨大Rutgers',
-                id: 'KDQ',
-              },
-              {
-                name: '清华MIT',
-                id: 'QHM',
-              },
-              {
-                name: '圣吉伯爱之星',
-                id: 'SJB',
-              },
-              {
-                name: '天南南',
-                id: 'TNN',
-              },
-              {
-                name: '台湾阿交伯',
-                id: 'TW',
-              },
-              {
-                name: '中大UCBD',
-                id: 'ZDBD',
-              },	              
-	          {
-                name: '浙大北高',
-                id: 'ZJU_BYD',
-              }
-	        ]
+	        teams: [],
   	    }
     }
 }
@@ -86,8 +32,8 @@ export default {
                    ></path>
                </svg>
             </span>
-            <a :href="'?team=' + team.id">
-                <span class="ml-1">{{ team.name }}</span>
+            <a :href="'?team=' + team.name">
+                <span class="ml-1">{{ team.displayName }}</span>
             </a>
           </li>
       </ul>

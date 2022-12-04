@@ -15,7 +15,7 @@ export default {
         <table class="border-collapse border-spacing-0 border border-slate-400">
           <thead>
             <tr>
-                <th colspan="4" class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                <th colspan="5" class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                     {{ teamName }}
                 </th>
             </tr>
@@ -32,6 +32,9 @@ export default {
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                     UTR
                 </th>
+                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                    Latest UTR
+                </th>
             </tr>
           </thead>
           <tbody>
@@ -47,6 +50,9 @@ export default {
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     {{ player.utr }}
+                </td>
+                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                    {{ player.dUTR }} ({{player.dUTRStatus}})
                 </td>
               </tr>
           </tbody>
