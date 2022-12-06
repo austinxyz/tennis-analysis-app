@@ -18,6 +18,11 @@ const router = createRouter({
       name: "Analysis",
       component: () => import("../views/TeamComparationView.vue"),
     },
+    {
+      path: "/event",
+      name: "Event",
+      component: () => import("../views/EventView.vue"),
+    },
   ],
 });
 

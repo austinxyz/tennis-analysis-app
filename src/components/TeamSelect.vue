@@ -27,7 +27,7 @@ export default {
         setTeam(value) {
             axios.get("http://localhost:8080/team?team=" + this.team)
                 .then(response => {
-                    this.teamName = response.data.name;
+                    this.teamName = response.data.displayName;
                     this.players = response.data.players;
                     this.players.map(function (x){
                        return x.label = x.name + '(' + x.gender + ')-' + x.utr;
@@ -197,14 +197,14 @@ export default {
                             v-model:player2="d3player2" />
                     </div>
                     <div class="w-full">
-                        <PlayersSelect :players="players" lineName="WD"
-                            v-model:player1="wdplayer1"
-                            v-model:player2="wdplayer2" />
-                    </div>
-                    <div class="w-full">
                         <PlayersSelect :players="players" lineName="MD"
                             v-model:player1="mdplayer1"
                             v-model:player2="mdplayer2" />
+                    </div>
+                    <div class="w-full">
+                        <PlayersSelect :players="players" lineName="WD"
+                            v-model:player1="wdplayer1"
+                            v-model:player2="wdplayer2" />
                     </div>
                 </div>
         </div>
