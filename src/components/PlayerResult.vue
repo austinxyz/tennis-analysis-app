@@ -11,8 +11,8 @@ export default {
 </script>
 
 <template>
-      <div  class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-        <div class="font-bold text-2xl"> Player {{ player }} </div>
+      <div  v-if="player" class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
+        <div class="font-bold text-2xl"> Player: {{ player }} W/L - ({{result.winsNumber}}/{{result.lossesNumber}}) </div>
         <table v-for="(event, index) in result.playerEvents" class="w-full border-collapse border-spacing-0 border border-slate-100">
           <thead>
             <tr>

@@ -37,9 +37,8 @@ export default {
 </script>
 
 <template>
-    <div class="m-2 flex flow-row">
-        <div class="w-50 min-w-fit">
-              <div class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
+        <div class="w-50 min-w-fit flex flow-row">
+              <div class="align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
                 <table  class="border-collapse border-spacing-0 border border-slate-400">
                   <thead>
                     <tr>
@@ -88,10 +87,10 @@ export default {
                   </tbody>
                 </table>
               </div>
+              <div v-if="player" class="min-w-fit">
+                  <PlayerResult :result="player" :player="playerName"/>
+              </div>
         </div>
-        <div v-if="player" class="w-full">
-            <PlayerResult :result="player" :player="playerName"/>
-        </div>
-    </div>
+
 </template>
 
