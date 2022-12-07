@@ -17,7 +17,13 @@ export default {
           <thead>
             <tr>
                 <th colspan="5" class="px-3 py-2 bg-slate-400 border-b-2 border-gray-500 text-left text-sm leading-4 text-blue-500 tracking-wider">
+
+                    <a v-if="!event.usta" :href="'/event?event=' + event.id " class="underline">
                     {{ event.name }}
+                    </a>
+                    <span v-else>
+                    {{ event.name }}
+                    </span>
                 </th>
             </tr>
             <tr>

@@ -25,9 +25,14 @@ export default {
         }
     },
 
-  components: {
-    PlayerResult
-  }
+    mounted() {
+        this.player={};
+        this.playerName="";
+    },
+
+    components: {
+        PlayerResult
+    }
 }
 </script>
 
@@ -53,10 +58,10 @@ export default {
                             Gender
                         </th>
                         <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            UTR
+                            single UTR
                         </th>
                         <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            Latest UTR
+                            double UTR
                         </th>
                     </tr>
                   </thead>
@@ -74,7 +79,7 @@ export default {
                             {{ player.gender }}
                         </td>
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            {{ player.utr }}
+                            {{ player.sUTR }} ({{player.sUTRStatus}})
                         </td>
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                             {{ player.dUTR }} ({{player.dUTRStatus}})
