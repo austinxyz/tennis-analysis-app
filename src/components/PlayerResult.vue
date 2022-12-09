@@ -53,19 +53,19 @@ export default {
                     {{ match.matchDate }}
                 </td>
                 <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                   <span v-if="match.type === 'single'">
-                   {{ match.winner1.name }} ({{ match.winner1.sUTR }}) </span>
+                   <span v-if="match.winner" class="border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-300 font-medium z-10 shadow-lg">
+                        {{match.winnerInfo}}
+                   </span>
                    <span v-else>
-                   {{ match.winner1.name }} ({{ match.winner1.dUTR }}) and
-                   {{ match.winner2.name }} ({{ match.winner2.dUTR }})
+                        {{match.winnerInfo}}
                    </span>
                 </td>
                 <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                   <span v-if="match.type === 'single'">
-                   {{ match.loser1.name }} ({{ match.loser1.sUTR }}) </span>
-                   <span v-else>
-                   {{ match.loser1.name }} ({{ match.loser1.dUTR }}) and
-                   {{ match.loser2.name }} ({{ match.loser2.dUTR }})
+                   <span v-if="match.winner" >
+                        {{match.loserInfo}}
+                   </span>
+                   <span v-else class="border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-300 font-medium z-10 shadow-lg">
+                        {{match.loserInfo}}
                    </span>
                 </td>
                 <td class="w-1/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">

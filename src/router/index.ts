@@ -23,6 +23,11 @@ const router = createRouter({
       name: "Event",
       component: () => import("../views/EventView.vue"),
     },
+    {
+      path: "/playersearch",
+      name: "Player",
+      component: () => import("../views/PlayerSearchView.vue"),
+    },
   ],
 });
 

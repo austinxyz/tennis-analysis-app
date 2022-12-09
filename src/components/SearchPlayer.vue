@@ -4,10 +4,6 @@ import PlayerResult from "./PlayerResult.vue";
 
 export default {
 
-    props: {
-        team: {type: Object}
-    },
-
     methods: {
         setPlayerResult(playerId, playerName) {
             this.playerName = playerName;
@@ -16,18 +12,21 @@ export default {
                  this.player = response.data;
              })
         },
+        searchPlayer() {
+            axios.get("http://localhost:8080/search/players?query=" + this.query)
+             .then(response => {
+                 this.players = response.data;
+             })
+        }
     },
 
     data() {
         return {
+            query: '',
+            players: [],
             player: {},
             playerName: '',
         }
-    },
-
-    mounted() {
-        this.player={};
-        this.playerName="";
     },
 
     components: {
@@ -39,13 +38,15 @@ export default {
 <template>
         <div class="flex flow-row">
               <div class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
+                <input v-model="query" class="border-b-2 border-gray-300" >
+                <button
+                        class="border border-indigo-500 bg-indigo-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-indigo-600 focus:outline-none focus:shadow-outline"
+                        @click="searchPlayer"
+                >
+                 Search Player
+                </button>
                 <table  class="border-collapse border-spacing-0 border border-slate-400">
                   <thead>
-                    <tr>
-                        <th colspan="2" class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            {{ team.name }}
-                        </th>
-                    </tr>
                     <tr>
                         <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                             #
@@ -56,7 +57,7 @@ export default {
                     </tr>
                   </thead>
                   <tbody>
-                     <tr v-for="(player, index) in team.players" class="even:bg-slate-50 odd:bg-slate-400">
+                     <tr v-for="(player, index) in players" class="even:bg-slate-50 odd:bg-slate-400">
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                             {{ index+1 }}
                         </td>
