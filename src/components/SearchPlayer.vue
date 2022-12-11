@@ -2,21 +2,38 @@
 import axios from "axios";
 import PlayerResult from "./PlayerResult.vue";
 
+const BASE_URL = 'http://localhost:8080';
+const BASE_URL_PROD = 'http://localhost:8080';
+
 export default {
 
+
     methods: {
-        setPlayerResult(playerId, playerName) {
-            this.playerName = playerName;
-            axios.get("http://localhost:8080/playerresult/?id=" + playerId)
-             .then(response => {
-                 this.player = response.data;
-             })
+
+        getBaseURL() {
+            if (process.env.NODE_ENV === 'production') {
+                return BASE_URL_PROD;
+            } else {
+                return BASE_URL;
+            }
+
         },
-        searchPlayer() {
-            axios.get("http://localhost:8080/search/players?query=" + this.query)
-             .then(response => {
-                 this.players = response.data;
-             })
+
+        async setPlayerResult(playerId, playerName) {
+            this.loading = true;
+            this.playerName = playerName;
+
+            var url = this.getBaseURL() + "/playerresult/?id=" + playerId;
+            const response = await axios.get(url);
+
+            this.player = response.data;
+            this.loading = false;
+        },
+
+        async searchPlayer() {
+            var url = this.getBaseURL() + "/search/players?query=" + this.query;
+            const response = await axios.get(url);
+            this.players = response.data;
         }
     },
 
@@ -26,6 +43,7 @@ export default {
             players: [],
             player: {},
             playerName: '',
+            loading: false,
         }
     },
 
@@ -45,7 +63,7 @@ export default {
                 >
                  Search Player
                 </button>
-                <table  class="border-collapse border-spacing-0 border border-slate-400">
+                <table v-if="players.length >0" class="border-collapse border-spacing-0 border border-slate-400">
                   <thead>
                     <tr>
                         <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
@@ -83,7 +101,12 @@ export default {
                   </tbody>
                 </table>
               </div>
-              <div v-if="player">
+              <div v-if="loading" class="px-5 py-5">
+                <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+              <div v-else>
                   <PlayerResult :result="player" :player="playerName"/>
               </div>
         </div>
