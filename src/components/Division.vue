@@ -2,6 +2,9 @@
 import axios from "axios";
 import PlayerResult from "./PlayerResult.vue";
 
+const BASE_URL = 'http://localhost:8080';
+const BASE_URL_PROD = 'http://localhost:8080';
+
 export default {
 
     props: {
@@ -9,12 +12,25 @@ export default {
     },
 
     methods: {
-        setPlayerResult(playerId, playerName) {
+
+        async setPlayerResult(playerId, playerName) {
+            this.loading = true;
             this.playerName = playerName;
-            axios.get("http://localhost:8080/playerresult/?id=" + playerId)
-             .then(response => {
-                 this.player = response.data;
-             })
+
+            var url = this.getBaseURL() + "/playerresult/?id=" + playerId;
+            const response = await axios.get(url);
+
+            this.player = response.data;
+            this.loading = false;
+        },
+
+        getBaseURL() {
+            if (process.env.NODE_ENV === 'production') {
+                return BASE_URL_PROD;
+            } else {
+                return BASE_URL;
+            }
+
         },
     },
 
@@ -22,6 +38,7 @@ export default {
         return {
             player: {},
             playerName: '',
+            loading: false,
         }
     },
 
@@ -82,7 +99,12 @@ export default {
                   </tbody>
                 </table>
               </div>
-              <div v-if="player">
+              <div v-if="loading" class="px-5 py-5">
+                <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+              <div v-else>
                   <PlayerResult :result="player" :player="playerName"/>
               </div>
         </div>
