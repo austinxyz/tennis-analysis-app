@@ -28,6 +28,11 @@ const router = createRouter({
       name: "Player",
       component: () => import("../views/PlayerSearchView.vue"),
     },
+    {
+      path: "/bat",
+      name: "bayareaclub",
+      component: () => import("../views/ClubView.vue"),
+    },
   ],
 });
 

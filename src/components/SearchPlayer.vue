@@ -16,7 +16,6 @@ export default {
             } else {
                 return BASE_URL;
             }
-
         },
 
         async setPlayerResult(playerId, playerName) {

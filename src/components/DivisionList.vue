@@ -6,6 +6,7 @@ import Division from "./Division.vue";
 export default {
 
     mounted() {
+
         let eventId = this.$route.query.event;
 
         if (eventId == null) {
