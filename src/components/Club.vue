@@ -70,33 +70,28 @@ export default {
 
 <template>
     <div class="flex flex-row min-h-screen w-full bg-gray-100 text-gray-700" x-data="layout">
-        <div class="bg-white shadow-dashboard px-2 py-2 rounded-lg m-2">
-            <span class="flex w-60 font-medium text-sm bg-slate-700 text-blue-500 text-center"> {{ club.name}} </span>
-            <nav class="flex flex-col bg-slate-700 w-60 px-2 py-2 text-gray-900 border border-purple-900">
+        <div class="bg-white shadow-dashboard px-2 py-2 rounded-lg m-1">
+            <span class="flex w-90 px-4 py-2 font-large bg-slate-700 text-gray-100 text-center"> {{ club.name}} </span>
+            <nav class="flex flex-col bg-slate-700 w-60 px-2 py-1 text-gray-900 border border-purple-900">
                 <ul class="ml-1">
-                  <li v-for="event in club.events" class="mb-1 px-0 py-2 text-gray-100 flex flex-row  border-gray-300 hover:text-black   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
+                  <li v-for="event in club.events" class="mb-1 px-0 py-1 text-gray-100 flex flex-row  border-gray-300 hover:text-black   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
                     <span>
-                       <svg class="fill-current h-5 w-5 " viewBox="0 0 24 24">
-                       <path
-                           d="M16 20h4v-4h-4m0-2h4v-4h-4m-6-2h4V4h-4m6
-                                        4h4V4h-4m-6 10h4v-4h-4m-6 4h4v-4H4m0 10h4v-4H4m6
-                                        4h4v-4h-4M4 8h4V4H4v4z"
-                           ></path>
-                       </svg>
+                    <svg class="fill-current h-5 w-5 " viewBox="0 0 8 8">
+                      <path d="M8 8"/><circle cx="2" cy="6" r="1.5" fill="gray"/>
+                    </svg>
                     </span>
                     <a href="#" @click="selectEvent(event)">
-                        <span class="ml-1" >{{ event.name }}</span>
-                        <span class="ml-1" >{{ event.duration }}</span>
+                        <span class="text-sm">{{ event.name }}: {{ event.duration }}, {{ event.year}}</span>
                     </a>
                   </li>
               </ul>
             </nav>
         </div>
-        <div v-if="divisions.length > 0" class="bg-white shadow-dashboard px-2 py-2 rounded-lg m-2">
-            <span class="flex w-60 font-medium text-sm bg-slate-700 text-blue-500 text-center"> {{ eventName }} </span>
+        <div v-if="divisions.length > 0" class="px-2 bg-white shadow-dashboard py-2 rounded-lg m-1">
+            <span class="flex w-60 px-4 py-2 font-large bg-slate-700 text-gray-100 text-center"> {{ eventName }} </span>
             <nav class="flex flex-col bg-slate-700 w-60 px-2 py-2 text-gray-900 border border-purple-900">
                 <ul class="ml-1">
-                  <li v-for="team in divisions" class="mb-1 px-0 py-2 text-gray-100 flex flex-row  border-gray-300 hover:text-black   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
+                  <li v-for="team in divisions" class="mb-1 px-1 py-2 text-gray-100 flex flex-row  border-gray-300 hover:text-black   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
                     <span>
                        <svg class="fill-current h-5 w-5 " viewBox="0 0 24 24">
                        <path
@@ -114,7 +109,7 @@ export default {
               </ul>
             </nav>
         </div>
-        <div v-if="team.name" class="m-2 flex flow-row">
+        <div v-if="team.name" class="m-1 flex flow-row">
             <Division :team="team" />
         </div>
     </div>

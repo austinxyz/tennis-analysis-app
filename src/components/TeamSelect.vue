@@ -50,12 +50,14 @@ export default {
            let WD = this.getLineString(this.wdplayer1, this.wdplayer2);
            let MD = this.getLineString(this.mdplayer1, this.mdplayer2);
            this.selectedPairs = this.getSelectPairs(D1,D2,D3,MD,WD);
+
            axios.get("http://localhost:8080/fixedlineup?team=" + this.team
                 + "&d1=" + D1
                 + "&d2=" + D2
                 + "&d3=" + D3
                 + "&md=" + MD
                 + "&wd=" + WD
+                + "&grantUTR=" + this.utrmode
                 )
                 .then(response => {
                    this.lineups = response.data;
@@ -154,6 +156,7 @@ export default {
 	        wdplayer1: '',
 	        wdplayer2: '',
 	        selectedPairs: '',
+	        utrmode: 'true',
   	    }
     },
     components: {
@@ -180,6 +183,13 @@ export default {
                                 :options="teams"
                                 @option:selected="setTeam"></v-select>
                         </div>
+                    </div>
+                    <div class="block tracking-wide text-grey-darker text-xs font-bold mb-2">
+                        <label>
+                            Calculated by:
+                        </label>
+                        <input type="radio" v-model="utrmode" value="true"/> Assigned UTR
+                        <input type="radio" v-model="utrmode" value="false"/> Latest UTR
                     </div>
                     <div class="w-full">
                         <PlayersSelect :players="players" lineName="D1"
