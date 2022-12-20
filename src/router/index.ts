@@ -33,6 +33,11 @@ const router = createRouter({
       name: "bayareaclub",
       component: () => import("../views/ClubView.vue"),
     },
+    {
+      path: "/single",
+      name: "single",
+      component: () => import("../views/SingleAnalysisView.vue"),
+    },
   ],
 });
 
