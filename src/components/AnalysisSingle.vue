@@ -1,6 +1,7 @@
 <script>
 import axios from "axios";
-import PlayerResult from "./PlayerResult.vue";
+import MatchResults from "./MatchResults.vue";
+import SingleComparation from "./SingleComparation.vue";
 
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
@@ -44,6 +45,8 @@ export default {
                 this.playerId2 = this.players2[0].id;
             }
         }
+
+
     },
 
     data() {
@@ -60,7 +63,8 @@ export default {
     },
 
     components: {
-        PlayerResult
+        MatchResults,
+        SingleComparation,
     }
 }
 </script>
@@ -171,146 +175,13 @@ export default {
               </div>
               <div v-else>
                 <div v-if="result.player1"  >
-                    <div class="flex flex-col md:flex-row md:transform md:scale-75 lg:scale-100 ">
-                        <div class="border-transparent rounded-lg text-center p-5 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
-                           <div class="font-bold text-2xl"> Player 1 {{ result.player1.name }} </div>
-                           <hr />
-                           <div class="text-sm my-3 flex flex-row">
-                                <div>
-                                    <img v-if="result.player1.sUTR > result.player2.sUTR " src="/win_1262465.png" width="30" height="30" alt="Win"/>
-                                </div>
-                           Single UTR : {{result.player1.sUTR}} ({{ result.player1.sUTRStatus}})</div>
-                           <hr />
-                           <div class="text-sm my-3 flex flex-row">
-                                <div>
-                                    <img v-if="result.player1.dUTR > result.player2.dUTR " src="/win_1262465.png" width="30" height="30" alt="Win"/>
-                                </div>
-                           Double UTR : {{result.player1.dUTR}} ({{ result.player1.dUTRStatus}})</div>
-                           <hr />
-                         </div>
-                         <div class="border-transparent rounded-lg text-center p-5 mx-auto md:mx-0 my-2 bg-gray-700 text-white font-medium z-10 shadow-lg">
-                           <div class="font-bold text-2xl"> Player 2 {{ result.player2.name }} </div>
-                           <hr />
-                           <div class="text-sm my-3 flex flex-row">
-                                <div>
-                                    <img v-if="result.player2.sUTR > result.player1.sUTR " src="/win_1262465.png" width="30" height="30" alt="Win"/>
-                                </div>
-                           Single UTR : {{result.player2.sUTR}} ({{ result.player2.sUTRStatus}})</div>
-                              <hr />
-                              <div class="text-sm my-3 flex flex-row">
-                                <div>
-                                    <img v-if="result.player2.dUTR > result.player1.dUTR " src="/win_1262465.png" width="30" height="30" alt="Win"/>
-                                </div>
-                           Double UTR : {{result.player2.dUTR}} ({{ result.player2.dUTRStatus}})</div>
-                              <hr />
-                         </div>
+                    <SingleComparation :player1="result.player1" :player2="result.player2" />
+                    <div class="font-bold text-2xl"> Past Matches </div>
+                    <MatchResults :matches="result.pastMatches" />
+                    <div class="font-bold text-2xl"> Matches with same opponents </div>
+                    <div v-for="matches in result.matchesWithSamePlayer" class="w-full border-collapse border-spacing-0 border border-slate-100">
+                        <MatchResults :matches="matches" />
                     </div>
-                    <div  class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-                        <div class="font-bold text-2xl"> Past Matches </div>
-                        <table class="w-full border-collapse border-spacing-0 border border-slate-100">
-                              <thead>
-                                <tr>
-                                    <th class="w-1/3 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                        Match Name
-                                    </th>
-                                    <th class="w-1/9 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                        Time
-                                    </th>
-                                    <th class="w-2/9 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                        Winner
-                                    </th>
-                                    <th class="w-2/9 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                        Loser
-                                    </th>
-                                    <th class="w-1/9 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                        Score
-                                    </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                 <tr v-for="(match, index) in result.pastMatches" class="even:bg-slate-50 odd:bg-slate-200">
-                                    <td class="w-1/3 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                                        {{ match.name }}
-                                    </td>
-                                    <td class="w-1/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                                        {{ match.matchDate }}
-                                    </td>
-                                    <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                                       <span v-if="match.winner" class="border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-300 font-medium z-10 shadow-lg">
-                                            {{match.winnerInfo}}
-                                       </span>
-                                       <span v-else>
-                                            {{match.winnerInfo}}
-                                       </span>
-                                    </td>
-                                    <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                                       <span v-if="match.winner" >
-                                            {{match.loserInfo}}
-                                       </span>
-                                       <span v-else class="border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-300 font-medium z-10 shadow-lg">
-                                            {{match.loserInfo}}
-                                       </span>
-                                    </td>
-                                    <td class="w-1/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                                        {{ match.matchScore }}
-                                    </td>
-                                  </tr>
-                              </tbody>
-                            </table>
-                    </div>
-                    <div class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-                            <div class="font-bold text-2xl"> Matches with same opponents </div>
-                            <table v-for="matches in result.matchesWithSamePlayer" class="w-full border-collapse border-spacing-0 border border-slate-100">
-                                  <thead>
-                                    <tr>
-                                        <th class="w-1/3 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                            Match Name
-                                        </th>
-                                        <th class="w-1/9 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                            Time
-                                        </th>
-                                        <th class="w-2/9 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                            Winner
-                                        </th>
-                                        <th class="w-2/9 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                            Loser
-                                        </th>
-                                        <th class="w-1/9 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                            Score
-                                        </th>
-                                    </tr>
-                                  </thead>
-                                 <tbody>
-                                 <tr v-for="(match, index) in matches" class="even:bg-slate-50 odd:bg-slate-200">
-                                    <td class="w-1/3 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                                        {{ match.name }}
-                                    </td>
-                                    <td class="w-1/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                                        {{ match.matchDate }}
-                                    </td>
-                                    <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                                       <span v-if="match.winner" class="border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-300 font-medium z-10 shadow-lg">
-                                            {{match.winnerInfo}}
-                                       </span>
-                                       <span v-else>
-                                            {{match.winnerInfo}}
-                                       </span>
-                                    </td>
-                                    <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                                       <span v-if="match.winner" >
-                                            {{match.loserInfo}}
-                                       </span>
-                                       <span v-else class="border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-300 font-medium z-10 shadow-lg">
-                                            {{match.loserInfo}}
-                                       </span>
-                                    </td>
-                                    <td class="w-1/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                                        {{ match.matchScore }}
-                                    </td>
-                                  </tr>
-                                </tbody>
-                                </table>
-                        </div>
                 </div>
               </div>
         </div>
