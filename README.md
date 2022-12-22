@@ -1,7 +1,20 @@
-# Vue 3 + Vite
+# Tennis Analysis
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+this application is mainly to analysis UTR player for matches.
 
-## Recommended IDE Setup
+now it includes two functions
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+## UTR matches
+
+- Show all events orginizated by Bay Area Tennis Club. you can see the event's divisions (teams) and see all players, for player you can see all matches for this player.
+
+- Search perticular player by name or id and also show all matches for this player
+
+- Single analysis, by search two player by name or id and compare the players' utr, past matches history and list all matches with same opponents. it will give you some ideas to predict the upcoming match result.
+
+
+### Zijing Cup analysis
+
+- It will list all teams for Zijing Cup, show all team members and top 5 pair (based on authorized UTR, grant by orginizer) for each line, there are 5 lines (D1, D2, D3, Mixed, Women)
+
+- By selecting team to compare, with fixed player in one or multiple lines, show the top 5 possibility and compare the lineup.
