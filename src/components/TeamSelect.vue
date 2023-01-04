@@ -25,6 +25,7 @@ export default {
             return players.join(",");
         },
         setTeam(value) {
+            console.log(value);
             axios.get("http://localhost:8080/team?team=" + this.team)
                 .then(response => {
                     this.teamName = response.data.displayName;
@@ -181,6 +182,7 @@ export default {
                                 v-model="team"
                                 :reduce="(option) => option.name"
                                 :options="teams"
+                                :value="team"
                                 @option:selected="setTeam"></v-select>
                         </div>
                     </div>
