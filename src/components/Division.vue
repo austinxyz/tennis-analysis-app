@@ -24,12 +24,6 @@ export default {
             this.loading = false;
         },
 
-        methods: {
-            selectTeam(team) {
-                this.team = team;
-            },
-        },
-
         getBaseURL() {
             if (process.env.NODE_ENV === 'production') {
                 return BASE_URL_PROD;
@@ -45,7 +39,6 @@ export default {
             player: {},
             playerName: '',
             loading: false,
-            team: {},
         }
     },
 
