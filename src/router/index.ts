@@ -38,6 +38,11 @@ const router = createRouter({
       name: "single",
       component: () => import("../views/SingleAnalysisView.vue"),
     },
+    {
+      path: "/ustateam",
+      name: "ustateam",
+      component: () => import("../views/USTATeamView.vue"),
+    },
   ],
 });
 
