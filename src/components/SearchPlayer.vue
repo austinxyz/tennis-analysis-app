@@ -23,16 +23,21 @@ export default {
             this.playerName = playerName;
 
             var url = this.getBaseURL() + "/playerresult/?id=" + playerId;
-            const response = await axios.get(url);
-
-            this.player = response.data;
+            try {
+                const response = await axios.get(url);
+                this.player = response.data;
+            } catch(error) {
+            };
             this.loading = false;
         },
 
         async searchPlayer() {
             var url = this.getBaseURL() + "/players/search?name=" + this.query;
-            const response = await axios.get(url);
-            this.players = response.data;
+            try {
+                const response = await axios.get(url);
+                this.players = response.data;
+            } catch(error) {
+            };
             this.showUTRSearch = this.players.length == 0;
         },
 
