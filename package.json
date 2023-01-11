@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@kouts/vue-modal": "^3.0.8",
     "axios": "^1.2.0",
     "jenesius-vue-modal": "^1.8.2",
+    "sass": "^1.57.1",
     "vue": "^3.2.41",
     "vue-router": "^4.1.6",
     "vue-select": "^4.0.0-beta.6"

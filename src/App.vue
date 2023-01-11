@@ -44,6 +44,6 @@ import { RouterLink, RouterView } from "vue-router";
             </ul>
         </div>
     </nav>
-  <router-view></router-view>
+    <router-view></router-view>
 </template>
 
