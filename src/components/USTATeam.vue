@@ -12,6 +12,8 @@ export default {
         team: {type: Object}
     },
 
+    emits: ['update:team'],
+
     data() {
         return {
             loading: false,
@@ -24,6 +26,7 @@ export default {
     methods: {
 
         async setPlayerResult(player) {
+
             this.loading = true;
             this.currentPlayer = player;
             this.playerName = player.name;
@@ -32,6 +35,12 @@ export default {
             const response = await axios.get(url);
 
             this.playerresult = response.data;
+
+            var url = this.getBaseURL() + "/usta/teams/" + this.team.id;
+            const res = await axios.get(url);
+
+            this.$emit('update:team', res.data);
+
             this.loading = false;
         },
 
@@ -62,7 +71,7 @@ export default {
                        {{ team.name }} ({{team.alias}})
                     </a>
                 </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                <th colspan="2" class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
 
                     <a :href="team.tennisRecordLink" class="underline" target="_blank">
                        TennisRecord Link
@@ -77,10 +86,13 @@ export default {
                     Player
                 </th>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Gender
+                    USTA Rating
                 </th>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    USTA Rating
+                    UTR Rating
+                </th>
+                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                    UTR Win Ratio
                 </th>
             </tr>
           </thead>
@@ -91,14 +103,28 @@ export default {
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     <a href="#" class="underline" @click="setPlayerResult(player)">
-                    {{ player.name }}
+                    {{ player.name }} ({{ player.gender }})
                     </a>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ player.gender }}
+                    {{ player.ustaRating}}
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ player.ustaRating}}
+                    <span v-if="player.sUTRStatus === 'Rated'" class="font-semibold" >
+                        {{ player.sUTR }} (S)
+                    </span>
+                    <span v-else class="font-light" >
+                        {{ player.sUTR }} (S)
+                    </span>  /
+                    <span v-if="player.dUTRStatus === 'Rated'" class="font-semibold" >
+                        {{ player.dUTR }} (D)
+                    </span>
+                    <span v-else class="font-light" >
+                        {{ player.dUTR }} (D)
+                    </span>
+                </td>
+                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                    {{ (player.successRate * 100).toFixed(2) }} %
                 </td>
               </tr>
           </tbody>

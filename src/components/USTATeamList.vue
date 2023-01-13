@@ -10,17 +10,25 @@ export default {
             .then(response => {
                 this.teams = response.data;
                 this.team = this.teams[0];
+                this.loading = false;
             })
     },
+
     methods: {
-        selectTeam(team) {
-            this.team = team;
+        async selectTeam(team) {
+            this.loading = true;
+            this.team = {};
+            var url = "http://localhost:8080/usta/teams/" + team.id;
+            const response = await axios.get(url);
+            this.team = response.data;
+            this.loading = false;
         },
     },
     data() {
   	    return {
 	        teams: [],
 	        team: {},
+	        loading: false,
   	    }
     },
     components: {
@@ -51,9 +59,15 @@ export default {
             </ul>
           </nav>
         </div>
-        <div v-if="team" class="m-2 flex flow-row">
-            <USTATeam :team="team" />
+
+      <div v-if="loading" class="px-5 py-5">
+        <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
+          <span class="sr-only">Loading...</span>
         </div>
+      </div>
+      <div v-else class="m-2 flex flow-row">
+            <USTATeam v-model:team="team"/>
+      </div>
     </div>
 
 </template>
