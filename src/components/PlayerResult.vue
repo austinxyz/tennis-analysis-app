@@ -10,7 +10,14 @@ export default {
 
     components: {
         MatchResults,
-    }
+    },
+
+    data() {
+        return {
+            ustamode: 'true',
+            singlemode: 'all',
+        };
+    },
 };
 </script>
 
@@ -25,17 +32,37 @@ export default {
             <span class="w-1/2 text-left">Double UTR : {{result.player.dUTR}} ({{ result.player.dUTRStatus}})</span>
            </div>
            <hr />
+           <div class="text-sm my-3 flex flex-row">
+           <div class="w-1/2 text-left">
+               <label>
+                   USTA Match?:
+               </label>
+               <input type="radio" v-model="ustamode" value="true"/> USTA only
+               <input type="radio" v-model="ustamode" value="false"/> All
+           </div>
+           <div class="w-1/2 text-left">
+               <label>
+                   Single or Double:
+               </label>
+               <input type="radio" v-model="singlemode" value="all"/> All
+               <input type="radio" v-model="singlemode" value="single"/> Single
+               <input type="radio" v-model="singlemode" value="double"/> Double
+           </div>
+           </div>
         </div>
+
         <div v-for="(event, index) in result.playerEvents" class="w-full border-collapse border-spacing-0 border border-slate-100">
-            <div class="text-sm my-2 flex flex-row px-4">
-            <a v-if="!event.usta" :href="'/event?event=' + event.id " class="underline">
-            {{ event.name }}
-            </a>
-            <span v-else>
-            {{ event.name }}
-            </span>
+            <div v-if=" (ustamode=='true' && event.usta) || (ustamode=='false')" >
+                <div class="text-sm my-2 flex flex-row px-4">
+                <a v-if="!event.usta" :href="'/event?event=' + event.id " class="underline">
+                {{ event.name }}
+                </a>
+                <span v-else>
+                {{ event.name }}
+                </span>
+                </div>
+                <MatchResults :matches="event.results" :singlemode="singlemode"/>
             </div>
-            <MatchResults :matches="event.results"/>
         </div>
       </div>
 </template>

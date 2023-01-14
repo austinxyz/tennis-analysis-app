@@ -4,6 +4,7 @@ export default {
 
   props: {
     matches: { type: Array},
+    singlemode: {tpye: String}
   },
 
 };
@@ -31,8 +32,8 @@ export default {
                 </th>
             </tr>
           </thead>
-          <tbody>
-             <tr v-for="(match, index) in matches" class="even:bg-slate-50 odd:bg-slate-200">
+          <tbody v-for="(match, index) in matches">
+             <tr v-if="(singlemode == 'all') || (singlemode == match.type)" class="even:bg-slate-50 odd:bg-slate-200">
                 <td class="w-1/3 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
                     {{ match.name }}
                 </td>
