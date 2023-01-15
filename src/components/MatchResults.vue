@@ -4,7 +4,8 @@ export default {
 
   props: {
     matches: { type: Array},
-    singlemode: {tpye: String}
+    singlemode: {tpye: String},
+    player: {type: String}
   },
 
 };
@@ -40,21 +41,27 @@ export default {
                 <td class="w-1/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
                     {{ match.matchDate }}
                 </td>
-                <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                   <span v-if="match.winner" class="border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-300 font-medium z-10 shadow-lg">
-                        {{match.winnerInfo}}
-                   </span>
-                   <span v-else>
-                        {{match.winnerInfo}}
-                   </span>
+                <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5 flex flex-nowrap">
+                    <span v-for="winner in match.winnerInfo" class="flex-nowrap">
+                       [<a :href="'playersearch?utr=' + winner.utrId"
+                       v-if="player == winner.name" class="underline border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-400 font-medium z-10 shadow-lg" >
+                           <span class="flex-nowrap"> {{winner.info}} </span>
+                       </a>
+                       <a v-else :href="'playersearch?utr=' + winner.utrId" class="underline">
+                           <span class="whitespace-no-wrap"> {{winner.info}} </span>
+                      </a>]
+                    </span>
                 </td>
                 <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                   <span v-if="match.winner" >
-                        {{match.loserInfo}}
-                   </span>
-                   <span v-else class="border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-300 font-medium z-10 shadow-lg">
-                        {{match.loserInfo}}
-                   </span>
+                    <span v-for="loser in match.loserInfo">
+                       [<a :href="'playersearch?utr=' + loser.utrId"
+                       v-if="player == loser.name" class="underline border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-400 font-medium z-10 shadow-lg" >
+                            {{loser.info}}
+                       </a>
+                       <a v-else :href="'playersearch?utr=' + loser.utrId" class="underline">
+                           {{loser.info}}
+                      </a>]
+                    </span>
                 </td>
                 <td class="w-1/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
                     {{ match.matchScore }}

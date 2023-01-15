@@ -7,6 +7,26 @@ const BASE_URL_PROD = 'http://localhost:8080';
 
 export default {
 
+    mounted() {
+        let utrId = this.$route.query.utr;
+
+        console.log(utrId);
+
+        if (utrId == null) {
+            return;
+        }
+
+        var url = this.getBaseURL() + "/playerresult/?id=" + utrId;
+
+        axios.get(url)
+            .then(response => {
+                this.player = response.data;
+                this.utrquery = utrId;
+                this.showUTRSearch = true;
+                this.playerName = this.player.player.name;
+                this.loading = false;
+            })
+    },
 
     methods: {
 
@@ -69,7 +89,7 @@ export default {
 
 <template>
         <div class="flex flow-row">
-              <div class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
+              <div v-if="!withutrid" class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
                 Player <input v-model="query" class="border-b-2 border-gray-300" >
                 <button
                         class="border border-indigo-500 bg-indigo-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-indigo-600 focus:outline-none focus:shadow-outline"

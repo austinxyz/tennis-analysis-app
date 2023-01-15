@@ -44,6 +44,34 @@ export default {
             this.loading = false;
         },
 
+        async refreshUTR(player) {
+
+            this.loading = true;
+            this.currentPlayer = player;
+            this.playerName = player.name;
+
+            if (player.utrId == null || player.utrId == '') {
+                return;
+            }
+
+            var url = this.getBaseURL() + "/players/utr/" + player.utrId + "?action=refreshUTR";
+            const response = await axios.get(url);
+
+            this.currentPlayer = response.data;
+
+            var url = this.getBaseURL() + "/playerresult/?id=" + player.utrId;
+            const res1 = await axios.get(url);
+
+            this.playerresult = res1.data;
+
+            var url = this.getBaseURL() + "/usta/teams/" + this.team.id;
+            const res = await axios.get(url);
+
+            this.$emit('update:team', res.data);
+
+            this.loading = false;
+        },
+
         getBaseURL() {
             if (process.env.NODE_ENV === 'production') {
                 return BASE_URL_PROD;
@@ -63,21 +91,30 @@ export default {
 
 <template>
     <div class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
+            <div v-if="team" class="border-transparent rounded-lg text-center p-5 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
+               <div class="font-bold text-2xl text-left">
+                <span class="w-1/2 text-left">Team :
+                     <a :href="team.link" class="underline" target="_blank">
+                        {{ team.name }}
+                     </a>
+                 </span>
+                 <span v-if="team.alias" class="text-left">
+                 [{{team.alias}}]
+                 </span>
+               </div>
+               <div class="text-sm my-3 flex flex-row">
+                <span class="w-1/2 text-left">Area : {{team.area}} </span>
+                <span class="w-1/2 text-left">Flight : {{team.flight}}</span>
+
+               </div>
+               <hr />
+               <div class="text-sm my-3 flex flex-row">
+                   <span class="w-1/2 text-left ">Captain :  {{team.captainName}}</span>
+                   <span class="w-1/2 text-left "><a :href="team.tennisRecordLink" class="underline" target="_blank"> TennisRecord Link </a></span>
+               </div>
+            </div>
         <table  class="border-collapse border-spacing-0 border border-slate-400">
           <thead>
-            <tr>
-                <th colspan="3" class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    <a :href="team.link" class="underline" target="_blank">
-                       {{ team.name }} ({{team.alias}})
-                    </a>
-                </th>
-                <th colspan="2" class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-
-                    <a :href="team.tennisRecordLink" class="underline" target="_blank">
-                       TennisRecord Link
-                    </a>
-                </th>
-            </tr>
             <tr>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                     #
@@ -86,7 +123,7 @@ export default {
                     Player
                 </th>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    USTA Rating
+                    NTRP
                 </th>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                     UTR Rating
@@ -122,9 +159,16 @@ export default {
                     <span v-else class="font-light" >
                         {{ player.dUTR }} (D)
                     </span>
+                    <span v-if="!player.refreshedUTR">
+                         <a href="#" class="underline" @click="refreshUTR(player)">
+                            Refresh UTR
+                         </a>
+                    </span>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ (player.successRate * 100).toFixed(2) }} %
+                    {{ (player.successRate * 100).toFixed(2) }} % (Latest)/ {{ (player.wholeSuccessRate * 100).toFixed(2) }}%
+
+
                 </td>
               </tr>
           </tbody>

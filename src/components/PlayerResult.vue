@@ -61,7 +61,7 @@ export default {
                 {{ event.name }}
                 </span>
                 </div>
-                <MatchResults :matches="event.results" :singlemode="singlemode"/>
+                <MatchResults :matches="event.results" :singlemode="singlemode" :player="result.player.name"/>
             </div>
         </div>
       </div>

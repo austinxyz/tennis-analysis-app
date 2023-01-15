@@ -177,10 +177,10 @@ export default {
                 <div v-if="result.player1"  >
                     <SingleComparation :player1="result.player1" :player2="result.player2" />
                     <div class="font-bold text-2xl"> Past Matches </div>
-                    <MatchResults :matches="result.pastMatches" singlemode="single"/>
+                    <MatchResults :matches="result.pastMatches" singlemode="single" :player="result.player1.name"/>
                     <div class="font-bold text-2xl"> Matches with same opponents </div>
                     <div v-for="matches in result.matchesWithSamePlayer" class="w-full border-collapse border-spacing-0 border border-slate-100">
-                        <MatchResults :matches="matches" singlemode="single"/>
+                        <MatchResults :matches="matches" singlemode="single" :player="result.player1.name"/>
                     </div>
                 </div>
               </div>
