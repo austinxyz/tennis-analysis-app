@@ -41,24 +41,24 @@ export default {
                 <td class="w-1/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
                     {{ match.matchDate }}
                 </td>
-                <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5 flex flex-nowrap">
-                    <span v-for="winner in match.winnerInfo" class="flex-nowrap">
+                <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
+                    <span v-for="winner in match.winnerInfo">
                        [<a :href="'playersearch?utr=' + winner.utrId"
-                       v-if="player == winner.name" class="underline border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-400 font-medium z-10 shadow-lg" >
-                           <span class="flex-nowrap"> {{winner.info}} </span>
+                       v-if="player == winner.name" class="whitespace-no-wrap underline border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-400 font-medium z-10 shadow-lg" >
+                          {{winner.info}}
                        </a>
-                       <a v-else :href="'playersearch?utr=' + winner.utrId" class="underline">
-                           <span class="whitespace-no-wrap"> {{winner.info}} </span>
+                       <a v-else :href="'playersearch?utr=' + winner.utrId" class="whitespace-no-wrap underline">
+                           {{winner.info}}
                       </a>]
                     </span>
                 </td>
                 <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
                     <span v-for="loser in match.loserInfo">
                        [<a :href="'playersearch?utr=' + loser.utrId"
-                       v-if="player == loser.name" class="underline border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-400 font-medium z-10 shadow-lg" >
+                       v-if="player == loser.name" class="whitespace-no-wrap underline border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-400 font-medium z-10 shadow-lg" >
                             {{loser.info}}
                        </a>
-                       <a v-else :href="'playersearch?utr=' + loser.utrId" class="underline">
+                       <a v-else :href="'playersearch?utr=' + loser.utrId" class="whitespace-no-wrap underline">
                            {{loser.info}}
                       </a>]
                     </span>

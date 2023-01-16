@@ -76,7 +76,7 @@ export default {
               <ul class="ml-1">
                     <li v-for="team in teams" class="mb-1 px-0 py-1 text-gray-100 flex flex-row  border-gray-300 hover:text-black hover:bg-gray-300  hover:font-bold rounded rounded-lg">
                       <span class="text-sm">
-                        [{{team.areaCode}}]
+                        [{{team.areaCode}}-{{team.flight}}]
                       <a href="#" @click="selectTeam(team)">
                           <span class="ml-1 text-sm">{{ team.name }}</span>
                       </a>

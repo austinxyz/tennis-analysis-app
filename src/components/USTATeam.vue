@@ -31,6 +31,8 @@ export default {
             this.currentPlayer = player;
             this.playerName = player.name;
 
+            try {
+
             var url = this.getBaseURL() + "/playerresult/?id=" + player.utrId;
             const response = await axios.get(url);
 
@@ -40,6 +42,9 @@ export default {
             const res = await axios.get(url);
 
             this.$emit('update:team', res.data);
+
+            } catch (error) {
+            }
 
             this.loading = false;
         },
@@ -72,6 +77,22 @@ export default {
             this.loading = false;
         },
 
+        async refreshTeamUTRId(team) {
+
+            this.loading = true;
+
+            if (team.id == null || team.id == '') {
+                return;
+            }
+
+            var url = this.getBaseURL() + "/usta/teams/" + team.id + "/utrs?action=refresh";
+            const res = await axios.get(url);
+
+            this.$emit('update:team', res.data);
+
+            this.loading = false;
+        },
+
         getBaseURL() {
             if (process.env.NODE_ENV === 'production') {
                 return BASE_URL_PROD;
@@ -91,7 +112,7 @@ export default {
 
 <template>
     <div class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-            <div v-if="team" class="border-transparent rounded-lg text-center p-5 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
+            <div v-if="team" class="border-transparent rounded-lg text-center px-4 pt-2 pb-1 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
                <div class="font-bold text-2xl text-left">
                 <span class="w-1/2 text-left">Team :
                      <a :href="team.link" class="underline" target="_blank">
@@ -111,6 +132,7 @@ export default {
                <div class="text-sm my-3 flex flex-row">
                    <span class="w-1/2 text-left ">Captain :  {{team.captainName}}</span>
                    <span class="w-1/2 text-left "><a :href="team.tennisRecordLink" class="underline" target="_blank"> TennisRecord Link </a></span>
+                   <span class="w-1/2 text-left "><a href="#" class="underline" @click="refreshTeamUTRId(team)"> Refresh UTR IDs </a></span>
                </div>
             </div>
         <table  class="border-collapse border-spacing-0 border border-slate-400">
@@ -159,7 +181,7 @@ export default {
                     <span v-else class="font-light" >
                         {{ player.dUTR }} (D)
                     </span>
-                    <span v-if="!player.refreshedUTR">
+                    <span v-if="!player.refreshedUTR && player.utrId!=null">
                          <a href="#" class="underline" @click="refreshUTR(player)">
                             Refresh UTR
                          </a>
