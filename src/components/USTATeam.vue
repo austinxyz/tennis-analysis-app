@@ -152,7 +152,39 @@ export default {
                 return;
             }
 
-            var url = this.getBaseURL() + "/usta/teams/" + team.id + "/utrs?action=refresh";
+            var url = this.getBaseURL() + "/usta/teams/" + team.id + "/utrs?action=refreshID";
+            const res = await axios.get(url);
+
+            this.$emit('update:team', res.data);
+
+            this.loading = false;
+        },
+
+        async refreshTeamUTRValue(team) {
+
+            this.loading = true;
+
+            if (team.id == null || team.id == '') {
+                return;
+            }
+
+            var url = this.getBaseURL() + "/usta/teams/" + team.id + "/utrs?action=refreshValue";
+            const res = await axios.get(url);
+
+            this.$emit('update:team', res.data);
+
+            this.loading = false;
+        },
+
+        async refreshTeamDRValue(team) {
+
+            this.loading = true;
+
+            if (team.id == null || team.id == '') {
+                return;
+            }
+
+            var url = this.getBaseURL() + "/usta/teams/" + team.id + "/drs?action=refresh";
             const res = await axios.get(url);
 
             this.$emit('update:team', res.data);
@@ -193,14 +225,13 @@ export default {
            <div class="text-sm my-3 flex flex-row">
             <span class="w-1/2 text-left">Area : {{team.area}} </span>
             <span class="w-1/2 text-left">Flight : {{team.flight}}</span>
-            <span class="w-1/2 text-left "><a href="#" class="underline" @click="getMatches(team)"> Matches </a></span>
-            <span class="w-1/2 text-left "><a href="#" class="underline" @click="refreshScores(team)"> Refresh Score </a></span>
+            <span class="w-1/2 text-left "><a href="#" class="underline" @click="refreshTeamUTRId(team)"> Fetch UTR IDs </a></span>
            </div>
            <hr />
            <div class="text-sm my-3 flex flex-row">
                <span class="w-1/2 text-left ">Captain :  {{team.captainName}}</span>
                <span class="w-1/2 text-left "><a :href="team.tennisRecordLink" class="underline" target="_blank"> TennisRecord Link </a></span>
-               <span class="w-1/2 text-left "><a href="#" class="underline" @click="refreshTeamUTRId(team)"> Refresh UTR IDs </a></span>
+               <span class="w-1/2 text-left "><a href="#" class="underline" @click="refreshTeamDRValue(team)"> Get Latest DR </a></span>
            </div>
         </div>
 
@@ -221,6 +252,9 @@ export default {
                 </th>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                     UTR Win Ratio
+                </th>
+                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                    DR
                 </th>
             </tr>
           </thead>
@@ -259,12 +293,19 @@ export default {
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     {{ (player.successRate * 100).toFixed(2) }} % (Latest)/ {{ (player.wholeSuccessRate * 100).toFixed(2) }}%
                 </td>
+                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                    {{ player.dynamicRating}}
+                </td>
               </tr>
           </tbody>
         </table>
-        <table v-if="matches.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
+        <a id="match_anchor" />
+        <table class="min-w-full border-collapse border-spacing-0 border border-slate-400">
           <thead>
             <tr>
+                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                    <span class="w-1/2 text-left "><a href="#match_anchor" class="underline" @click="getMatches(team)"> + </a></span>
+                </th>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                     Match Date
                 </th>
@@ -275,12 +316,15 @@ export default {
                     Home/Away
                 </th>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Score
+                    Score <span class="w-1/2 text-left "><a href="#" class="underline" @click="refreshScores(team)"> Refresh</a></span>
                 </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="matches.length >0">
              <tr v-for="(match, index) in matches" class="even:bg-slate-50 odd:bg-slate-400">
+                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                     {{ index+1 }}
+                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     {{ match.matchDate }}
                 </td>
@@ -296,7 +340,7 @@ export default {
                     Away
                 </td>
                 <td v-if="match.scoreCard" class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <a href="#" class="underline" @click="showScoreDetail(match)">
+                    <a href="#score_anchor" class="underline" @click="showScoreDetail(match)">
                         {{match.point}} - {{match.opponentPoint}}
                     </a>
                 </td>
@@ -306,8 +350,8 @@ export default {
               </tr>
           </tbody>
         </table>
-
-        <table v-if="scoreCard" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
+        <a id="score_anchor" />
+        <table v-if="scoreCard.scores" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
           <thead>
             <tr>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
