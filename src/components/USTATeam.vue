@@ -225,13 +225,19 @@ export default {
            <div class="text-sm my-3 flex flex-row">
             <span class="w-1/2 text-left">Area : {{team.area}} </span>
             <span class="w-1/2 text-left">Flight : {{team.flight}}</span>
-            <span class="w-1/2 text-left "><a href="#" class="underline" @click="refreshTeamUTRId(team)"> Fetch UTR IDs </a></span>
+            <span>
+                <button type="button" @click="refreshTeamUTRId(team)">
+                    <img src="/utr.svg" width="30" height="30" alt="Fetch UTR ID" title="fetch UTR ID"/>
+                </button>
+            </span>
            </div>
            <hr />
            <div class="text-sm my-3 flex flex-row">
                <span class="w-1/2 text-left ">Captain :  {{team.captainName}}</span>
                <span class="w-1/2 text-left "><a :href="team.tennisRecordLink" class="underline" target="_blank"> TennisRecord Link </a></span>
-               <span class="w-1/2 text-left "><a href="#" class="underline" @click="refreshTeamDRValue(team)"> Get Latest DR </a></span>
+               <button type="button" @click="refreshTeamDRValue(team)" class="flex flex-row">
+                  <img src="/recruiting50x50.png" width="25" height="25" alt="Refresh DR" title="Refresh DR"/>
+               </button>
            </div>
         </div>
 
@@ -315,8 +321,11 @@ export default {
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                     Home/Away
                 </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Score <span class="w-1/2 text-left "><a href="#" class="underline" @click="refreshScores(team)"> Refresh</a></span>
+                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider flex flex-row">
+                    <span>Score</span>
+                    <button type="button" @click="refreshScores(team)" class="px-2">
+                        <img src="/updates-30.png" width="20" height="20" alt="Refresh Score" title="Refresh Score"/>
+                    </button>
                 </th>
             </tr>
           </thead>
@@ -377,33 +386,33 @@ export default {
                     {{ lineScore.homeLine.name }}
                 </td>
                 <td class="px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <span class="flex flex row"> <img v-if="lineScore.homeTeamWin" src="/win_1262465.png" width="25" height="25" alt="Win"/>
-                    <span v-if="lineScore.homeLine.type === 'S'">
-                        <a :href="'playersearch?utr=' + lineScore.homeLine.player1.utrId" class="underline">
-                           {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.sUTR}}S)
-                        </a>
-                    </span>
-                    <span v-else class="font-light" >
-                        <a :href="'playersearch?utr=' + lineScore.homeLine.player1.utrId" class="underline">
-                        {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.dUTR}}D)</a>/
-                         <a :href="'playersearch?utr=' + lineScore.homeLine.player2.utrId" class="underline">
-                        {{ lineScore.homeLine.player2.name }}({{lineScore.homeLine.player2.dUTR}}D)</a>
-                    </span>
+                    <span v-if="lineScore.homeLine.player1 != null" class="flex flex row"> <img v-if="lineScore.homeTeamWin" src="/win_1262465.png" width="25" height="25" alt="Win"/>
+                        <span v-if="lineScore.homeLine.type === 'S'">
+                            <a :href="'playersearch?utr=' + lineScore.homeLine.player1.utrId" class="underline">
+                               {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.sUTR}}S)
+                            </a>
+                        </span>
+                        <span v-else class="font-light" >
+                            <a :href="'playersearch?utr=' + lineScore.homeLine.player1.utrId" class="underline">
+                            {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.dUTR}}D)</a>/
+                             <a :href="'playersearch?utr=' + lineScore.homeLine.player2.utrId" class="underline">
+                            {{ lineScore.homeLine.player2.name }}({{lineScore.homeLine.player2.dUTR}}D)</a>
+                        </span>
                     </span>
                 </td>
                 <td class="px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <span class="flex flex row"> <img v-if="!lineScore.homeTeamWin" src="/win_1262465.png" width="20" height="20" alt="Win"/>
-                    <span v-if="lineScore.guestLine.type === 'S'" >
-                        <a :href="'playersearch?utr=' + lineScore.guestLine.player1.utrId" class="underline">
-                        {{ lineScore.guestLine.player1.name }} ({{lineScore.guestLine.player1.sUTR}}S)
-                        </a>
-                    </span>
-                    <span v-else class="font-light" >
-                        <a :href="'playersearch?utr=' + lineScore.guestLine.player1.utrId" class="underline">
-                        {{ lineScore.guestLine.player1.name }}({{lineScore.guestLine.player1.dUTR}}D)</a> /
-                        <a :href="'playersearch?utr=' + lineScore.guestLine.player2.utrId" class="underline">
-                        {{ lineScore.guestLine.player2.name }}({{lineScore.guestLine.player2.dUTR}}D)</a>
-                    </span>
+                    <span v-if="lineScore.guestLine.player1 != null" class="flex flex row"> <img v-if="!lineScore.homeTeamWin" src="/win_1262465.png" width="20" height="20" alt="Win"/>
+                        <span v-if="lineScore.guestLine.type === 'S'" >
+                            <a :href="'playersearch?utr=' + lineScore.guestLine.player1.utrId" class="underline">
+                            {{ lineScore.guestLine.player1.name }} ({{lineScore.guestLine.player1.sUTR}}S)
+                            </a>
+                        </span>
+                        <span v-else class="font-light" >
+                            <a :href="'playersearch?utr=' + lineScore.guestLine.player1.utrId" class="underline">
+                            {{ lineScore.guestLine.player1.name }}({{lineScore.guestLine.player1.dUTR}}D)</a> /
+                            <a :href="'playersearch?utr=' + lineScore.guestLine.player2.utrId" class="underline">
+                            {{ lineScore.guestLine.player2.name }}({{lineScore.guestLine.player2.dUTR}}D)</a>
+                        </span>
                     </span>
                 </td>
                 <td class="px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">

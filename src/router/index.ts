@@ -9,19 +9,38 @@ const router = createRouter({
       component: () => import("../views/AboutView.vue"),
     },
     {
-      path: "/team",
-      name: "team",
-      component: () => import("../views/TeamView.vue"),
+        path: "/zijing",
+        name: "zijing",
+        component: () => import("../views/ZijingView.vue"),
+        children: [
+          {
+            path: "team",
+            component: () => import("../views/TeamView.vue"),
+          },
+          {
+            path: "analysis",
+            component: () => import("../views/TeamComparationView.vue"),
+          },
+        ]
     },
     {
-      path: "/analysis",
-      name: "Analysis",
-      component: () => import("../views/TeamComparationView.vue"),
-    },
-    {
-      path: "/event",
-      name: "Event",
-      component: () => import("../views/EventView.vue"),
+      path: "/utr",
+      name: "utr",
+      component: () => import("../views/UTRView.vue"),
+      children: [
+        {
+        path: "event",
+        component: () => import("../views/EventView.vue"),
+        },
+        {
+          path: "bat",
+          component: () => import("../views/ClubView.vue"),
+        },
+        {
+          path: "single",
+          component: () => import("../views/SingleAnalysisView.vue"),
+        },
+      ]
     },
     {
       path: "/playersearch",
@@ -29,19 +48,15 @@ const router = createRouter({
       component: () => import("../views/PlayerSearchView.vue"),
     },
     {
-      path: "/bat",
-      name: "bayareaclub",
-      component: () => import("../views/ClubView.vue"),
-    },
-    {
-      path: "/single",
-      name: "single",
-      component: () => import("../views/SingleAnalysisView.vue"),
-    },
-    {
-      path: "/ustateam",
-      name: "ustateam",
-      component: () => import("../views/USTATeamView.vue"),
+      path: "/usta",
+      name: "usta",
+      component: () => import("../views/USTAView.vue"),
+      children: [
+        {
+            path: 'team',
+            component:() => import("../views/USTATeamView.vue"),
+        }
+      ]
     },
   ],
 });

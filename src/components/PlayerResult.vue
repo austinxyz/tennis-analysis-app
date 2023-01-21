@@ -54,7 +54,7 @@ export default {
         <div v-for="(event, index) in result.playerEvents" class="w-full border-collapse border-spacing-0 border border-slate-100">
             <div v-if=" (ustamode=='true' && event.usta) || (ustamode=='false')" >
                 <div class="text-sm my-2 flex flex-row px-4">
-                <a v-if="!event.usta" :href="'/event?event=' + event.id " class="underline">
+                <a v-if="!event.usta" :href="'/utr/event?event=' + event.id " class="underline">
                 {{ event.name }}
                 </a>
                 <span v-else>
