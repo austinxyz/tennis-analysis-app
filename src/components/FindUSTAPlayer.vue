@@ -8,36 +8,6 @@ const BASE_URL_PROD = 'http://localhost:8080';
 
 export default {
 
-    async mounted() {
-        let utrId = this.$route.query.utr;
-
-        if (utrId == null) {
-            return;
-        }
-
-        var url = this.getBaseURL() + "/playerresult/?id=" + utrId;
-
-        try {
-            const response = await axios.get(url);
-            this.playerresult = response.data;
-            this.teams = [];
-            this.team = {},
-            this.query = utrId;
-            this.loading = false;
-        } catch (error) {
-            console.log(error);
-        };
-
-        url = this.getBaseURL() + "/players/utr/" + utrId;
-        try {
-            const res = await axios.get(url);
-            this.currentPlayer = res.data;
-            this.players.push(this.currentPlayer);
-        } catch (error) {
-        }''
-
-    },
-
     methods: {
 
         getBaseURL() {
@@ -61,8 +31,15 @@ export default {
             this.loading = false;
         },
 
-        async searchPlayer() {
-            var url = this.getBaseURL() + "/players/search?name=" + this.query;
+        async findPlayers() {
+            console.log(this.type);
+            var url = this.getBaseURL() + "/players/searchUTR?" +
+                "gender=" + this.gender +
+                "&USTARating=" + this.ustaRating +
+                "&type=" + this.playertype +
+                "&utr=" + this.utr +
+                "&start=" + this.start +
+                "&pagesize=" + this.pagesize;
             try {
                 const response = await axios.get(url);
                 this.players = response.data;
@@ -93,13 +70,18 @@ export default {
 
     data() {
         return {
-            query: '',
             players: [],
             playerresult: {},
             currentPlayer: {},
             teams: [],
             team: {},
             loading: false,
+            ustaRating:'',
+            playertype:'double',
+            utr: '',
+            gender: 'M',
+            start:'0',
+            pagesize:'10',
         }
     },
 
@@ -113,13 +95,43 @@ export default {
 <template>
     <div class="flex flow-row">
         <div class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-            <label class="border-transparent rounded-lg text-center px-2 py-1 mx-auto md:mx-0 my-2 bg-gray-100 font-normal z-10 shadow-lg">
-              USTA Player:
+            <label class="block text-gray-700 font-bold mb-2 px-2 ">
+              USTA Player Finder:
             </label>
-            <input v-model="query" class="border-b-2 border-gray-300" >
+            <hr>
+            <div class="py-2 border border-gray-300">
+                <div class="mb-2 flex flow-row">
+                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="usta">
+                    USTA Rating:
+                  </label>
+                  <input class="border-b-2 border-gray-300 mb-2 text-sm"
+                    type="text" v-model="ustaRating" />
+                </div>
+                <div class="mb-2 flex flow-row">
+                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">
+                    Match Type:
+                  </label>
+                  <input type="radio" v-model="playertype" value="single" /> <span class="px-2 text-sm">Single</span>
+                  <input type="radio" v-model="playertype" value="double" /> <span class="px-2 text-sm">Double</span>
+                </div>
+                <div class="mb-2 flex flow-row">
+                  <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="utr">
+                    UTR (> ):
+                  </span>
+                  <input class="border-b-2 border-gray-300 mb-2 text-sm"
+                    type="text" v-model="utr" />
+                </div>
+                <div class="mb-2 flex flow-row">
+                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">
+                    Gender:
+                  </label>
+                  <input type="radio" v-model="gender" value="M" /> <span class="px-2 text-sm"> Male</span>
+                  <input type="radio" v-model="gender" value="F" /> <span class="px-2 text-sm">Female</span>
+                </div>
+            </div>
             <button
                     class="border border-indigo-500 bg-indigo-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-indigo-600 focus:outline-none focus:shadow-outline"
-                    @click="searchPlayer"
+                    @click="findPlayers"
             >
              Search
             </button>
@@ -164,7 +176,7 @@ export default {
                             {{ player.dynamicRating}}
                         </td>
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            {{ player.sUTR}}S/{{ player.dUTR}}D
+                            {{ player.sutr}}S/{{ player.dutr}}D
                         </td>
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                             <a href="#" class="underline" @click="getTeams(player)">
@@ -259,16 +271,16 @@ export default {
                     </td>
                     <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                         <span v-if="player.sUTRStatus === 'Rated'" class="font-semibold" >
-                            {{ player.sUTR }} (S)
+                            {{ player.sutr }} (S)
                         </span>
                         <span v-else class="font-light" >
-                            {{ player.sUTR }} (S)
+                            {{ player.sutr }} (S)
                         </span>  /
                         <span v-if="player.dUTRStatus === 'Rated'" class="font-semibold" >
-                            {{ player.dUTR }} (D)
+                            {{ player.dutr }} (D)
                         </span>
                         <span v-else class="font-light" >
-                            {{ player.dUTR }} (D)
+                            {{ player.dutr }} (D)
                         </span>
                     </td>
                     <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">

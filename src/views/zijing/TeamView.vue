@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TeamList from "../components/TeamList.vue";
-import Team from "../components/Team.vue";
+import TeamList from "../../components/TeamList.vue";
+import Team from "../../components/Team.vue";
 </script>
 
 <template>

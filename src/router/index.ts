@@ -11,58 +11,57 @@ const router = createRouter({
     {
         path: "/zijing",
         name: "zijing",
-        component: () => import("../views/ZijingView.vue"),
+        component: () => import("../views/zijing/ZijingView.vue"),
         children: [
           {
             path: "team",
-            component: () => import("../views/TeamView.vue"),
+            component: () => import("../views/zijing/TeamView.vue"),
           },
           {
             path: "analysis",
-            component: () => import("../views/TeamComparationView.vue"),
+            component: () => import("../views/zijing/TeamComparationView.vue"),
           },
         ]
     },
     {
       path: "/utr",
       name: "utr",
-      component: () => import("../views/UTRView.vue"),
+      component: () => import("../views/utr/UTRView.vue"),
       children: [
         {
             path: "event",
-            component: () => import("../views/EventView.vue"),
+            component: () => import("../views/utr/EventView.vue"),
         },
         {
             path: "bat",
-            component: () => import("../views/ClubView.vue"),
+            component: () => import("../views/utr/ClubView.vue"),
         },
         {
             path: "single",
-            component: () => import("../views/SingleAnalysisView.vue"),
+            component: () => import("../views/utr/SingleAnalysisView.vue"),
         },
         {
             path: 'player',
-            component:() => import("../views/UTRPlayerSearchView.vue"),
+            component:() => import("../views/utr/UTRPlayerSearchView.vue"),
         }
       ]
     },
     {
-      path: "/playersearch",
-      name: "Player",
-      component: () => import("../views/PlayerSearchView.vue"),
-    },
-    {
       path: "/usta",
       name: "usta",
-      component: () => import("../views/USTAView.vue"),
+      component: () => import("../views/usta/USTAView.vue"),
       children: [
         {
             path: 'team',
-            component:() => import("../views/USTATeamView.vue"),
+            component:() => import("../views/usta/USTATeamView.vue"),
         },
         {
             path: 'player',
-            component:() => import("../views/USTAPlayerSearchView.vue"),
+            component:() => import("../views/usta/USTAPlayerSearchView.vue"),
+        },
+        {
+            path: 'playerfinder',
+            component:() => import("../views/usta/USTAPlayerFinderView.vue"),
         }
       ]
     },

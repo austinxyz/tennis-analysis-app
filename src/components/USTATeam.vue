@@ -279,16 +279,16 @@ export default {
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     <span v-if="player.sUTRStatus === 'Rated'" class="font-semibold" >
-                        {{ player.sUTR }} (S)
+                        {{ player.sutr }} (S)
                     </span>
                     <span v-else class="font-light" >
-                        {{ player.sUTR }} (S)
+                        {{ player.sutr }} (S)
                     </span>  /
                     <span v-if="player.dUTRStatus === 'Rated'" class="font-semibold" >
-                        {{ player.dUTR }} (D)
+                        {{ player.dutr }} (D)
                     </span>
                     <span v-else class="font-light" >
-                        {{ player.dUTR }} (D)
+                        {{ player.dutr }} (D)
                     </span>
                     <span v-if="!player.refreshedUTR && player.utrId!=null">
                          <a href="#" class="underline" @click="refreshUTR(player)">
@@ -388,14 +388,14 @@ export default {
                 <td class="px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
                     <span v-if="lineScore.homeLine.player1 != null" class="flex flex row"> <img v-if="lineScore.homeTeamWin" src="/win_1262465.png" width="25" height="25" alt="Win"/>
                         <span v-if="lineScore.homeLine.type === 'S'">
-                            <a :href="'playersearch?utr=' + lineScore.homeLine.player1.utrId" class="underline">
+                            <a :href="'player?utr=' + lineScore.homeLine.player1.utrId" class="underline">
                                {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.sUTR}}S)
                             </a>
                         </span>
                         <span v-else class="font-light" >
-                            <a :href="'playersearch?utr=' + lineScore.homeLine.player1.utrId" class="underline">
+                            <a :href="'player?utr=' + lineScore.homeLine.player1.utrId" class="underline">
                             {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.dUTR}}D)</a>/
-                             <a :href="'playersearch?utr=' + lineScore.homeLine.player2.utrId" class="underline">
+                             <a :href="'player?utr=' + lineScore.homeLine.player2.utrId" class="underline">
                             {{ lineScore.homeLine.player2.name }}({{lineScore.homeLine.player2.dUTR}}D)</a>
                         </span>
                     </span>
@@ -403,14 +403,14 @@ export default {
                 <td class="px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
                     <span v-if="lineScore.guestLine.player1 != null" class="flex flex row"> <img v-if="!lineScore.homeTeamWin" src="/win_1262465.png" width="20" height="20" alt="Win"/>
                         <span v-if="lineScore.guestLine.type === 'S'" >
-                            <a :href="'playersearch?utr=' + lineScore.guestLine.player1.utrId" class="underline">
+                            <a :href="'player?utr=' + lineScore.guestLine.player1.utrId" class="underline">
                             {{ lineScore.guestLine.player1.name }} ({{lineScore.guestLine.player1.sUTR}}S)
                             </a>
                         </span>
                         <span v-else class="font-light" >
-                            <a :href="'playersearch?utr=' + lineScore.guestLine.player1.utrId" class="underline">
+                            <a :href="'player?utr=' + lineScore.guestLine.player1.utrId" class="underline">
                             {{ lineScore.guestLine.player1.name }}({{lineScore.guestLine.player1.dUTR}}D)</a> /
-                            <a :href="'playersearch?utr=' + lineScore.guestLine.player2.utrId" class="underline">
+                            <a :href="'player?utr=' + lineScore.guestLine.player2.utrId" class="underline">
                             {{ lineScore.guestLine.player2.name }}({{lineScore.guestLine.player2.dUTR}}D)</a>
                         </span>
                     </span>

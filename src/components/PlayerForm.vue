@@ -51,17 +51,17 @@ export default {
     <Modal v-model="showModal" :title="player.name">
         <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="utrid">
                 UTR ID
               </label>
               <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text" id="utrId" :value="utrId" @input="$emit('update:utrId', $event.target.value)">
             </div>
             <div class="mb-6">
-              <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="ustaid">
                 USTA ID
               </label>
-              <input class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text" id="ustaId" :value="ustaId" @input="$emit('update:ustaId', $event.target.value)">
             </div>
             <div class="flex items-center justify-between">

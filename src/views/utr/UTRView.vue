@@ -3,8 +3,9 @@
 
 <template>
     <div class="flex flex-no-wrap">
-        <div style="min-height: 716px" class="min-h-max w-70 absolute sm:relative bg-gray-800 shadow md:h-full flex-col justify-between hidden sm:flex">
+        <div style="min-height: 716px" class="min-h-max w-50 absolute sm:relative bg-gray-800 shadow md:h-full flex-col justify-between hidden sm:flex">
             <div class="px-2">
+                <span class="w-40 flex px-4 py-2 font-large text-gray-100 text-center"> UTR </span>
                 <ul class="mt-12">
                     <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
                            <router-link to="/utr/bat" class="flex flex-row py-2 mt-2 text-normal font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
