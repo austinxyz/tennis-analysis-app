@@ -2,12 +2,17 @@
 
 export default {
 
-  props: {
-    matches: { type: Array},
-    singlemode: {tpye: String},
-    player: {type: String}
-  },
+    props: {
+        matches: { type: Array},
+        singlemode: {tpye: String},
+        player: {type: String}
+    },
 
+    data() {
+        return {
+            rootPath: window.location.origin,
+        };
+    },
 };
 </script>
 
@@ -43,22 +48,22 @@ export default {
                 </td>
                 <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
                     <span v-for="winner in match.winnerInfo">
-                       [<a :href="'playersearch?utr=' + winner.utrId"
+                       [<a :href="'/utr/player?utr=' + winner.utrId"
                        v-if="player == winner.name" class="whitespace-no-wrap underline border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-400 font-medium z-10 shadow-lg" >
                           {{winner.info}}
                        </a>
-                       <a v-else :href="'playersearch?utr=' + winner.utrId" class="whitespace-no-wrap underline">
+                       <a v-else :href="'/utr/player?utr=' + winner.utrId" class="whitespace-no-wrap underline">
                            {{winner.info}}
                       </a>]
                     </span>
                 </td>
                 <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
                     <span v-for="loser in match.loserInfo">
-                       [<a :href="'playersearch?utr=' + loser.utrId"
+                       [<a :href="'/utr/player?utr=' + loser.utrId"
                        v-if="player == loser.name" class="whitespace-no-wrap underline border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-400 font-medium z-10 shadow-lg" >
                             {{loser.info}}
                        </a>
-                       <a v-else :href="'playersearch?utr=' + loser.utrId" class="whitespace-no-wrap underline">
+                       <a v-else :href="'/utr/player?utr=' + loser.utrId" class="whitespace-no-wrap underline">
                            {{loser.info}}
                       </a>]
                     </span>

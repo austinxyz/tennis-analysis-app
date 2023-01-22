@@ -202,10 +202,10 @@ export default {
         },
     },
 
-  components: {
-    PlayerResult,
-    PlayerInfo,
-  }
+    components: {
+        PlayerResult,
+        PlayerInfo,
+    }
 }
 </script>
 

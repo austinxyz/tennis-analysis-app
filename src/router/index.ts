@@ -29,17 +29,21 @@ const router = createRouter({
       component: () => import("../views/UTRView.vue"),
       children: [
         {
-        path: "event",
-        component: () => import("../views/EventView.vue"),
+            path: "event",
+            component: () => import("../views/EventView.vue"),
         },
         {
-          path: "bat",
-          component: () => import("../views/ClubView.vue"),
+            path: "bat",
+            component: () => import("../views/ClubView.vue"),
         },
         {
-          path: "single",
-          component: () => import("../views/SingleAnalysisView.vue"),
+            path: "single",
+            component: () => import("../views/SingleAnalysisView.vue"),
         },
+        {
+            path: 'player',
+            component:() => import("../views/UTRPlayerSearchView.vue"),
+        }
       ]
     },
     {
@@ -55,6 +59,10 @@ const router = createRouter({
         {
             path: 'team',
             component:() => import("../views/USTATeamView.vue"),
+        },
+        {
+            path: 'player',
+            component:() => import("../views/USTAPlayerSearchView.vue"),
         }
       ]
     },

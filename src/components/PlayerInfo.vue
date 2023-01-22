@@ -18,7 +18,7 @@ export default {
 <template>
     <div v-if="player.name" class="border-transparent rounded-lg text-center p-5 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
        <div class="font-bold text-2xl text-left flex flex-row">
-        <div class="w-5/6 text-left">Player : {{ player.name }} </div>
+        <div class="w-5/6 text-left"><a :href="'player?utr=' + player.utrId" class="underline">Player : {{ player.name }} </a></div>
         <PlayerForm :player="player" v-model:utrId="player.utrId" v-model:ustaId="player.ustaId" @change="$emit('update:player', $event.target)"/>
        </div>
        <div class="text-sm my-3 flex flex-row">
