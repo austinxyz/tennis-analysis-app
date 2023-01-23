@@ -1,7 +1,7 @@
 <script>
 import axios from "axios";
-import PlayerResult from "./PlayerResult.vue";
-import PlayerInfo from "./PlayerInfo.vue";
+import PlayerResult from "../PlayerResult.vue";
+import PlayerInfo from "../PlayerInfo.vue";
 
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';

@@ -53,7 +53,7 @@ const router = createRouter({
       children: [
         {
             path: 'team',
-            component:() => import("../views/usta/USTATeamView.vue"),
+            component:() => import("../views/usta/USTALeagueView.vue"),
         },
         {
             path: 'player',
@@ -62,6 +62,10 @@ const router = createRouter({
         {
             path: 'playerfinder',
             component:() => import("../views/usta/USTAPlayerFinderView.vue"),
+        },
+        {
+            path: 'teamanalysis',
+            component:() => import("../views/usta/USTATeamComparationView.vue"),
         }
       ]
     },
