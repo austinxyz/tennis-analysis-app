@@ -164,7 +164,7 @@ export default {
                             {{ player.dynamicRating}}
                         </td>
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            {{ player.sUTR}}S/{{ player.dUTR}}D
+                            {{ player.sutr}}S/{{ player.dutr}}D
                         </td>
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                             <a href="#" class="underline" @click="getTeams(player)">
@@ -259,16 +259,16 @@ export default {
                     </td>
                     <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                         <span v-if="player.sUTRStatus === 'Rated'" class="font-semibold" >
-                            {{ player.sUTR }} (S)
+                            {{ player.sutr }} (S)
                         </span>
                         <span v-else class="font-light" >
-                            {{ player.sUTR }} (S)
+                            {{ player.sutr }} (S)
                         </span>  /
                         <span v-if="player.dUTRStatus === 'Rated'" class="font-semibold" >
-                            {{ player.dUTR }} (D)
+                            {{ player.dutr }} (D)
                         </span>
                         <span v-else class="font-light" >
-                            {{ player.dUTR }} (D)
+                            {{ player.dutr }} (D)
                         </span>
                     </td>
                     <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">

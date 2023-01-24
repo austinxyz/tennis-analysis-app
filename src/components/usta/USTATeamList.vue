@@ -1,8 +1,7 @@
 <script>
 
 import axios from "axios";
-import USTATeamBrief from "./USTATeamBrief.vue";
-import MatchScore from "./MatchScore.vue";
+import USTATeam from "./USTATeam.vue";
 import 'vue-select/dist/vue-select.css';
 
 export default {
@@ -27,22 +26,7 @@ export default {
             this.loading = false;
         },
 
-        async compareTeams() {
-            this.loading = true;
-            if (this.selectedTeam.length >=2 ) {
-                this.team1 = this.teams[this.selectedTeam[0]];
-                this.team2 = this.teams[this.selectedTeam[1]];
-            }
-
-            var url = "http://localhost:8080/usta/analysis/team/team1/" + this.team1.id + "/team2/" + this.team2.id;
-            const response = await axios.get(url);
-            this.result = response.data;
-
-            this.loading = false;
-        },
-
         async selectDiv(div) {
-            this.loading = true;
             this.divName = div.name;
             var url = "http://localhost:8080/usta/divisions/" + div.id + "/flights";
             const response = await axios.get(url);
@@ -50,7 +34,8 @@ export default {
             this.flights.map(function (x){
                return x.label = x.area + '-' + x.flightNo;
             });
-            this.loading = false;
+            this.flight={};
+            this.teams=[];
         },
 
         async selectFlight(flight) {
@@ -62,24 +47,22 @@ export default {
             this.team = this.teams[0];
             this.loading = false;
         },
+
     },
     data() {
   	    return {
   	        divisions: [],
   	        division: {},
-  	        flights: [],
-  	        flight: {},
+            flights: [],
+            flight: {},
 	        teams: [],
-	        team1: {},
-	        team2: {},
+	        team: {},
 	        loading: false,
-	        selectedTeam:[],
-	        result: {}
+	        divName: '',
   	    }
     },
     components: {
-        USTATeamBrief,
-        MatchScore,
+        USTATeam,
     }
 }
 </script>
@@ -114,20 +97,16 @@ export default {
             <nav v-if="teams.length > 0" class="flex flex-col flex-nowrap bg-slate-700 px-2 py-1 my-2 text-gray-900 border border-purple-900">
               <ul class="ml-1">
                     <li v-for="(team, index) in teams" class="mb-1 px-0 py-1 text-gray-100 flex flex-row  border-gray-300 hover:text-black hover:bg-gray-300  hover:font-bold rounded rounded-lg">
-                        <input type="checkbox" v-model="selectedTeam" :value="index"><span class="text-sm">
+                        <span class="text-sm">
                             [{{team.areaCode}}-{{team.flight}}]
+                            <a href="#" class="underline" @click="selectTeam(team)">
                             <span v-if="team.alias" class="ml-1 text-sm">[{{ team.alias }}]</span>
                             <span class="ml-1 text-sm">{{ team.name }}</span>
+                            </a>
                         </span>
                     </li>
               </ul>
             </nav>
-            <button
-                    class="border border-indigo-500 bg-indigo-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-indigo-600 focus:outline-none focus:shadow-outline"
-                    @click="compareTeams"
-            >
-             Compare
-            </button>
         </div>
 
         <div v-if="loading" class="px-5 py-5">
@@ -136,30 +115,7 @@ export default {
             </div>
         </div>
         <div v-else class="m-2 flex flow-row">
-            <USTATeamBrief v-model:team="team1"/>
-            <USTATeamBrief v-model:team="team2"/>
-
-            <div class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-                <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                    Past Matches
-                </label>
-                <div v-for="scorecard in result.pastScores" class="w-full border-collapse border-spacing-0 border border-slate-100">
-                    <MatchScore :scoreCard="scorecard"/>
-                </div>
-                <hr/>
-                <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                    Matches with same team
-                </label>
-
-                <div v-for="(scorecards, key) in result.matchesWithSameTeam" class="w-full border-collapse border-spacing-0 border border-slate-100">
-                    <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                        Team: {{key}}
-                    </label>
-                    <div v-for="scorecard in scorecards">
-                        <MatchScore :scoreCard="scorecard"/>
-                    </div>
-                </div>
-            </div>
+            <USTATeam v-model:team="team"/>
         </div>
 
     </div>

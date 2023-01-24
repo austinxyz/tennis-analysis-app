@@ -32,14 +32,13 @@ export default {
         },
 
         async findPlayers() {
-            console.log(this.type);
             var url = this.getBaseURL() + "/players/searchUTR?" +
                 "gender=" + this.gender +
                 "&USTARating=" + this.ustaRating +
                 "&type=" + this.playertype +
                 "&utr=" + this.utr +
                 "&start=" + this.start +
-                "&pagesize=" + this.pagesize;
+                "&size=" + this.pagesize;
             try {
                 const response = await axios.get(url);
                 this.players = response.data;
@@ -127,6 +126,13 @@ export default {
                   </label>
                   <input type="radio" v-model="gender" value="M" /> <span class="px-2 text-sm"> Male</span>
                   <input type="radio" v-model="gender" value="F" /> <span class="px-2 text-sm">Female</span>
+                </div>
+                <div class="mb-2 flex flow-row">
+                  <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="utr">
+                    Total:
+                  </span>
+                  <input class="border-b-2 border-gray-300 mb-2 text-sm"
+                    type="text" v-model="pagesize"/>
                 </div>
             </div>
             <button
@@ -231,7 +237,7 @@ export default {
                 </tbody>
             </table>
             <label v-if="team.players" class="border-transparent rounded-lg text-center px-2 py-1 mx-auto md:mx-0 my-2 bg-gray-100 font-normal z-10 shadow-lg">
-              Team: <a :href="team.link" class="underline" >{{team.name}}</a>
+              Team: <a :href="team.link" class="underline" target="_blank" >{{team.name}}</a>
             </label>
             <table v-if="team.players" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
               <thead>
