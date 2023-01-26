@@ -38,6 +38,7 @@ export default {
                 "&type=" + this.playertype +
                 "&utr=" + this.utr +
                 "&start=" + this.start +
+                "&ageRange=" + this.agerange +
                 "&size=" + this.pagesize;
             try {
                 const response = await axios.get(url);
@@ -47,6 +48,11 @@ export default {
                 this.currentPlayer = {};
                 this.playerresult = {};
             } catch(error) {
+                this.players = [];
+                this.team = {};
+                this.teams = [];
+                this.currentPlayer = {};
+                this.playerresult = {};
             };
         },
 
@@ -58,6 +64,7 @@ export default {
                 const response = await axios.get(url);
                 this.teams = response.data;
             } catch(error) {
+
             };
             this.loading = false;
         },
@@ -81,6 +88,7 @@ export default {
             gender: 'M',
             start:'0',
             pagesize:'10',
+            agerange:'18+'
         }
     },
 
@@ -128,6 +136,13 @@ export default {
                   <input type="radio" v-model="gender" value="F" /> <span class="px-2 text-sm">Female</span>
                 </div>
                 <div class="mb-2 flex flow-row">
+                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">
+                    Age:
+                  </label>
+                  <input type="radio" v-model="agerange" value="18+" /> <span class="px-2 text-sm">18+</span>
+                  <input type="radio" v-model="agerange" value="40+" /> <span class="px-2 text-sm">40+</span>
+                </div>
+                <div class="mb-2 flex flow-row">
                   <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="utr">
                     Total:
                   </span>
@@ -156,8 +171,11 @@ export default {
                         <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                             DR
                         </th>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            UTR
+                        <th v-if="playertype=='single'" class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                            Single UTR
+                        </th>
+                        <th v-if="playertype=='double'" class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                            Double UTR
                         </th>
                         <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                             Teams
@@ -181,8 +199,11 @@ export default {
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                             {{ player.dynamicRating}}
                         </td>
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            {{ player.sutr}}S/{{ player.dutr}}D
+                        <td v-if="playertype=='single'" class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                            {{ player.sutr}}({{player.sutrstatus}})
+                        </td>
+                        <td v-if="playertype=='double'" class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                            {{ player.dutr}}({{player.dutrstatus}})
                         </td>
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                             <a href="#" class="underline" @click="getTeams(player)">
@@ -192,6 +213,11 @@ export default {
                     </tr>
                 </tbody>
             </table>
+            <div v-else>
+                 <label class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="usta">
+                   No Players are found!
+                 </label>
+            </div>
             <table v-if="teams.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
                 <thead>
                     <tr>

@@ -7,14 +7,33 @@ import 'vue-select/dist/vue-select.css';
 
 export default {
 
-    mounted() {
-        axios.get("http://localhost:8080/usta/divisions/")
-            .then(response => {
-                this.divisions = response.data;
-                this.divisions.map(function (x){
-                   return x.label = x.name;
-                });
+    async mounted() {
+        let team1Id = this.$route.query.team1;
+        let team2Id = this.$route.query.team2;
+
+        if (team1Id != null && team2Id !=null ) {
+            this.loading = true;
+
+            var url = "http://localhost:8080/usta/teams/" + team1Id;
+            const response = await axios.get(url);
+            this.team1 = response.data;
+
+            url = "http://localhost:8080/usta/teams/" + team2Id;
+            const res = await axios.get(url);
+            this.team2 = res.data;
+
+            var url = "http://localhost:8080/usta/analysis/team/team1/" + this.team1.id + "/team2/" + this.team2.id;
+            const res1 = await axios.get(url);
+            this.result = res1.data;
+
+            this.loading = false;
+        } else {
+            const res2 = await axios.get("http://localhost:8080/usta/divisions/");
+            this.divisions = res2.data;
+            this.divisions.map(function (x){
+               return x.label = x.name;
             });
+        }
     },
 
     methods: {

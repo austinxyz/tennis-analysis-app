@@ -322,10 +322,13 @@ export default {
                     Home/Away
                 </th>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider flex flex-row">
-                    <span>Score</span>
-                    <button type="button" @click="refreshScores(team)" class="px-2">
+                    <span>Score</span><span>
+                    <button type="button" @click="refreshScores(team)">
                         <img src="/updates-30.png" width="20" height="20" alt="Refresh Score" title="Refresh Score"/>
-                    </button>
+                    </button></span>
+                </th>
+                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                    Compare
                 </th>
             </tr>
           </thead>
@@ -355,6 +358,11 @@ export default {
                 </td>
                 <td v-else class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     -
+                </td>
+                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                     <a :href="'/usta/teamanalysis?team1=' + team.id + '&team2=' + match.opponentTeamId" class="underline" target="_blank">
+                        Analysis
+                    </a>
                 </td>
               </tr>
           </tbody>
