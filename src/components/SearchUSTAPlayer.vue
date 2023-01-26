@@ -15,7 +15,7 @@ export default {
             return;
         }
 
-        var url = this.getBaseURL() + "/playerresult/?id=" + utrId;
+        var url = this.getBaseURL() + "/playerresult?id=" + utrId;
 
         try {
             const response = await axios.get(url);

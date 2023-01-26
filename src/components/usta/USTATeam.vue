@@ -100,7 +100,7 @@ export default {
 
             try {
 
-            var url = this.getBaseURL() + "/playerresult/?id=" + player.utrId;
+            var url = this.getBaseURL() + "/playerresult?id=" + player.utrId;
             const response = await axios.get(url);
 
             this.playerresult = response.data;
@@ -131,7 +131,7 @@ export default {
 
             this.currentPlayer = response.data;
 
-            var url = this.getBaseURL() + "/playerresult/?id=" + player.utrId;
+            var url = this.getBaseURL() + "/playerresult?id=" + player.utrId;
             const res1 = await axios.get(url);
 
             this.playerresult = res1.data;

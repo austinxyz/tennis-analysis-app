@@ -66,7 +66,12 @@ const router = createRouter({
         {
             path: 'teamanalysis',
             component:() => import("../views/usta/USTATeamComparationView.vue"),
+        },
+        {
+            path: 'playerstat',
+            component:() => import("../views/usta/USTAPlayerStatView.vue"),
         }
+
       ]
     },
   ],
