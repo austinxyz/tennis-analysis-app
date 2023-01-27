@@ -17,14 +17,14 @@ export default {
             <span v-if="lineScore.homeLine.player1 != null" class="flex flex row"> <img v-if="lineScore.homeTeamWin" src="/win_1262465.png" width="25" height="25" alt="Win"/>
                 <span v-if="lineScore.homeLine.type === 'S'">
                     <a :href="'player?utr=' + lineScore.homeLine.player1.utrId" class="underline">
-                       {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.sutr}}S)
+                       {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.sutr}}S - DR:{{lineScore.homeLine.player1.dynamicRating}})
                     </a>
                 </span>
                 <span v-else class="font-light" >
                     <a :href="'player?utr=' + lineScore.homeLine.player1.utrId" class="underline">
-                    {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.dutr}}D)</a>/
+                    {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.dutr}}D - DR:{{lineScore.homeLine.player1.dynamicRating}})</a>/
                      <a :href="'player?utr=' + lineScore.homeLine.player2.utrId" class="underline">
-                    {{ lineScore.homeLine.player2.name }}({{lineScore.homeLine.player2.dutr}}D)</a>
+                    {{ lineScore.homeLine.player2.name }}({{lineScore.homeLine.player2.dutr}}D - DR:{{lineScore.homeLine.player2.dynamicRating}})</a>
                 </span>
             </span>
         </td>
@@ -32,14 +32,14 @@ export default {
             <span v-if="lineScore.guestLine.player1 != null" class="flex flex row"> <img v-if="!lineScore.homeTeamWin" src="/win_1262465.png" width="20" height="20" alt="Win"/>
                 <span v-if="lineScore.guestLine.type === 'S'" >
                     <a :href="'player?utr=' + lineScore.guestLine.player1.utrId" class="underline">
-                    {{ lineScore.guestLine.player1.name }} ({{lineScore.guestLine.player1.sutr}}S)
+                    {{ lineScore.guestLine.player1.name }} ({{lineScore.guestLine.player1.sutr}}S - DR:{{lineScore.guestLine.player1.dynamicRating}})
                     </a>
                 </span>
                 <span v-else class="font-light" >
                     <a :href="'player?utr=' + lineScore.guestLine.player1.utrId" class="underline">
-                    {{ lineScore.guestLine.player1.name }}({{lineScore.guestLine.player1.dutr}}D)</a> /
+                    {{ lineScore.guestLine.player1.name }}({{lineScore.guestLine.player1.dutr}}D - DR:{{lineScore.guestLine.player1.dynamicRating}})</a> /
                     <a :href="'player?utr=' + lineScore.guestLine.player2.utrId" class="underline">
-                    {{ lineScore.guestLine.player2.name }}({{lineScore.guestLine.player2.dutr}}D)</a>
+                    {{ lineScore.guestLine.player2.name }}({{lineScore.guestLine.player2.dutr}}D - DR:{{lineScore.guestLine.player2.dynamicRating}})</a>
                 </span>
             </span>
         </td>

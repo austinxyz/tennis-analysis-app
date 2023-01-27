@@ -1,8 +1,7 @@
 <script>
 import axios from "axios";
-import PlayerResult from "../PlayerResult.vue";
-import PlayerInfo from "../PlayerInfo.vue";
-import LineScore from "./LineScore.vue";
+import USTAPlayer from "./USTAPlayer.vue";
+import USTAPlayerList from "./USTAPlayerList.vue";
 
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
@@ -16,26 +15,13 @@ export default {
             return;
         }
 
-        var url = this.getBaseURL() + "/playerresult?id=" + utrId;
-
-        try {
-            const response = await axios.get(url);
-            this.playerresult = response.data;
-            this.teams = [];
-            this.team = {},
-            this.query = utrId;
-            this.loading = false;
-        } catch (error) {
-            console.log(error);
-        };
-
-        url = this.getBaseURL() + "/players/utr/" + utrId;
+        var url = this.getBaseURL() + "/players/utr/" + utrId;
         try {
             const res = await axios.get(url);
             this.currentPlayer = res.data;
             this.players.push(this.currentPlayer);
         } catch (error) {
-        }''
+        };
 
     },
 
@@ -49,80 +35,30 @@ export default {
             }
         },
 
-        async setPlayerResult(player) {
-            this.loading = true;
-            this.currentPlayer = player;
-
-            var url = this.getBaseURL() + "/playerresult/?id=" + player.utrId;
-            try {
-                const response = await axios.get(url);
-                this.playerresult = response.data;
-            } catch(error) {
-            };
-            this.loading = false;
-        },
-
         async searchPlayer() {
             var url = this.getBaseURL() + "/players/search?name=" + this.query;
             try {
                 const response = await axios.get(url);
                 this.players = response.data;
-                this.team = {};
-                this.teams = [];
                 this.currentPlayer = {};
-                this.playerresult = {};
-                this.scores = [];
             } catch(error) {
             };
         },
 
-        async getTeams(player) {
-            this.loading = true;
-
-            var url = this.getBaseURL() + "/players/" + player.id + "/teams";
-            try {
-                const response = await axios.get(url);
-                this.teams = response.data;
-            } catch(error) {
-            };
-            this.loading = false;
-        },
-
-        async getMatchScores(player) {
-            this.loading = true;
-
-            var url = this.getBaseURL() + "/usta/players/" + player.id + "/scores";
-            try {
-                const response = await axios.get(url);
-                this.scores = response.data;
-            } catch(error) {
-
-            };
-            this.loading = false;
-        },
-
-        async getTeam(team) {
-            this.team = team;
-        },
     },
 
     data() {
         return {
             query: '',
             players: [],
-            playerresult: {},
             currentPlayer: {},
-            teams: [],
-            team: {},
-            scores: [],
             loading: false,
         }
     },
 
     components: {
-        PlayerResult,
-        PlayerInfo,
-        LineScore
+        USTAPlayerList,
+        USTAPlayer,
     }
 }
 </script>
@@ -140,212 +76,16 @@ export default {
             >
              Search
             </button>
-            <table v-if="players.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
-                <thead>
-                    <tr>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            #
-                        </th>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            Player
-                        </th>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            NTRP
-                        </th>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            DR
-                        </th>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            UTR
-                        </th>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            Teams
-                        </th>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            USTA Matches
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(player, index) in players" class="even:bg-slate-50 odd:bg-slate-400">
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            {{ index+1 }}
-                        </td>
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            <a href="#" class="underline" @click="setPlayerResult(player)">
-                            {{ player.firstName }} {{player.lastName}}
-                            </a>
-                            {{ player.gender }}
-                        </td>
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            {{ player.ustaRating}}
-                        </td>
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            {{ player.dynamicRating}}
-                        </td>
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            {{ player.sutr}}S/{{ player.dutr}}D
-                        </td>
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            <a href="#" class="underline" @click="getTeams(player)">
-                            Teams
-                            </a>
-                        </td>
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            <a href="#" class="underline" @click="getMatchScores(player)">
-                            USTA Matches
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table v-if="teams.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
-                <thead>
-                    <tr>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            #
-                        </th>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            Name
-                        </th>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            Flight
-                        </th>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            Captain
-                        </th>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            TR
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(team, index) in teams" class="even:bg-slate-50 odd:bg-slate-400">
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            {{ index+1 }}
-                        </td>
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            <a href="#" class="underline" @click="getTeam(team)">
-                            <span v-if="team.alias">[{{ team.alias }}] </span> {{team.name}}
-                            </a>
-                        </td>
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            {{ team.areaCode}}-{{team.flight}}
-                        </td>
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            {{ team.captainName}}
-                        </td>
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            <a :href="team.tennisRecordLink" class="underline" target="_blank">
-                            TR Link
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <label v-if="team.players" class="border-transparent rounded-lg text-center px-2 py-1 mx-auto md:mx-0 my-2 bg-gray-100 font-normal z-10 shadow-lg">
-              Team: <a :href="team.link" class="underline" >{{team.name}}</a>
-            </label>
-            <table v-if="team.players" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
-              <thead>
-                <tr>
-                    <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                        #
-                    </th>
-                    <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                        Player
-                    </th>
-                    <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                        NTRP
-                    </th>
-                    <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                        UTR Rating
-                    </th>
-                    <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                        UTR Win Ratio
-                    </th>
-                    <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                        DR
-                    </th>
-                </tr>
-              </thead>
-              <tbody>
-                 <tr v-for="(player, index) in team.players" class="even:bg-slate-50 odd:bg-slate-400">
-                    <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                        {{ index+1 }}
-                    </td>
-                    <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                        <a href="#" class="underline" @click="setPlayerResult(player)">
-                        {{ player.name }} ({{ player.gender }})
-                        </a>
-                    </td>
-                    <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                        {{ player.ustaRating}}
-                    </td>
-                    <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                        <span v-if="player.sUTRStatus === 'Rated'" class="font-semibold" >
-                            {{ player.sutr }} (S)
-                        </span>
-                        <span v-else class="font-light" >
-                            {{ player.sutr }} (S)
-                        </span>  /
-                        <span v-if="player.dUTRStatus === 'Rated'" class="font-semibold" >
-                            {{ player.dutr }} (D)
-                        </span>
-                        <span v-else class="font-light" >
-                            {{ player.dutr }} (D)
-                        </span>
-                    </td>
-                    <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                        {{ (player.successRate * 100).toFixed(2) }} % (Latest)/ {{ (player.wholeSuccessRate * 100).toFixed(2) }}%
-                    </td>
-                    <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                        {{ player.dynamicRating}}
-                    </td>
-                  </tr>
-              </tbody>
-            </table>
+            <USTAPlayerList :players="players" v-model:currentPlayer="currentPlayer" />
+        </div>
+        <div v-if="loading" class="px-5 py-5">
+            <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
+                <span class="sr-only">Loading...</span>
             </div>
-            <div v-if="loading" class="px-5 py-5">
-                <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-            <div v-if="currentPlayer.id">
-                <PlayerInfo :player="currentPlayer" />
-                <PlayerResult :result="playerresult"/>
-            </div>
-            <div v-if="scores.length > 0" class="border-transparent rounded-lg text-center p-3 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
-               <div class="py-2 font-bold text-2xl text-left flex flex-row">
-                    <div class="w-5/6 text-left">USTA Matches</div>
-               </div>
-                <table class="min-w-full border-collapse border-spacing-0 border border-slate-400">
-                      <thead>
-                        <tr>
-                            <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                Match Type
-                            </th>
-                            <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                Home Players
-                            </th>
-                            <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                Visit Players
-                            </th>
-                            <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                Winners Score
-                            </th>
-                            <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                                Winner
-                            </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                         <tr v-for="lineScore in scores" class="even:bg-slate-50 odd:bg-slate-400">
-                            <LineScore :lineScore="lineScore" />
-                          </tr>
-                      </tbody>
-                </table>
-            </div>
+        </div>
+        <div v-if="currentPlayer.id">
+            <USTAPlayer :player="currentPlayer" />
+        </div>
     </div>
 
 </template>

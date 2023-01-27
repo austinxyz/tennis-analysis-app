@@ -1,7 +1,6 @@
 <script>
 import axios from "axios";
-import PlayerResult from "../PlayerResult.vue";
-import PlayerInfo from "../PlayerInfo.vue";
+import USTAPlayer from "./USTAPlayer.vue";
 import MatchScore from "./MatchScore.vue";
 
 const BASE_URL = 'http://localhost:8080';
@@ -221,8 +220,7 @@ export default {
     },
 
     components: {
-        PlayerResult,
-        PlayerInfo,
+        USTAPlayer,
         MatchScore,
     }
 }
@@ -399,8 +397,7 @@ export default {
     </div>
     <div v-else>
       <div class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-        <PlayerInfo :player="currentPlayer" />
-        <PlayerResult :result="playerresult"/>
+        <USTAPlayer :player="currentPlayer" />
       </div>
     </div>
 </template>
