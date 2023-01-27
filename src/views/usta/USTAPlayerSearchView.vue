@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SearchPlayer from "../../components/SearchUSTAPlayer.vue";
+import SearchPlayer from "../../components/usta/SearchUSTAPlayer.vue";
 </script>
 
 <template>

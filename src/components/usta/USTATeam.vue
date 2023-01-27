@@ -2,6 +2,7 @@
 import axios from "axios";
 import PlayerResult from "../PlayerResult.vue";
 import PlayerInfo from "../PlayerInfo.vue";
+import MatchScore from "./MatchScore.vue";
 
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
@@ -176,6 +177,23 @@ export default {
             this.loading = false;
         },
 
+        async updatePlayers(team) {
+
+            this.loading = true;
+
+            if (team.id == null || team.id == '') {
+                return;
+            }
+
+            var url = this.getBaseURL() + "/usta/teams/" + team.id + "/players?action=refresh";
+            const res = await axios.get(url);
+
+            this.$emit('update:team', res.data);
+
+            this.loading = false;
+        },
+
+
         async refreshTeamDRValue(team) {
 
             this.loading = true;
@@ -205,6 +223,7 @@ export default {
     components: {
         PlayerResult,
         PlayerInfo,
+        MatchScore,
     }
 }
 </script>
@@ -223,9 +242,12 @@ export default {
              </span>
            </div>
            <div class="text-sm my-3 flex flex-row">
-            <span class="w-1/2 text-left">Area : {{team.area}} </span>
-            <span class="w-1/2 text-left">Flight : {{team.flight}}</span>
-            <span>
+            <span class="w-1/4 text-left">Area : {{team.area}} </span>
+            <span class="w-1/4 text-left">Flight : {{team.flight}}</span>
+            <span class="w-1/4 text-left">
+                <a href="#" class="underline" @click="updatePlayers(team)"> Update Players </a>
+            </span>
+            <span class="w-1/4 text-right">
                 <button type="button" @click="refreshTeamUTRId(team)">
                     <img src="/utr.svg" width="30" height="30" alt="Fetch UTR ID" title="fetch UTR ID"/>
                 </button>
@@ -368,73 +390,7 @@ export default {
           </tbody>
         </table>
         <a id="score_anchor" />
-        <table v-if="scoreCard.scores" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
-          <thead>
-            <tr>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Match Type
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Home ({{homeTeam}})
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Visit ({{guestTeam}})
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Winners Score
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Winner
-                </th>
-            </tr>
-          </thead>
-          <tbody>
-             <tr v-for="lineScore in scoreCard.scores" class="even:bg-slate-50 odd:bg-slate-400">
-                <td class="px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ lineScore.homeLine.name }}
-                </td>
-                <td class="px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <span v-if="lineScore.homeLine.player1 != null" class="flex flex row"> <img v-if="lineScore.homeTeamWin" src="/win_1262465.png" width="25" height="25" alt="Win"/>
-                        <span v-if="lineScore.homeLine.type === 'S'">
-                            <a :href="'player?utr=' + lineScore.homeLine.player1.utrId" class="underline">
-                               {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.sutr}}S)
-                            </a>
-                        </span>
-                        <span v-else class="font-light" >
-                            <a :href="'player?utr=' + lineScore.homeLine.player1.utrId" class="underline">
-                            {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.dutr}}D)</a>/
-                             <a :href="'player?utr=' + lineScore.homeLine.player2.utrId" class="underline">
-                            {{ lineScore.homeLine.player2.name }}({{lineScore.homeLine.player2.dutr}}D)</a>
-                        </span>
-                    </span>
-                </td>
-                <td class="px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <span v-if="lineScore.guestLine.player1 != null" class="flex flex row"> <img v-if="!lineScore.homeTeamWin" src="/win_1262465.png" width="20" height="20" alt="Win"/>
-                        <span v-if="lineScore.guestLine.type === 'S'" >
-                            <a :href="'player?utr=' + lineScore.guestLine.player1.utrId" class="underline">
-                            {{ lineScore.guestLine.player1.name }} ({{lineScore.guestLine.player1.sutr}}S)
-                            </a>
-                        </span>
-                        <span v-else class="font-light" >
-                            <a :href="'player?utr=' + lineScore.guestLine.player1.utrId" class="underline">
-                            {{ lineScore.guestLine.player1.name }}({{lineScore.guestLine.player1.dutr}}D)</a> /
-                            <a :href="'player?utr=' + lineScore.guestLine.player2.utrId" class="underline">
-                            {{ lineScore.guestLine.player2.name }}({{lineScore.guestLine.player2.dutr}}D)</a>
-                        </span>
-                    </span>
-                </td>
-                <td class="px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{lineScore.score}}
-                </td>
-                <td v-if="lineScore.homeTeamWin" class="px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    Home
-                </td>
-                <td v-else class="px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    Visit
-                </td>
-              </tr>
-          </tbody>
-        </table>
+        <MatchScore :scoreCard="scoreCard"/>
     </div>
     <div v-if="loading" class="px-5 py-5">
       <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">

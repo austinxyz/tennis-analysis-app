@@ -2,6 +2,7 @@
 import axios from "axios";
 import PlayerResult from "../PlayerResult.vue";
 import PlayerInfo from "../PlayerInfo.vue";
+import LineScore from "./LineScore.vue";
 
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
@@ -40,6 +41,9 @@ export default {
                 "&start=" + this.start +
                 "&ageRange=" + this.agerange +
                 "&size=" + this.pagesize;
+            if (this.utrlimit !=null && this.utrlimit != '') {
+                url = url + "&utrLimit=" + this.utrlimit;
+            }
             try {
                 const response = await axios.get(url);
                 this.players = response.data;
@@ -69,6 +73,19 @@ export default {
             this.loading = false;
         },
 
+        async getMatchScores(player) {
+            this.loading = true;
+
+            var url = this.getBaseURL() + "/usta/players/" + player.id + "/scores";
+            try {
+                const response = await axios.get(url);
+                this.scores = response.data;
+            } catch(error) {
+
+            };
+            this.loading = false;
+        },
+
         async getTeam(team) {
             this.team = team;
         },
@@ -88,13 +105,16 @@ export default {
             gender: 'M',
             start:'0',
             pagesize:'10',
-            agerange:'18+'
+            agerange:'18+',
+            utrlimit:'',
+            scores:[],
         }
     },
 
     components: {
         PlayerResult,
-        PlayerInfo
+        PlayerInfo,
+        LineScore,
     }
 }
 </script>
@@ -123,10 +143,15 @@ export default {
                 </div>
                 <div class="mb-2 flex flow-row">
                   <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="utr">
-                    UTR (> ):
+                    UTR : &gt;=
                   </span>
                   <input class="border-b-2 border-gray-300 mb-2 text-sm"
                     type="text" v-model="utr" />
+                  <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="utr">
+                    &lt;=
+                  </span>
+                  <input class="border-b-2 border-gray-300 mb-2 text-sm"
+                    type="text" v-model="utrlimit" />
                 </div>
                 <div class="mb-2 flex flow-row">
                   <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">
@@ -180,6 +205,9 @@ export default {
                         <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                             Teams
                         </th>
+                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                            USTA Matches
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -208,6 +236,11 @@ export default {
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                             <a href="#" class="underline" @click="getTeams(player)">
                             Teams
+                            </a>
+                        </td>
+                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                            <a href="#" class="underline" @click="getMatchScores(player)">
+                            USTA Matches
                             </a>
                         </td>
                     </tr>
@@ -333,6 +366,34 @@ export default {
             <div v-else>
                 <PlayerInfo :player="currentPlayer" />
                 <PlayerResult :result="playerresult"/>
+            </div>
+            <div v-if="scores.length > 0">
+                <table class="min-w-full border-collapse border-spacing-0 border border-slate-400">
+                      <thead>
+                        <tr>
+                            <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                                Match Type
+                            </th>
+                            <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                                Home Players
+                            </th>
+                            <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                                Visit Players
+                            </th>
+                            <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                                Winners Score
+                            </th>
+                            <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                                Winner
+                            </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                         <tr v-for="lineScore in scores" class="even:bg-slate-50 odd:bg-slate-400">
+                            <LineScore :lineScore="lineScore" />
+                          </tr>
+                      </tbody>
+                </table>
             </div>
     </div>
 
