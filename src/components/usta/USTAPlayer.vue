@@ -155,7 +155,7 @@ export default {
     <div v-if="player.id" class="border-b border-gray-200 dark:border-gray-700 mb-2">
         <ul class="flex -mb-px" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
             <li class="mr-2" role="presentation">
-                <button v-if="tab=='teams'" class="inline-block text-blue-500 bg-gray-600 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300 active"
+                <button v-if="tab=='teams'" class="inline-block text-blue-500 bg-gray-600 hover:text-blue-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300 active"
                 id="team-tab" data-tabs-target="#teams" type="button" role="tab" aria-controls="profile" aria-selected="false" @click="showTeams(player)">
                 USTA Teams</button>
                 <button v-else class="inline-block text-gray-500 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300"
@@ -163,7 +163,7 @@ export default {
                 USTA Teams</button>
             </li>
             <li class="mr-2" role="presentation">
-                <button v-if="tab=='matches'" class="inline-block text-blue-500 bg-gray-600 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300"
+                <button v-if="tab=='matches'" class="inline-block text-blue-500 bg-gray-600 hover:text-blue-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300"
                 id="matches-tab" data-tabs-target="#matches" type="button" role="tab" aria-controls="dashboard" aria-selected="true" @click="showMatches(player)">
                 USTA Matches</button>
                 <button v-else class="inline-block text-gray-500 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300"
@@ -171,7 +171,7 @@ export default {
                 USTA Matches</button>
             </li>
             <li class="mr-2" role="presentation">
-                <button v-if="tab=='utrmatches'" class="inline-block text-blue-500 bg-gray-600 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300"
+                <button v-if="tab=='utrmatches'" class="inline-block text-blue-500 bg-gray-600 hover:text-blue-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300"
                 id="utrmatches-tab" data-tabs-target="#utrmatches" type="button" role="tab" aria-controls="settings" aria-selected="false" @click="showUTRMatches(player)">
                 UTR Matches</button>
                 <button v-else class="inline-block text-gray-500 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300"

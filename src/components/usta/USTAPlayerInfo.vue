@@ -61,7 +61,7 @@ export default {
         <div class="text-sm my-3 flex flex-row">
             <span class="w-1/2 text-left">Gender : {{player.gender}} </span>
             <span class="w-1/2 text-left">Area : {{player.area}}</span>
-            <span class="w-1/2 text-left ">UTR ID : <a :href="'https://app.universaltennis.com/profiles/' + player.utrId" class="underline" target="_blank"> {{player.utrId}}</a></span>
+            <span class="w-1/2 text-left">Age : {{player.ageRange}}</span>
             <span>
                <button type="button" @click="refreshTeamUTRInfo(player)">
                    <img src="/utr.svg" width="30" height="30" alt="Fetch UTR" title="fetch UTR"/>
@@ -72,14 +72,15 @@ export default {
         <div class="text-sm my-3 flex flex-row">
            <span class="w-1/2 text-left ">USTA Rating :  {{player.ustaRating}}</span>
            <span class="w-1/2 whitespace-no-wrap text-left">USTA ID : <a :href="player.tennisLinkURL" class="underline" target="_blank"> {{player.ustaId}}</a></span>
-           <span class="w-1/2 text-left"><a :href="player.noncalLink" class="underline" target="_blank"> USTA NonCal Link</a></span>
-           <span class="w-1/2 text-left"><a :href="player.tennisRecordLink" class="underline" target="_blank"> Tennis Record Link</a></span>
+           <span class="w-1/2 text-left">USTA Norcal ID : <a :href="player.noncalLink" class="underline" target="_blank"> {{player.ustaNorcalId}}</a></span>
+           <span class="w-1/2 text-left">Tennis Record DR : <a :href="player.tennisRecordLink" class="underline" target="_blank"> {{player.dynamicRating}}</a></span>
         </div>
         <hr />
         <div class="text-sm my-3 flex flex-row">
+          <span class="w-1/2 text-left ">UTR ID : <a :href="'https://app.universaltennis.com/profiles/' + player.utrId" class="underline" target="_blank"> {{player.utrId}}</a></span>
           <span class="w-1/2 text-left ">Single UTR :  {{player.sutr}} ({{player.sutrstatus}})</span>
           <span class="w-1/2 text-left ">Double UTR :  {{player.dutr}} ({{player.dutrstatus}})</span>
-          <span class="w-1/2 text-left ">DR :  {{player.dynamicRating}} </span>
+          <span class="w-1/2 text-left ">WPct : {{ (player.successRate * 100).toFixed(2) }} % (Latest)/ {{ (player.wholeSuccessRate * 100).toFixed(2) }}%</span>
         </div>
     </div>
     <div v-if="loading" class="px-5 py-5">

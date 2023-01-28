@@ -3,6 +3,7 @@ import axios from "axios";
 
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
+import USTAPlayerList from "./USTAPlayerList.vue";
 
 export default {
 
@@ -15,6 +16,7 @@ export default {
     data() {
         return {
             loading: false,
+            currentPlayer: {},
         };
     },
 
@@ -98,12 +100,15 @@ export default {
         },
     },
 
+    components: {
+        USTAPlayerList,
+    }
 }
 </script>
 
 <template>
     <div class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-        <div v-if="team" class="border-transparent rounded-lg text-center px-4 pt-2 pb-1 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
+        <div v-if="team.id" class="border-transparent rounded-lg text-center px-4 pt-2 pb-1 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
            <div class="font-bold text-2xl text-left">
             <span class="w-1/2 text-left">Team :
                  <a :href="team.link" class="underline" target="_blank">
@@ -133,70 +138,9 @@ export default {
            </div>
         </div>
 
-        <table  class="min-w-full border-collapse border-spacing-0 border border-slate-400">
-          <thead>
-            <tr>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    #
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Player
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    NTRP
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    UTR Rating
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    UTR Win Ratio
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    DR
-                </th>
-            </tr>
-          </thead>
-          <tbody>
-             <tr v-for="(player, index) in team.players" class="even:bg-slate-50 odd:bg-slate-400">
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ index+1 }}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <a :href="'player?utr=' + player.utrId" class="underline" target="_blank">
-                    {{ player.name }} ({{ player.gender }})
-                    </a>
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ player.ustaRating}}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <span v-if="player.sUTRStatus === 'Rated'" class="font-semibold" >
-                        {{ player.sutr }} (S)
-                    </span>
-                    <span v-else class="font-light" >
-                        {{ player.sutr }} (S)
-                    </span>  /
-                    <span v-if="player.dUTRStatus === 'Rated'" class="font-semibold" >
-                        {{ player.dutr }} (D)
-                    </span>
-                    <span v-else class="font-light" >
-                        {{ player.dutr }} (D)
-                    </span>
-                    <span v-if="!player.refreshedUTR && player.utrId!=null">
-                         <a href="#" class="underline" @click="refreshUTR(player)">
-                            Refresh UTR
-                         </a>
-                    </span>
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ (player.successRate * 100).toFixed(2) }} % (Latest)/ {{ (player.wholeSuccessRate * 100).toFixed(2) }}%
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ player.dynamicRating}}
-                </td>
-              </tr>
-          </tbody>
-        </table>
+        <div v-if="team.id">
+            <USTAPlayerList :players="team.players" v-model:currentPlayer="currentPlayer" showMode="jump"/>
+        </div>
     </div>
 </template>
 

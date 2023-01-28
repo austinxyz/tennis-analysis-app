@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import USTATeamList from "../../components/usta/USTATeamList.vue";
+import USTALeague from "../../components/usta/USTALeague.vue";
 </script>
 
 <template>
-    <USTATeamList />
+    <USTALeague />
 </template>

@@ -146,7 +146,7 @@ export default {
             >
              Search
             </button>
-            <USTAPlayerList :players="players" v-model:currentPlayer="currentPlayer" />
+            <USTAPlayerList :players="players" v-model:currentPlayer="currentPlayer" showMode="parent" />
         </div>
         <div v-if="loading" class="px-5 py-5">
             <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
