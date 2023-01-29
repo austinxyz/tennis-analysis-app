@@ -8,7 +8,7 @@ import 'vue-select/dist/vue-select.css';
 export default {
 
     mounted() {
-        axios.get("http://localhost:8080/usta/divisions/")
+        axios.get("http://localhost:8080/usta/2023/divisions/")
             .then(response => {
                 this.divisions = response.data;
                 this.divisions.map(function (x){

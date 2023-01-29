@@ -76,7 +76,7 @@ export default {
         </tbody>
     </table>
     <label v-if="team.players" class="border-transparent rounded-lg text-center px-2 py-1 mx-auto md:mx-0 my-2 bg-gray-100 font-normal z-10 shadow-lg">
-      Team: <a :href="team.link" class="underline" >{{team.name}}</a>
+      Team: <a :href="team.link" class="underline" target="_blank">{{team.name}}</a>
     </label>
     <table v-if="team.players" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
       <thead>
@@ -115,18 +115,18 @@ export default {
                 {{ player.ustaRating}}
             </td>
             <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                <span v-if="player.sUTRStatus === 'Rated'" class="font-semibold" >
+                <span v-if="player.dutrstatus === 'Rated'" class="font-semibold" >
+                    {{ player.dutr }} (D)
+                </span>
+                <span v-else class="font-light" >
+                    {{ player.dutr }} (D)
+                </span>
+                <span v-if="player.sutrstatus === 'Rated'" class="font-semibold" >
                     {{ player.sutr }} (S)
                 </span>
                 <span v-else class="font-light" >
                     {{ player.sutr }} (S)
                 </span>  /
-                <span v-if="player.dUTRStatus === 'Rated'" class="font-semibold" >
-                    {{ player.dutr }} (D)
-                </span>
-                <span v-else class="font-light" >
-                    {{ player.dutr }} (D)
-                </span>
             </td>
             <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                 {{ (player.successRate * 100).toFixed(2) }} % (Latest)/ {{ (player.wholeSuccessRate * 100).toFixed(2) }}%

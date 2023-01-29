@@ -3,7 +3,7 @@ import axios from "axios";
 import USTAPlayerInfo from './USTAPlayerInfo.vue';
 import USTAPlayerTeams from './USTAPlayerTeams.vue';
 import USTAPlayerMatches from './USTAPlayerMatches.vue';
-import PlayerResult from "../PlayerResult.vue";
+import PlayerResult from "../utr/PlayerResult.vue";
 
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
@@ -150,9 +150,9 @@ export default {
 
 <template>
 
-<div style="min-width: 1000px" class="min-w-full mx-auto">
+<div v-if="player.id" style="min-width: 1000px" class="min-w-full mx-auto">
     <USTAPlayerInfo :player="player" />
-    <div v-if="player.id" class="border-b border-gray-200 dark:border-gray-700 mb-2">
+    <div  class="border-b border-gray-200 dark:border-gray-700 mb-2">
         <ul class="flex -mb-px" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
             <li class="mr-2" role="presentation">
                 <button v-if="tab=='teams'" class="inline-block text-blue-500 bg-gray-600 hover:text-blue-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300 active"

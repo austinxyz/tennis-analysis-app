@@ -28,7 +28,7 @@ export default {
 
             this.loading = false;
         } else {
-            const res2 = await axios.get("http://localhost:8080/usta/divisions/");
+            const res2 = await axios.get("http://localhost:8080/usta/2023/divisions/");
             this.divisions = res2.data;
             this.divisions.map(function (x){
                return x.label = x.name;

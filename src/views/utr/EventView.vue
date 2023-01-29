@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DivisionList from "../../components/DivisionList.vue";
+import DivisionList from "../../components/utr/DivisionList.vue";
 </script>
 
 <template>

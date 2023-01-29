@@ -298,18 +298,18 @@ export default {
                     {{ player.ustaRating}}
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <span v-if="player.sUTRStatus === 'Rated'" class="font-semibold" >
+                    <span v-if="player.dutrstatus === 'Rated'" class="font-semibold" >
+                        {{ player.dutr }} (D)
+                    </span>
+                    <span v-else class="font-light" >
+                        {{ player.dutr }} (D)
+                    </span>
+                    <span v-if="player.sutrstatus === 'Rated'" class="font-semibold" >
                         {{ player.sutr }} (S)
                     </span>
                     <span v-else class="font-light" >
                         {{ player.sutr }} (S)
                     </span>  /
-                    <span v-if="player.dUTRStatus === 'Rated'" class="font-semibold" >
-                        {{ player.dutr }} (D)
-                    </span>
-                    <span v-else class="font-light" >
-                        {{ player.dutr }} (D)
-                    </span>
                     <span v-if="!player.refreshedUTR && player.utrId!=null">
                          <a href="#" class="underline" @click="refreshUTR(player)">
                             Refresh UTR

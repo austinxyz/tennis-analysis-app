@@ -21,8 +21,8 @@ export default {
         axios.get(url)
             .then(response => {
                 this.player = response.data;
-                this.utrquery = utrId;
                 this.playerName = this.player.player.name;
+                this.utrquery = this.playerName;
                 this.loading = false;
             })
     },
