@@ -3,6 +3,7 @@
 import axios from "axios";
 import USTATeamBrief from "./USTATeamBrief.vue";
 import MatchScore from "./MatchScore.vue";
+import USTALineupSelect from "./USTALineupSelect.vue";
 import 'vue-select/dist/vue-select.css';
 
 export default {
@@ -91,6 +92,8 @@ export default {
 	        teams: [],
 	        team1: {},
 	        team2: {},
+	        lineups1: [],
+	        lineups1: [],
 	        loading: false,
 	        selectedTeam:[],
 	        result: {}
@@ -99,6 +102,7 @@ export default {
     components: {
         USTATeamBrief,
         MatchScore,
+        USTALineupSelect,
     }
 }
 </script>
@@ -154,10 +158,14 @@ export default {
               <span class="sr-only">Loading...</span>
             </div>
         </div>
-        <div v-else class="m-2 flex flow-row">
-            <USTATeamBrief v-model:team="team1"/>
-            <USTATeamBrief v-model:team="team2"/>
 
+        <div v-if="team1.id" class="m-2 flex flow-row">
+            <div>
+                <USTATeamBrief v-model:team="team1"/>
+            </div>
+            <div>
+                <USTATeamBrief v-model:team="team2"/>
+            </div>
             <div class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
                 <label class="block text-gray-700 font-bold mb-2 px-2 ">
                     Past Matches
