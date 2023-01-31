@@ -8,27 +8,41 @@ import USTAPlayerList from "./USTAPlayerList.vue";
 export default {
 
     props: {
-        team: {type: Object}
+        team: {type: Object},
+        matchType: {type: String}
     },
 
     emits: ['update:team'],
+
+    mounted() {
+        this.lineups= [
+                    {name:'D1',
+                    player1:{},
+                    player2:{}},
+                    {name:'D2',
+                    player1:{},
+                    player2:{}},
+                    {name:'D3',
+                    player1:{},
+                    player2:{}}
+                ];
+        if (this.matchType == '40+Adult') {
+            this.lineups.push(
+                {name:'S1',
+                player1:{},
+                player2:{}}
+            )
+        }
+        console.log(this.matchType);
+        console.log(this.lineups);
+    },
 
     data() {
         return {
             loading: false,
             currentPlayer: {},
             selectPlayers: [],
-            lineups: [
-                {name:'D1',
-                player1:{},
-                player2:{}},
-                {name:'D2',
-                player1:{},
-                player2:{}},
-                {name:'D3',
-                player1:{},
-                player2:{}},
-            ]
+            lineups: []
         };
     },
 
@@ -127,6 +141,23 @@ export default {
                      this.lineups[2].player2 = this.team.players[i];
                     }
                 }
+
+                if (this.matchType == '40+Adult') {
+                    if (this.lineups.length == 3) {
+                        this.lineups.push(
+                            {name:'S1',
+                            player1:{},
+                            player2:{}}
+                        )
+                    }
+                    if (this.selectPlayers[i] == 's1') {
+                        this.lineups[3].player1 = this.team.players[i];
+                    }
+                    if (this.selectPlayers[i] == 'None') {
+                        this.lineups[3].player1 = {};
+                    }
+                }
+
                 if (this.selectPlayers[i] == 'None') {
                     for (let j=0; j<3; j++) {
                         if (this.lineups[j].player1.id == this.team.players[i].id) {
@@ -175,6 +206,11 @@ export default {
             <span class="w-1/2 text-left">Area : {{team.area}} </span>
             <span class="w-1/2 text-left">Flight : {{team.flight}}</span>
             <span>
+                <button type="button" @click="refreshTeamUTRValue(team)">
+                    <img src="/utr.svg" width="30" height="30" alt="Fetch UTR Value" title="fetch UTR Value"/>
+                </button>
+            </span>
+            <span>
                 <button type="button" @click="refreshTeamUTRId(team)">
                     <img src="/utr.svg" width="30" height="30" alt="Fetch UTR ID" title="fetch UTR ID"/>
                 </button>
@@ -187,6 +223,7 @@ export default {
                <button type="button" @click="refreshTeamDRValue(team)" class="flex flex-row">
                   <img src="/recruiting50x50.png" width="25" height="25" alt="Refresh DR" title="Refresh DR"/>
                </button>
+
            </div>
         </div>
 
@@ -256,10 +293,12 @@ export default {
                             {{ (player.successRate * 100).toFixed(2) }} % (Latest)/ {{ (player.wholeSuccessRate * 100).toFixed(2) }}%
                         </td>
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            <select v-model="selectPlayers[index]" @change="setLineup">
+                            <select v-model="selectPlayers[index]" @change="setLineup"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full">
                                 <option value="d1">D1</option>
                                 <option value="d2">D2</option>
                                 <option value="d3">D3</option>
+                                <option v-if="matchType == '40+Adult'" value="s1">S1</option>
                                 <option value="None">None</option>
                             </select>
                         </td>
@@ -322,11 +361,17 @@ export default {
                             </span>
                         </td>
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            <span v-if="lineup.player2.id" class="text-sm leading-5"> {{lineup.player2.dutr + lineup.player1.dutr}}</span>
+                            <span v-if="lineup.player2.id" class="text-sm leading-5"> {{(lineup.player2.dutr + lineup.player1.dutr).toFixed(2)}}</span>
+                            <span v-else-if="matchType == '40+Adult' && lineup.player1.id" class="text-sm leading-5"> {{lineup.player1.sutr}}</span>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <div v-if="loading" class="px-5 py-5">
+                <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
+                  <span class="sr-only">Loading...</span>
+                </div>
+            </div>
         </div>
     </div>
 </template>

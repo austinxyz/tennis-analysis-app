@@ -3,7 +3,6 @@
 import axios from "axios";
 import USTATeamBrief from "./USTATeamBrief.vue";
 import MatchScore from "./MatchScore.vue";
-import USTALineupSelect from "./USTALineupSelect.vue";
 import 'vue-select/dist/vue-select.css';
 
 export default {
@@ -26,6 +25,12 @@ export default {
             var url = "http://localhost:8080/usta/analysis/team/team1/" + this.team1.id + "/team2/" + this.team2.id;
             const res1 = await axios.get(url);
             this.result = res1.data;
+
+            if (this.team1.name.indexOf("40A") > 0) {
+                this.matchType = "40+Adult";
+            } else {
+                this.matchType = "Mixed";
+            }
 
             this.loading = false;
         } else {
@@ -57,6 +62,12 @@ export default {
             var url = "http://localhost:8080/usta/analysis/team/team1/" + this.team1.id + "/team2/" + this.team2.id;
             const response = await axios.get(url);
             this.result = response.data;
+
+            if (this.team1.name.indexOf("40A") > 0) {
+                this.matchType = "40+Adult";
+            } else {
+                this.matchType = "Mixed";
+            }
 
             this.loading = false;
         },
@@ -96,13 +107,13 @@ export default {
 	        lineups1: [],
 	        loading: false,
 	        selectedTeam:[],
+	        matchType:'',
 	        result: {}
   	    }
     },
     components: {
         USTATeamBrief,
         MatchScore,
-        USTALineupSelect,
     }
 }
 </script>
@@ -161,10 +172,10 @@ export default {
 
         <div v-if="team1.id" class="m-2 flex flow-row">
             <div>
-                <USTATeamBrief v-model:team="team1"/>
+                <USTATeamBrief v-model:team="team1" :matchType="matchType"/>
             </div>
             <div>
-                <USTATeamBrief v-model:team="team2"/>
+                <USTATeamBrief v-model:team="team2" :matchType="matchType"/>
             </div>
             <div class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
                 <label class="block text-gray-700 font-bold mb-2 px-2 ">
