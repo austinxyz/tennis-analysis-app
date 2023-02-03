@@ -30,6 +30,29 @@ export default {
 
     },
 
+    watch: {
+        player(newPlayer, oldPlayer) {
+            this.teams= [];
+            this.team= {};
+            this.currPlayer=newPlayer;
+            this.scores= [];
+            this.playerresult= [];
+
+            if (this.tab == 'teams') {
+                this.showTeams(newPlayer);
+            }
+
+            if (this.tab == 'matches') {
+                this.showMatches(newPlayer);
+            }
+
+            if (this.tab == 'utrmatches') {
+                this.showUTRMatches(newPlayer);
+            }
+        }
+
+    },
+
     methods: {
 
         getBaseURL() {
