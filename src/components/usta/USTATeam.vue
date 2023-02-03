@@ -26,6 +26,19 @@ export default {
         };
     },
 
+    watch: {
+        team(newTeam, oldTeam) {
+            this.matches = [];
+            this.currentPlayer = {};
+            if (newTeam == null || newTeam.id == null) {
+                return;
+            }
+            if (this.tab = 'matches') {
+                this.showMatches(newTeam);
+            }
+        }
+    },
+
     methods: {
 
         teamRefresh(team) {
@@ -60,7 +73,7 @@ export default {
             this.tab = 'players';
 
             if (team.id == null || team.id == '') {
-             return;
+                return;
             }
 
             if (team.id != this.team.id) {

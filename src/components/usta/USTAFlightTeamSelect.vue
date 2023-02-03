@@ -59,15 +59,15 @@ export default {
                 this.team2 = this.teams[this.selectedTeam[1]];
             }
 
-            var url = "http://localhost:8080/usta/analysis/team/team1/" + this.team1.id + "/team2/" + this.team2.id;
-            const response = await axios.get(url);
-            this.result = response.data;
-
             if (this.team1.name.indexOf("40A") > 0) {
                 this.matchType = "40+Adult";
             } else {
                 this.matchType = "Mixed";
             }
+
+            var url = "http://localhost:8080/usta/analysis/team/team1/" + this.team1.id + "/team2/" + this.team2.id;
+            const response = await axios.get(url);
+            this.result = response.data;
 
             this.loading = false;
         },
@@ -156,7 +156,7 @@ export default {
                     </li>
               </ul>
             </nav>
-            <button
+            <button v-if="teams.length > 0"
                     class="border border-indigo-500 bg-indigo-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-indigo-600 focus:outline-none focus:shadow-outline"
                     @click="compareTeams"
             >
@@ -182,7 +182,7 @@ export default {
                     Past Matches
                 </label>
                 <div v-for="scorecard in result.pastScores" class="w-full border-collapse border-spacing-0 border border-slate-100">
-                    <MatchScore :scoreCard="scorecard"/>
+                    <MatchScore :scoreCard="scorecard" />
                 </div>
                 <hr/>
                 <label class="block text-gray-700 font-bold mb-2 px-2 ">
@@ -194,7 +194,7 @@ export default {
                         Team: {{key}}
                     </label>
                     <div v-for="scorecard in scorecards">
-                        <MatchScore :scoreCard="scorecard"/>
+                        <MatchScore :scoreCard="scorecard" />
                     </div>
                 </div>
             </div>

@@ -38,6 +38,27 @@ export default {
             this.loading = false;
 
         },
+
+        async refreshTeamUTRValue(player) {
+
+            this.loading = true;
+
+            if (player.id == null || player.id == '') {
+                return;
+            }
+
+            var url = this.getBaseURL() + "/players/" + player.id + "?action=updateUTRId";
+            const res = await axios.get(url);
+
+            this.$emit('update:player', res.data);
+
+            this.loading = false;
+
+        },
+
+        savePlayer(player) {
+            $emit('update:player', player);
+        }
     },
 
     data() {
@@ -55,8 +76,8 @@ export default {
 <template>
     <div v-if="player.name" class="min-w-full border-transparent rounded-lg text-center p-5 my-2 bg-gray-100 font-medium z-10 shadow-lg">
         <div class="font-bold text-2xl text-left flex flex-row">
-            <div class="w-5/6 text-left"><a :href="'player?utr=' + player.utrId" class="underline">Player : {{ player.name }} </a></div>
-            <PlayerForm :player="player" v-model:utrId="player.utrId" v-model:ustaId="player.ustaId" @change="$emit('update:player', $event.target)"/>
+            <div class="w-5/6 text-left"><a :href="'player?ustaId=' + player.ustaNorcalId" class="underline">Player : {{ player.name }} </a></div>
+            <PlayerForm :player="player" @change="savePlayer"/>
         </div>
         <div class="text-sm my-3 flex flex-row">
             <span class="w-1/2 text-left">Gender : {{player.gender}} </span>
@@ -65,6 +86,11 @@ export default {
             <span>
                <button type="button" @click="refreshTeamUTRInfo(player)">
                    <img src="/utr.svg" width="30" height="30" alt="Fetch UTR" title="fetch UTR"/>
+               </button>
+            </span>
+            <span>
+               <button type="button" @click="refreshTeamUTRValue(player)">
+                   <img src="/utr.svg" width="30" height="30" alt="Fetch UTR Value" title="fetch UTR Value"/>
                </button>
             </span>
         </div>

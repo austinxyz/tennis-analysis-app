@@ -1,4 +1,5 @@
 <script>
+import axios from "axios";
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
 
@@ -12,8 +13,18 @@ export default {
     emits: ["update:team"],
 
     methods: {
+        getBaseURL() {
+            if (process.env.NODE_ENV === 'production') {
+                return BASE_URL_PROD;
+            } else {
+                return BASE_URL;
+            }
+        },
+
         async getTeam(team) {
-            this.$emit('update:team', team);
+            var url = this.getBaseURL() + "/usta/teams/" + team.id;
+            const res = await axios.get(url);
+            this.$emit('update:team', res.data);
         },
     },
 

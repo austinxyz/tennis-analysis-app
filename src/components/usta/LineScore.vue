@@ -1,55 +1,34 @@
 <script>
-
+import LinePlayerInfo from "./LinePlayerInfo.vue";
 export default {
 
     props: {
         lineScore: { type: Object},
     },
 
+    components: {
+        LinePlayerInfo,
+    }
 };
 </script>
 
 <template>
-        <td class="px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
+        <td class="w-1/20 px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
             {{ lineScore.homeLine.name }}
         </td>
-        <td class="px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
-            <span v-if="lineScore.homeLine.player1 != null" class="flex flex row"> <img v-if="lineScore.homeTeamWin" src="/win_1262465.png" width="25" height="25" alt="Win"/>
-                <span v-if="lineScore.homeLine.type === 'S'">
-                    <a :href="'player?utr=' + lineScore.homeLine.player1.utrId" class="underline">
-                       {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.sutr}}S - DR:{{lineScore.homeLine.player1.dynamicRating}})
-                    </a>
-                </span>
-                <span v-else class="font-light" >
-                    <a :href="'player?utr=' + lineScore.homeLine.player1.utrId" class="underline">
-                    {{ lineScore.homeLine.player1.name }}({{lineScore.homeLine.player1.dutr}}D - DR:{{lineScore.homeLine.player1.dynamicRating}})</a>/
-                     <a :href="'player?utr=' + lineScore.homeLine.player2.utrId" class="underline">
-                    {{ lineScore.homeLine.player2.name }}({{lineScore.homeLine.player2.dutr}}D - DR:{{lineScore.homeLine.player2.dynamicRating}})</a>
-                </span>
-            </span>
+        <td class="w-2/5 px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
+            <LinePlayerInfo :player1="lineScore.homeLine.player1" :player2="lineScore.homeLine.player2" :winner="lineScore.homeTeamWin" :matchType="lineScore.homeLine.type" />
         </td>
-        <td class="px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
-            <span v-if="lineScore.guestLine.player1 != null" class="flex flex row"> <img v-if="!lineScore.homeTeamWin" src="/win_1262465.png" width="20" height="20" alt="Win"/>
-                <span v-if="lineScore.guestLine.type === 'S'" >
-                    <a :href="'player?utr=' + lineScore.guestLine.player1.utrId" class="underline">
-                    {{ lineScore.guestLine.player1.name }} ({{lineScore.guestLine.player1.sutr}}S - DR:{{lineScore.guestLine.player1.dynamicRating}})
-                    </a>
-                </span>
-                <span v-else class="font-light" >
-                    <a :href="'player?utr=' + lineScore.guestLine.player1.utrId" class="underline">
-                    {{ lineScore.guestLine.player1.name }}({{lineScore.guestLine.player1.dutr}}D - DR:{{lineScore.guestLine.player1.dynamicRating}})</a> /
-                    <a :href="'player?utr=' + lineScore.guestLine.player2.utrId" class="underline">
-                    {{ lineScore.guestLine.player2.name }}({{lineScore.guestLine.player2.dutr}}D - DR:{{lineScore.guestLine.player2.dynamicRating}})</a>
-                </span>
-            </span>
+        <td class="w-2/5 px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
+            <LinePlayerInfo :player1="lineScore.guestLine.player1" :player2="lineScore.guestLine.player2" :winner="!lineScore.homeTeamWin" :matchType="lineScore.guestLine.type" />
         </td>
-        <td class="px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
+        <td class="w-1/10 px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
             {{lineScore.score}}
         </td>
-        <td v-if="lineScore.homeTeamWin" class="px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
+        <td v-if="lineScore.homeTeamWin" class="w-1/20 px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
             Home
         </td>
-        <td v-else class="px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
+        <td v-else class="w-1/20 px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
             Visit
         </td>
 </template>

@@ -17,13 +17,13 @@ export default {
            <hr />
            <div class="text-sm my-3 flex flex-row">
                 <div>
-                    <img v-if="player1.sUTR > player2.sUTR " src="/win_1262465.png" width="30" height="30" alt="Win"/>
+                    <img v-if="player1.sUTR > player2.sUTR" src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
                 </div>
            Single UTR : {{player1.sUTR}} ({{ player1.sUTRStatus}})</div>
            <hr />
            <div class="text-sm my-3 flex flex-row">
                 <div>
-                    <img v-if="player1.dUTR > player2.dUTR " src="/win_1262465.png" width="30" height="30" alt="Win"/>
+                    <img v-if="player1.dUTR > player2.dUTR" src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
                 </div>
            Double UTR : {{player1.dUTR}} ({{ player1.dUTRStatus}})</div>
            <hr />
@@ -33,13 +33,13 @@ export default {
            <hr />
            <div class="text-sm my-3 flex flex-row">
                 <div>
-                    <img v-if="player2.sUTR > player1.sUTR " src="/win_1262465.png" width="30" height="30" alt="Win"/>
+                    <img v-if="player2.sUTR > player1.sUTR " src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
                 </div>
            Single UTR : {{player2.sUTR}} ({{ player2.sUTRStatus}})</div>
               <hr />
               <div class="text-sm my-3 flex flex-row">
                 <div>
-                    <img v-if="player2.dUTR > player1.dUTR " src="/win_1262465.png" width="30" height="30" alt="Win"/>
+                    <img v-if="player2.dUTR > player1.dUTR " src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
                 </div>
            Double UTR : {{player2.dUTR}} ({{ player2.dUTRStatus}})</div>
               <hr />

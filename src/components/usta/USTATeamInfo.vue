@@ -125,7 +125,7 @@ export default {
                 <img src="/utr.svg" width="30" height="30" alt="Fetch UTR Value" title="fetch UTR Value"/>
             </button>
         </span>
-        <span class="w-1/4 text-right">
+        <span class="text-right">
             <button type="button" @click="refreshTeamUTRId(team)">
                 <img src="/utr.svg" width="30" height="30" alt="Fetch UTR ID" title="fetch UTR ID"/>
             </button>

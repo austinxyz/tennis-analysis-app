@@ -39,6 +39,7 @@ export default {
                 "&utr=" + this.utr +
                 "&start=" + this.start +
                 "&ageRange=" + this.agerange +
+                "&ratedOnly=" + this.ratedonly +
                 "&size=" + this.pagesize;
             if (this.utrlimit !=null && this.utrlimit != '') {
                 url = url + "&utrLimit=" + this.utrlimit;
@@ -73,6 +74,7 @@ export default {
             start:'0',
             pagesize:'10',
             agerange:'18+',
+            ratedonly: false,
             utrlimit:'',
         }
     },
@@ -124,6 +126,13 @@ export default {
                   </label>
                   <input type="radio" v-model="gender" value="M" /> <span class="px-2 text-sm"> Male</span>
                   <input type="radio" v-model="gender" value="F" /> <span class="px-2 text-sm">Female</span>
+                </div>
+                <div class="mb-2 flex flow-row">
+                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">
+                    RatedOnly
+                  </label>
+                  <input type="radio" v-model="ratedonly" value="true" /> <span class="px-2 text-sm">Yes</span>
+                  <input type="radio" v-model="ratedonly" value="false" /> <span class="px-2 text-sm">No</span>
                 </div>
                 <div class="mb-2 flex flow-row">
                   <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">

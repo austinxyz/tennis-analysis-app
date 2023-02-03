@@ -14,6 +14,12 @@ export default {
 
     emits: ["update:team", "update:matches", "change"],
 
+    watch: {
+        matches(newMatches, oldMatches) {
+            this.scoreCard={};
+        }
+    },
+
     methods: {
 
         getBaseURL() {
@@ -79,7 +85,7 @@ export default {
 </script>
 
 <template>
-        <table v-if="matches.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
+        <table class="min-w-full border-collapse border-spacing-0 border border-slate-400">
           <thead>
             <tr>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
@@ -105,7 +111,7 @@ export default {
                 </th>
             </tr>
           </thead>
-          <tbody >
+          <tbody v-if="matches.length >0" >
              <tr v-for="(match, index) in matches" class="even:bg-slate-50 odd:bg-slate-400">
                  <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                      {{ index+1 }}

@@ -11,7 +11,7 @@ export default {
         showMode: {type: String},
     },
 
-    emits: ["update:currentPlayer", "update:players"],
+    emits: ["update:currentPlayer", "update:players", "changePlayer"],
 
     methods: {
 
@@ -26,6 +26,7 @@ export default {
 
         async setPlayer(player) {
             this.$emit('update:currentPlayer', player);
+            this.$emit('changePlayer', player);
         },
 
         async refreshUTR(player) {
@@ -94,7 +95,7 @@ export default {
                     {{ player.gender }}
                 </td>
                 <td v-if="showMode=='jump'" class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <a :href="'/usta/player?utr=' + player.utrId" class="whitespace-no-wrap underline">
+                    <a :href="'/usta/player?ustaId=' + player.ustaNorcalId" class="whitespace-no-wrap underline">
                       {{ player.name }} ({{ player.gender }})
                     </a>
                 </td>

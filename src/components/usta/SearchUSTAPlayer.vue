@@ -9,13 +9,13 @@ const BASE_URL_PROD = 'http://localhost:8080';
 export default {
 
     async mounted() {
-        let utrId = this.$route.query.utr;
+        let ustaId = this.$route.query.ustaId;
 
-        if (utrId == null) {
+        if (ustaId == null) {
             return;
         }
 
-        var url = this.getBaseURL() + "/players/utr/" + utrId;
+        var url = this.getBaseURL() + "/players/usta/" + ustaId;
         try {
             const res = await axios.get(url);
             this.currentPlayer = res.data;
