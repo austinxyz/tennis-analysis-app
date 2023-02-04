@@ -33,11 +33,14 @@ export default {
                     <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                         Winner
                     </th>
+                    <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                        Comment
+                    </th>
                 </tr>
               </thead>
               <tbody>
                  <tr v-for="lineScore in scores" class="even:bg-slate-50 odd:bg-slate-400">
-                    <LineScore :lineScore="lineScore" />
+                    <LineScore :score="lineScore" />
                   </tr>
               </tbody>
         </table>

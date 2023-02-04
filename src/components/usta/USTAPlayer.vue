@@ -14,12 +14,10 @@ export default {
         player: { type: Object},
     },
 
-    emits: ["update:player"],
+    emits: ['update:player'],
 
     async mounted() {
-
         var url = this.getBaseURL() + "/playerresult?id=" + this.player.utrId;
-
         try {
             const response = await axios.get(url);
             this.playerresult = response.data;

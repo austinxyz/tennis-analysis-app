@@ -7,15 +7,14 @@ import 'vue-select/dist/vue-select.css';
 
 export default {
 
-    mounted() {
-        axios.get("http://localhost:8080/usta/2023/divisions/")
-            .then(response => {
-                this.divisions = response.data;
-                this.divisions.map(function (x){
-                   return x.label = x.name;
-                });
-                this.teams=[];
-            });
+    async mounted() {
+        var url = "http://localhost:8080/usta/2023/divisions/";
+        const response = await axios.get(url);
+        this.divisions = response.data;
+        this.divisions.map(function (x){
+           return x.label = x.name;
+        });
+        this.teams=[];
     },
 
     methods: {
@@ -77,9 +76,9 @@ export default {
             <label class="block text-gray-700 font-bold mb-2 px-2 ">
                 Division:
             </label>
-            <div style="min-width: 300px" class="w-full block tracking-wide  text-grey-darker text-xs font-bold mb-2">
+            <div v-if="divisions.length >0" style="min-width: 300px" class="w-full block tracking-wide  text-grey-darker text-xs font-bold mb-2">
                 <v-select
-                    :reduce="(option) => option.name"
+                    label="label"
                     :options="divisions"
                     :value="division"
                     v-model="division"
@@ -90,7 +89,7 @@ export default {
                 Flight:
             </label>
             <div v-if="flights.length > 0" class="w-full block tracking-wide  text-grey-darker text-xs font-bold mb-2">
-                <v-select label="label"
+                <v-select
                     :reduce="(option) => option.label"
                     :options="flights"
                     :value="flight"

@@ -76,7 +76,8 @@ export default {
                     {{ team.areaCode}}-{{team.flight}}
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ team.captainName}}
+                <a v-if="team.captain" :href="'/usta/player?ustaId=' + team.captain.ustaNorcalId" class="whitespace-no-wrap underline">
+                    {{ team.captainName}} </a>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     <a :href="team.tennisRecordLink" class="underline" target="_blank">

@@ -11,7 +11,7 @@ export default {
         showMode: {type: String},
     },
 
-    emits: ["update:currentPlayer", "update:players", "changePlayer"],
+    emits: ['update:currentPlayer', 'update:players', 'changePlayer'],
 
     methods: {
 

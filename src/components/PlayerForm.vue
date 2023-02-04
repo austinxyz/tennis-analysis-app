@@ -16,7 +16,7 @@ export default {
         player: { type: Object},
     },
 
-    emits: ['update:player', "change"],
+    emits: ['update:player', 'change'],
 
     watch: {
         player(newPlayer, oldPlayer) {
@@ -91,7 +91,7 @@ export default {
         </a>
     </div>
     <Modal v-model="showModal" :title="player.name">
-        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-200 h-100">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2" for="utrid">
                 UTR ID
@@ -112,6 +112,18 @@ export default {
               </label>
               <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text" id="ustaNorcalId" v-model="ustaNorcalId">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="ustaid">
+                Lefty
+                </label>
+                <input type="radio" v-model="lefty" value="true" /> <span class="px-2 text-sm"> Yes</span>
+                <input type="radio" v-model="lefty" value="false" /> <span class="px-2 text-sm"> No</span>
+            </div>
+            <div class="mb-6">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Summary</label>
+                <textarea id="message" v-model="summary" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    ></textarea>
             </div>
             <div class="flex items-center justify-between">
               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" @click="savePlayer">

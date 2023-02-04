@@ -20,16 +20,19 @@ export default {
                     Match Type
                 </th>
                 <th class="w-2/5 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    <span > Home {{scoreCard.homeTeamName}} </span>
+                    <span > Home Team - {{scoreCard.homeTeamName}} </span>
                 </th>
                 <th class="w-2/5 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    <span > Visit {{scoreCard.guestTeamName}}   </span>
+                    <span > Visitor Team - {{scoreCard.guestTeamName}}   </span>
                 </th>
                 <th class="w-1/10 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                     Winners Score
                 </th>
                 <th class="w-1/20 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                     Winner
+                </th>
+                <th class="w-1/10 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                    Comment
                 </th>
             </tr>
           </thead>

@@ -133,7 +133,9 @@ export default {
        </div>
        <hr />
        <div class="text-sm my-3 flex flex-row">
-           <span class="w-1/2 text-left ">Captain :  {{team.captainName}}</span>
+           <span class="w-1/2 text-left ">Captain :
+           <a v-if="team.captain" :href="'/usta/player?ustaId=' + team.captain.ustaNorcalId" class="whitespace-no-wrap underline" target="_blank">
+           {{team.captainName}} </a></span>
            <span class="w-1/2 text-left "><a :href="team.tennisRecordLink" class="underline" target="_blank"> TennisRecord Link </a></span>
            <button type="button" @click="refreshTeamDRValue(team)" class="flex flex-row">
               <img src="/recruiting50x50.png" width="25" height="25" alt="Refresh DR" title="Refresh DR"/>

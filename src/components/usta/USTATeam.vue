@@ -28,12 +28,13 @@ export default {
 
     watch: {
         team(newTeam, oldTeam) {
+            console.log(newTeam.name);
             this.matches = [];
             this.currentPlayer = {};
             if (newTeam == null || newTeam.id == null) {
                 return;
             }
-            if (this.tab = 'matches') {
+            if (this.tab == 'matches') {
                 this.showMatches(newTeam);
             }
         }
@@ -50,8 +51,6 @@ export default {
             this.loading = true;
 
             this.$emit('update:team', team);
-
-            console.log(team);
 
             this.currentPlayer = {};
 
