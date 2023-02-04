@@ -40,7 +40,7 @@ export default {
               </thead>
               <tbody>
                  <tr v-for="lineScore in scores" class="even:bg-slate-50 odd:bg-slate-400">
-                    <LineScore :score="lineScore" />
+                    <LineScore :lineScore="lineScore" />
                   </tr>
               </tbody>
         </table>
