@@ -73,13 +73,15 @@ export default {
               <label class="block text-gray-700 text-sm font-bold mb-2" for="utrid">
                 Home Player
               </label>
-              <LinePlayerInfo :player1="score.homeLine.player1" :player2="score.homeLine.player2" :winner="score.homeTeamWin" :matchType="score.homeLine.type" />
+              <LinePlayerInfo :player1="score.homeLine.player1" :player2="score.homeLine.player2" :winner="score.homeTeamWin" :matchType="score.homeLine.type"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" />
             </div>
             <div class="mb-6">
               <label class="block text-gray-700 text-sm font-bold mb-2" for="ustaid">
                 Vistor Player
               </label>
-              <LinePlayerInfo :player1="score.guestLine.player1" :player2="score.guestLine.player2" :winner="!score.homeTeamWin" :matchType="score.guestLine.type" />
+              <LinePlayerInfo :player1="score.guestLine.player1" :player2="score.guestLine.player2" :winner="!score.homeTeamWin" :matchType="score.guestLine.type"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" />
             </div>
             <div class="mb-6">
               <label class="block text-gray-700 text-sm font-bold mb-2">

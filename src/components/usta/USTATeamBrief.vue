@@ -4,6 +4,7 @@ import axios from "axios";
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
 import USTATeamInfo from "./USTATeamInfo.vue";
+import USTAPlayerSummary from "./USTAPlayerSummary.vue";
 
 export default {
 
@@ -139,6 +140,7 @@ export default {
 
     components: {
         USTATeamInfo,
+        USTAPlayerSummary,
     }
 }
 </script>
@@ -180,9 +182,14 @@ export default {
                             {{ index+1 }}
                         </td>
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            <a :href="'/usta/player?ustaId=' + player.ustaNorcalId" class="whitespace-no-wrap underline">
-                              {{ player.name }} ({{ player.gender }})
-                            </a>
+                            <div class="flex item-center justify-center">
+                                <a :href="'/usta/player?ustaId=' + player.ustaNorcalId" class="whitespace-no-wrap underline">
+                                  {{ player.name }} ({{ player.gender }})
+                                </a>
+                                <div v-if="player.summary" class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                    <USTAPlayerSummary :summary="player.summary" />
+                                </div>
+                            </div>
                         </td>
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                             {{ player.ustaRating}}

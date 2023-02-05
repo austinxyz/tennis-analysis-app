@@ -42,7 +42,7 @@ export default {
 <template>
 
 <div class="max-w-2xl mx-auto">
-<table v-if="teams.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
+    <table v-if="teams.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
         <thead>
             <tr>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
@@ -87,6 +87,11 @@ export default {
             </tr>
         </tbody>
     </table>
+    <div v-else>
+         <label class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="usta">
+           No Teams are found!
+         </label>
+    </div>
 </div>
 
 </template>

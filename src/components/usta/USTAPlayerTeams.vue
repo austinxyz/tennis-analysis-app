@@ -11,7 +11,6 @@ export default {
 
     methods: {
 
-
         getTeam(team) {
             this.$emit('update:team', team);
         },
@@ -41,6 +40,9 @@ export default {
                     Name
                 </th>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
+                    Players
+                </th>
+                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                     Flight
                 </th>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
@@ -57,8 +59,13 @@ export default {
                     {{ index+1 }}
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                    <a :href="'/usta/team?teamId=' + team.id" class="underline" target="_blank">
+                        <span v-if="team.alias">[{{ team.alias }}] </span> {{team.name}}
+                    </a>
+                </td>
+                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     <a href="#" class="underline" @click="getTeam(team)">
-                    <span v-if="team.alias">[{{ team.alias }}] </span> {{team.name}}
+                        <span> Players </span>
                     </a>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
@@ -75,9 +82,9 @@ export default {
             </tr>
         </tbody>
     </table>
-    <label v-if="team.players" class="border-transparent rounded-lg text-center px-2 py-1 mx-auto md:mx-0 my-2 bg-gray-100 font-normal z-10 shadow-lg">
-      Team: <a :href="team.link" class="underline" target="_blank">{{team.name}}</a>
-    </label>
+    <div class="font-bold text-2xl text-left flex flex-row p-2">
+        <div class="w-4/5 text-left">Team : <a :href="team.link" class="underline" target="_blank">{{team.name}}</a></div>
+    </div>
     <table v-if="team.players" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
       <thead>
         <tr>

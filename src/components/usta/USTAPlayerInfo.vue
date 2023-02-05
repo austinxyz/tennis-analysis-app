@@ -44,7 +44,7 @@ export default {
             const res = await axios.get(url);
 
             this.$emit('update:player', res.data);
-
+            this.$emit('change', res.data);
             this.loading = false;
 
         },
@@ -61,7 +61,7 @@ export default {
             const res = await axios.get(url);
 
             this.$emit('update:player', res.data);
-
+            this.$emit('change', res.data);
             this.loading = false;
 
         },
@@ -88,16 +88,17 @@ export default {
 
 <template>
     <div v-if="player.name" class="min-w-full border-transparent rounded-lg text-center p-5 my-2 bg-gray-100 font-medium z-10 shadow-lg">
-        <div class="font-bold text-2xl text-left flex flex-row">
-            <div class="w-5/6 text-left"><a :href="'player?ustaId=' + player.ustaNorcalId" class="underline">Player : {{ player.name }} </a></div>
-            <PlayerForm :player="player" @change="refreshPlayer"/>
+        <div class="font-bold text-2xl text-left flex flex-row pb-2">
+            <div class="w-4/5 text-left"><a :href="'player?ustaId=' + player.ustaNorcalId" class="underline">Player : {{ player.name }} </a></div>
+            <PlayerForm :player="player" @change="refreshPlayer" class="right-2"/>
         </div>
+        <hr />
         <div class="text-sm my-2 flex flex-row">
             <span class="w-1/5 text-left">Gender : {{player.gender}} </span>
             <span class="w-1/5 text-left">Area : {{player.area}}</span>
             <span class="w-1/5 text-left">Age : {{player.ageRange}}</span>
             <span class="w-1/5 text-left">Lefty : {{player.lefty?'Yes':'No'}}</span>
-            <div class="w-1/5 h-8">
+            <div class="w-1/5 h-6">
                <button type="button" @click="refreshTeamUTRInfo(player)">
                    <img src="/utr.svg" class="w-6 h-5" alt="Fetch UTR" title="fetch UTR"/>
                </button>
