@@ -14,9 +14,14 @@ export default {
         player: { type: Object},
     },
 
-    emits: ['update:player'],
+    emits: ['update:player', 'change'],
 
     async mounted() {
+
+        if (this.currentPlayer !=null && this.player.id == this.currentPlayer.id) {
+            return;
+        }
+
         var url = this.getBaseURL() + "/playerresult?id=" + this.player.utrId;
         try {
             const response = await axios.get(url);
@@ -60,6 +65,12 @@ export default {
                 return BASE_URL;
             }
         },
+
+        refreshPlayer(player) {
+            this.$emit('update:player', player);
+            this.$emit('change', player);
+        },
+
 
         async showTeams(player) {
 
@@ -110,6 +121,23 @@ export default {
             }
 
             var url = this.getBaseURL() + "/usta/players/" + player.id + "/scores";
+            try {
+                const response = await axios.get(url);
+                this.scores = response.data;
+            } catch(error) {
+
+            };
+
+            this.loading = false;
+
+        },
+
+        async refreshScores(score) {
+
+            this.loading = true;
+            this.tab = 'matches';
+
+            var url = this.getBaseURL() + "/usta/players/" + this.player.id + "/scores";
             try {
                 const response = await axios.get(url);
                 this.scores = response.data;
@@ -172,7 +200,7 @@ export default {
 <template>
 
 <div v-if="player.id" style="min-width: 1000px" class="min-w-full mx-auto">
-    <USTAPlayerInfo :player="player" />
+    <USTAPlayerInfo :player="player" @change="refreshPlayer"/>
     <div  class="border-b border-gray-200 dark:border-gray-700 mb-2">
         <ul class="flex -mb-px" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
             <li class="mr-2" role="presentation">
@@ -214,10 +242,10 @@ export default {
                 <USTAPlayerTeams v-model:team="team" :teams="teams"/>
         </div>
         <div v-if="tab=='matches'" class="bg-gray-50 p-2 rounded-lg dark:bg-gray-800" id="matches" role="tabpanel" aria-labelledby="matches-tab">
-                <USTAPlayerMatches :scores="scores"/>
+                <USTAPlayerMatches :scores="scores" @change="refreshScores"/>
         </div>
         <div v-else class="bg-gray-50 p-4 rounded-lg dark:bg-gray-800 hidden" id="matches" role="tabpanel" aria-labelledby="matches-tab">
-                <USTAPlayerMatches :scores="scores"/>
+                <USTAPlayerMatches :scores="scores" @change="refreshScores"/>
         </div>
         <div v-if="tab=='utrmatches'" class="bg-gray-50 p-2 rounded-lg dark:bg-gray-800" id="utrmatches" role="tabpanel" aria-labelledby="utrmatches-tab">
                 <PlayerResult :result="playerresult"/>

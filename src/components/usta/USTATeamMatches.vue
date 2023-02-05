@@ -42,6 +42,18 @@ export default {
             this.loading = false;
         },
 
+        async refreshScoreCard(score) {
+
+            this.loading = true;
+
+            var url = this.getBaseURL() + "/usta/teams/" + this.team.id + "/matches";
+            const response = await axios.get(url);
+
+            this.$emit('update:matches', response.data);
+
+            this.loading = false;
+        },
+
         async changeTeam(teamId) {
 
             this.loading = true;
@@ -146,7 +158,7 @@ export default {
               </tr>
           </tbody>
         </table>
-        <MatchScore :scoreCard="scoreCard"/>
+        <MatchScore :scoreCard="scoreCard" @change="refreshScoreCard"/>
         <div v-if="loading" class="px-5 py-5">
             <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
               <span class="sr-only">Loading...</span>

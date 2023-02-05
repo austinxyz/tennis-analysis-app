@@ -28,11 +28,13 @@ export default {
 
     watch: {
         team(newTeam, oldTeam) {
-            console.log(newTeam.name);
-            this.matches = [];
-            this.currentPlayer = {};
+            //console.log(newTeam.name);
             if (newTeam == null || newTeam.id == null) {
                 return;
+            }
+            if (newTeam.id != oldTeam.id) {
+                this.currentPlayer = {};
+                this.matches = [];
             }
             if (this.tab == 'matches') {
                 this.showMatches(newTeam);
@@ -57,6 +59,25 @@ export default {
             this.loading = false;
         },
 
+        async refreshPlayer(player) {
+
+            var url = this.getBaseURL() + "/usta/teams/" + this.team.id;
+            try {
+                const response = await axios.get(url);
+                this.$emit('update:team', response.data);
+
+                let players = response.data.players;
+
+                for (let i = 0; i < players.length; i++) {
+                    if (players[i].id == player.id) {
+                        this.currentPlayer = players[i];
+                        return;
+                    }
+                }
+            } catch(error) {
+
+            };
+        },
 
         getBaseURL() {
             if (process.env.NODE_ENV === 'production') {
@@ -171,7 +192,7 @@ export default {
 
     <div v-if="currentPlayer.id">
       <div class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-        <USTAPlayer :player="currentPlayer" />
+        <USTAPlayer :player="currentPlayer" @change="refreshPlayer"/>
       </div>
     </div>
 </template>

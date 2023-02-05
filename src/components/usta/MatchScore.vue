@@ -6,6 +6,16 @@ export default {
         scoreCard: { type: Object},
     },
 
+    emits: ['change'],
+
+    methods: {
+
+        refreshScore(score) {
+            this.$emit('change', score);
+        },
+
+    },
+
     components: {
         LineScore,
     }
@@ -38,7 +48,7 @@ export default {
           </thead>
           <tbody>
              <tr v-for="lineScore in scoreCard.scores" class="even:bg-slate-50 odd:bg-slate-200">
-                <LineScore :lineScore="lineScore"/>
+                <LineScore :lineScore="lineScore" @change="refreshScore"/>
               </tr>
           </tbody>
         </table>

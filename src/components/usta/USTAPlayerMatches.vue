@@ -7,6 +7,16 @@ export default {
         scores: { type: Array},
     },
 
+    emits: ['change'],
+
+    methods: {
+
+        refreshScores(score) {
+            this.$emit('change', score);
+        },
+
+    },
+
     components: {
         LineScore,
     }
@@ -40,7 +50,7 @@ export default {
               </thead>
               <tbody>
                  <tr v-for="lineScore in scores" class="even:bg-slate-50 odd:bg-slate-400">
-                    <LineScore :lineScore="lineScore" />
+                    <LineScore :lineScore="lineScore" @change="refreshScores"/>
                   </tr>
               </tbody>
         </table>

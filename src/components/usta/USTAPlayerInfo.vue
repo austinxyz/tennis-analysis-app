@@ -10,11 +10,15 @@ export default {
         player: { type: Object},
     },
 
-    emits: ['update:player'],
+    mounted() {
+        this.summary = this.player.summary;
+    },
+
+    emits: ['update:player', 'change'],
 
     watch: {
         player(newPlayer, oldPlayer) {
-            console.log(newPlayer);
+            this.summary=newPlayer.summary;
         }
     },
 
@@ -64,12 +68,15 @@ export default {
 
         async refreshPlayer(player) {
             this.$emit('update:player', player);
+            this.$emit('change', player);
+            this.summary=player.summary;
         }
     },
 
     data() {
         return {
             loading: false,
+            summary: '',
         }
     },
 
@@ -115,7 +122,7 @@ export default {
         </div>
         <hr />
         <div class="text-sm my-3 flex flex-row">
-          <span class="w-full text-left ">Summary :  {{player.summary}} </span>
+          <span class="w-full text-left ">Summary :  {{summary}} </span>
         </div>
     </div>
     <div v-if="loading" class="px-5 py-5">

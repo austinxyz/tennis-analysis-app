@@ -18,19 +18,6 @@ export default {
             }
         },
 
-        async setPlayerResult(player) {
-            this.loading = true;
-            this.currentPlayer = player;
-
-            var url = this.getBaseURL() + "/playerresult/?id=" + player.utrId;
-            try {
-                const response = await axios.get(url);
-                this.playerresult = response.data;
-            } catch(error) {
-            };
-            this.loading = false;
-        },
-
         async findPlayers() {
             var url = this.getBaseURL() + "/players/searchUTR?" +
                 "gender=" + this.gender +
@@ -50,14 +37,46 @@ export default {
                 this.team = {};
                 this.teams = [];
                 this.currentPlayer = {};
-                this.playerresult = {};
             } catch(error) {
                 this.players = [];
                 this.team = {};
                 this.teams = [];
                 this.currentPlayer = {};
-                this.playerresult = {};
             };
+        },
+
+        async refreshPlayer(player) {
+
+            var url = this.getBaseURL() + "/players/searchUTR?" +
+                "gender=" + this.gender +
+                "&USTARating=" + this.ustaRating +
+                "&type=" + this.playertype +
+                "&utr=" + this.utr +
+                "&start=" + this.start +
+                "&ageRange=" + this.agerange +
+                "&ratedOnly=" + this.ratedonly +
+                "&size=" + this.pagesize;
+            if (this.utrlimit !=null && this.utrlimit != '') {
+                url = url + "&utrLimit=" + this.utrlimit;
+            }
+            try {
+                const response = await axios.get(url);
+                this.players = response.data;
+                this.team = {};
+                this.teams = [];
+                for (let i = 0; i < this.players.length; i++) {
+                    if (this.players[i].id == player.id) {
+                        this.currentPlayer = this.players[i];
+                        return;
+                    }
+                }
+            } catch(error) {
+                this.players = [];
+                this.team = {};
+                this.teams = [];
+                this.currentPlayer = {};
+            };
+
         },
 
     },
@@ -164,7 +183,7 @@ export default {
         </div>
 
         <div v-if="currentPlayer.id">
-            <USTAPlayer :player="currentPlayer" />
+            <USTAPlayer :player="currentPlayer" @change="refreshPlayer"/>
         </div>
 
     </div>

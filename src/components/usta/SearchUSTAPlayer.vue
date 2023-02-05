@@ -46,6 +46,22 @@ export default {
             };
         },
 
+        async refreshPlayer(player) {
+
+            var url = this.getBaseURL() + "/players/search?name=" + this.query;
+             try {
+                 const response = await axios.get(url);
+                 this.players = response.data;
+
+                 for (let i = 0; i < this.players.length; i++) {
+                    if (this.players[i].id == player.id) {
+                        this.currentPlayer = this.players[i];
+                        return;
+                    }
+                 }
+             } catch(error) {
+             };
+        },
     },
 
     data() {
@@ -85,7 +101,7 @@ export default {
             </div>
         </div>
         <div v-if="currentPlayer.id">
-            <USTAPlayer :player="currentPlayer" />
+            <USTAPlayer :player="currentPlayer" @change="refreshPlayer"/>
         </div>
     </div>
 

@@ -7,12 +7,10 @@ export default {
     mounted() {
         this.comment = this.score.comment;
         this.videoLink = this.score.videoLink;
-        this.showModal = this.showScoreForm;
     },
 
     props: {
         score: { type: Object},
-        showScoreForm: {type: Boolean},
     },
 
     emits: ['update:score', 'change', 'update:showScoreForm'],
@@ -40,8 +38,13 @@ export default {
             );
             this.$emit('update:score', res.data);
             this.$emit('change', res.data);
+
             this.showModal=false;
-        }
+        },
+
+        openScoreForm() {
+            this.showModal = true;
+        },
     },
 
     data() {
@@ -59,7 +62,12 @@ export default {
 </script>
 
 <template>
-    <Modal v-model="showModal" :title="score.homeLine.name" modal-class="fullscreen-modal">
+    <a x-data="{ tooltip: 'Edite' }" href="#" @click="openScoreForm">
+        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+    </a>
+    <Modal v-model="showModal" :title="score.homeLine.name">
         <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-400 h-200">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2" for="utrid">
