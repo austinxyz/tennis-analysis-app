@@ -30,16 +30,19 @@ export default {
                     Match Type
                 </th>
                 <th class="w-2/5 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    <span > Home Team - {{scoreCard.homeTeamName}} </span>
+                <div class="flex flex-row align-middle">
+                    <img v-if="scoreCard.homeWin" src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                    <span class="align-middle"> Home Team - {{scoreCard.homeTeamName}} - {{scoreCard.homeTeamPoint}}</span>
+                </div>
                 </th>
                 <th class="w-2/5 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    <span > Visitor Team - {{scoreCard.guestTeamName}}   </span>
+                <div class="flex flex-row align-middle">
+                    <img v-if="!scoreCard.homeWin" src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                    <span class="align-middle" > Visitor Team - {{scoreCard.guestTeamName}} - {{scoreCard.guestTeamPoint}}  </span>
+                </div>
                 </th>
                 <th class="w-1/10 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                     Winners Score
-                </th>
-                <th class="w-1/20 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Winner
                 </th>
                 <th class="w-1/10 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                     Comment

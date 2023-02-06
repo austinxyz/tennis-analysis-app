@@ -72,7 +72,8 @@ export default {
                     {{ team.areaCode}}-{{team.flight}}
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ team.captainName}}
+                    <a v-if="team.captain" :href="'/usta/player?ustaId=' + team.captain.ustaNorcalId" class="whitespace-no-wrap underline">
+                    {{ team.captainName}} </a>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     <a :href="team.tennisRecordLink" class="underline" target="_blank">
@@ -82,7 +83,7 @@ export default {
             </tr>
         </tbody>
     </table>
-    <div class="font-bold text-2xl text-left flex flex-row p-2">
+    <div v-if="team.players" class="font-bold text-2xl text-left flex flex-row p-2">
         <div class="w-4/5 text-left">Team : <a :href="team.link" class="underline" target="_blank">{{team.name}}</a></div>
     </div>
     <table v-if="team.players" class="min-w-full border-collapse border-spacing-0 border border-slate-400">

@@ -147,7 +147,7 @@ export default {
 
 <template>
     <div v-if="team.id" class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-        <USTATeamInfo :team="team" @change="teamRefresh" />
+        <USTATeamInfo :team="team.team" @change="teamRefresh" />
 
         <div class="min-w-full mx-auto">
             <table v-if="team.players.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">

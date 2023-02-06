@@ -1,8 +1,7 @@
 <script>
 
 import axios from "axios";
-import USTATeamBrief from "./USTATeamBrief.vue";
-import MatchScore from "./MatchScore.vue";
+import USTACompTeam from "./USTACompTeam.vue";
 import 'vue-select/dist/vue-select.css';
 
 export default {
@@ -14,17 +13,11 @@ export default {
         if (team1Id != null && team2Id !=null ) {
             this.loading = true;
 
-            var url = "http://localhost:8080/usta/teams/" + team1Id;
-            const response = await axios.get(url);
-            this.team1 = response.data;
-
-            url = "http://localhost:8080/usta/teams/" + team2Id;
-            const res = await axios.get(url);
-            this.team2 = res.data;
-
-            var url = "http://localhost:8080/usta/analysis/team/team1/" + this.team1.id + "/team2/" + this.team2.id;
+            var url = "http://localhost:8080/usta/analysis/team/team1/" + team1Id + "/team2/" + team2Id;
             const res1 = await axios.get(url);
             this.result = res1.data;
+            this.team1 = this.result.team1.team;
+            this.team2 = this.result.team2.team;
 
             if (this.team1.name.indexOf("40A") > 0) {
                 this.matchType = "40+Adult";
@@ -43,29 +36,24 @@ export default {
     },
 
     methods: {
-        async selectTeam(team) {
-            this.loading = true;
-            this.team = {};
-            var url = "http://localhost:8080/usta/teams/" + team.id;
-            const response = await axios.get(url);
-            this.team = response.data;
-            this.loading = false;
-        },
 
         async compareTeams() {
             this.loading = true;
-            if (this.selectedTeam.length >=2 ) {
-                this.team1 = this.teams[this.selectedTeam[0]];
-                this.team2 = this.teams[this.selectedTeam[1]];
+            if (this.selectedTeam.length <2 ) {
+                this.loading = false;
+                return;
             }
+            let team1 = this.teams[this.selectedTeam[0]];
+            let team2 = this.teams[this.selectedTeam[1]];
 
-            if (this.team1.name.indexOf("40A") > 0) {
+
+            if (team1.name.indexOf("40A") > 0) {
                 this.matchType = "40+Adult";
             } else {
                 this.matchType = "Mixed";
             }
 
-            var url = "http://localhost:8080/usta/analysis/team/team1/" + this.team1.id + "/team2/" + this.team2.id;
+            var url = "http://localhost:8080/usta/analysis/team/team1/" + team1.id + "/team2/" + team2.id;
             const response = await axios.get(url);
             this.result = response.data;
 
@@ -81,6 +69,9 @@ export default {
             this.flights.map(function (x){
                return x.label = x.area + '-' + x.flightNo;
             });
+            this.flight={};
+            this.teams=[];
+            this.result={};
             this.loading = false;
         },
 
@@ -90,7 +81,7 @@ export default {
             var url = "http://localhost:8080/usta/flights/" + flight.id + "/teams";
             const response = await axios.get(url);
             this.teams = response.data;
-            this.team = this.teams[0];
+            this.result = {};
             this.loading = false;
         },
     },
@@ -101,10 +92,6 @@ export default {
   	        flights: [],
   	        flight: {},
 	        teams: [],
-	        team1: {},
-	        team2: {},
-	        lineups1: [],
-	        lineups1: [],
 	        loading: false,
 	        selectedTeam:[],
 	        matchType:'',
@@ -112,8 +99,7 @@ export default {
   	    }
     },
     components: {
-        USTATeamBrief,
-        MatchScore,
+        USTACompTeam,
     }
 }
 </script>
@@ -170,34 +156,8 @@ export default {
             </div>
         </div>
 
-        <div v-if="team1.id" class="m-2 flex flow-row">
-            <div>
-                <USTATeamBrief v-model:team="team1" :matchType="matchType"/>
-            </div>
-            <div>
-                <USTATeamBrief v-model:team="team2" :matchType="matchType"/>
-            </div>
-            <div class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-                <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                    Past Matches
-                </label>
-                <div v-for="scorecard in result.pastScores" class="w-full border-collapse border-spacing-0 border border-slate-100">
-                    <MatchScore :scoreCard="scorecard" />
-                </div>
-                <hr/>
-                <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                    Matches with same team
-                </label>
-
-                <div v-for="(scorecards, key) in result.matchesWithSameTeam" class="w-full border-collapse border-spacing-0 border border-slate-100">
-                    <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                        Team: {{key}}
-                    </label>
-                    <div v-for="scorecard in scorecards">
-                        <MatchScore :scoreCard="scorecard" />
-                    </div>
-                </div>
-            </div>
+        <div v-if="result.team1" class="m-2 flex flow-row">
+            <USTACompTeam :result="result" :matchType="matchType"/>
         </div>
 
     </div>

@@ -54,12 +54,6 @@ export default {
         <td class="w-1/10 px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
             {{lineScore.score}}
         </td>
-        <td v-if="lineScore.homeTeamWin" class="w-1/20 px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
-            Home
-        </td>
-        <td v-else class="w-1/20 px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
-            Visitor
-        </td>
         <td class="w-1/20 px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
             <div class="flex item-center justify-center">
                 <div v-if="lineScore.comment" class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
