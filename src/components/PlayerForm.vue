@@ -4,12 +4,12 @@ import axios from "axios";
 export default {
 
     mounted() {
-        this.utrId = this.player.utrId;
-        this.ustaId = this.player.ustaId;
-        this.ustaNorcalId = this.player.ustaNorcalId;
-        this.summary = this.player.summary;
-        this.memo = this.player.memo;
-        this.lefty = this.player.lefty;
+        //this.utrId = this.player.utrId;
+        //this.ustaId = this.player.ustaId;
+        //this.ustaNorcalId = this.player.ustaNorcalId;
+        //this.summary = this.player.summary;
+        //this.memo = this.player.memo;
+        //this.lefty = this.player.lefty;
     },
 
     props: {
@@ -58,12 +58,12 @@ export default {
 
     data() {
         return {
-            utrId: '',
-            ustaId: '',
-            ustaNorcalId: '',
-            summary: '',
-            memo: '',
-            lefty: false,
+            utrId: this.player.utrId,
+            ustaId: this.player.ustaId,
+            ustaNorcalId: this.player.ustaNorcalId,
+            summary: this.player.summary,
+            memo: this.player.memo,
+            lefty: this.player.lefty,
             showModal: false,
         }
     },
@@ -71,6 +71,7 @@ export default {
 </script>
 
 <template>
+    <div>
     <div>
         <a x-data="{ tooltip: 'Edite' }" href="#" @click="openPlayer">
           <svg
@@ -132,4 +133,5 @@ export default {
             </div>
           </form>
     </Modal>
+    </div>
 </template>

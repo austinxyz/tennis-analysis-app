@@ -39,13 +39,26 @@ export default {
 
         async compareTeams() {
             this.loading = true;
-            if (this.selectedTeam.length <2 ) {
+            if (this.selectedTeam1.length + this.selectedTeam2.length <2 ) {
                 this.loading = false;
                 return;
             }
-            let team1 = this.teams[this.selectedTeam[0]];
-            let team2 = this.teams[this.selectedTeam[1]];
+            var team1 = null;
+            var team2 = null;
 
+            if (this.selectedTeam1.length >=2) {
+                team1 = this.teams1[this.selectedTeam1[0]];
+                team2 = this.teams1[this.selectedTeam1[1]];
+            } else if (this.selectedTeam1.length ==1) {
+                team1 = this.teams1[this.selectedTeam1[0]];
+            }
+
+            if (team1 == null) {
+                team1 = this.teams2[this.selectedTeam2[0]];
+                team2 = this.teams2[this.selectedTeam2[1]];
+            } else if (team2 == null) {
+                team2 = this.teams2[this.selectedTeam2[0]];
+            }
 
             if (team1.name.indexOf("40A") > 0) {
                 this.matchType = "40+Adult";
@@ -76,14 +89,23 @@ export default {
             this.loading = false;
         },
 
-        async selectFlight(flight) {
+        async selectFlight1(flight) {
             this.loading = true;
-            this.flightName = flight.area + flight.flightNo;
             var url = "http://localhost:8080/usta/flights/" + flight.id + "/teams";
             const response = await axios.get(url);
-            this.teams = response.data;
+            this.teams1 = response.data;
             this.result = {};
-            this.selectedTeam=[];
+            this.selectedTeam1=[];
+            this.loading = false;
+        },
+
+        async selectFlight2(flight) {
+            this.loading = true;
+            var url = "http://localhost:8080/usta/flights/" + flight.id + "/teams";
+            const response = await axios.get(url);
+            this.teams2 = response.data;
+            this.result = {};
+            this.selectedTeam2=[];
             this.loading = false;
         },
     },
@@ -92,10 +114,13 @@ export default {
   	        divisions: [],
   	        division: {},
   	        flights: [],
-  	        flight: {},
-	        teams: [],
+  	        flight1: {},
+  	        flight2: {},
+	        teams1: [],
+	        teams2: [],
 	        loading: false,
-	        selectedTeam:[],
+	        selectedTeam1:[],
+	        selectedTeam2:[],
 	        matchType:'',
 	        result: {}
   	    }
@@ -114,6 +139,7 @@ export default {
             </label>
             <div style="min-width: 300px" class="w-full block tracking-wide  text-grey-darker text-xs font-bold mb-2">
                 <v-select
+                    :getOptionLabel="division => division.label"
                     :reduce="(option) => option.name"
                     :options="divisions"
                     :value="division"
@@ -122,21 +148,22 @@ export default {
                    ></v-select>
             </div>
             <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                Flight:
+                Flight 1:
             </label>
             <div v-if="flights.length > 0" class="w-full block tracking-wide  text-grey-darker text-xs font-bold mb-2">
                 <v-select label="label"
+                    :getOptionLabel="flight => flight.label"
                     :reduce="(option) => option.label"
                     :options="flights"
-                    :value="flight"
-                    v-model="flight"
-                    @option:selected="selectFlight"
+                    :value="flight1"
+                    v-model="flight1"
+                    @option:selected="selectFlight1"
                    ></v-select>
             </div>
-            <nav v-if="teams.length > 0" class="flex flex-col flex-nowrap bg-slate-700 px-2 py-1 my-2 text-gray-900 border border-purple-900">
+            <nav v-if="teams1.length > 0" class="flex flex-col flex-nowrap bg-slate-700 px-2 py-1 my-2 text-gray-900 border border-purple-900">
               <ul class="ml-1">
-                    <li v-for="(team, index) in teams" class="mb-1 px-0 py-1 text-gray-100 flex flex-row  border-gray-300 hover:text-black hover:bg-gray-300  hover:font-bold rounded rounded-lg">
-                        <input type="checkbox" v-model="selectedTeam" :value="index"><span class="text-sm">
+                    <li v-for="(team, index) in teams1" class="mb-1 px-0 py-1 text-gray-100 flex flex-row  border-gray-300 rounded rounded-lg">
+                        <input type="checkbox" v-model="selectedTeam1" :value="index"><span class="text-sm">
                             <span v-if="team.alias" class="ml-1 text-sm">[{{ team.alias }}]</span>
                             <span class="ml-1 text-sm">{{ team.name }}</span>
                             <span v-if="team.captain" class="ml-1 text-sm">[{{ team.captain.name }}]</span>
@@ -144,7 +171,31 @@ export default {
                     </li>
               </ul>
             </nav>
-            <button v-if="teams.length > 0"
+            <label class="block text-gray-700 font-bold mb-2 px-2 ">
+                Flight 2:
+            </label>
+            <div v-if="flights.length > 0" class="w-full block tracking-wide  text-grey-darker text-xs font-bold mb-2">
+                <v-select label="label"
+                    :getOptionLabel="flight => flight.label"
+                    :reduce="(option) => option.label"
+                    :options="flights"
+                    :value="flight2"
+                    v-model="flight2"
+                    @option:selected="selectFlight2"
+                   ></v-select>
+            </div>
+            <nav v-if="teams2.length > 0" class="flex flex-col flex-nowrap bg-slate-700 px-2 py-1 my-2 text-gray-900 border border-purple-900">
+              <ul class="ml-1">
+                    <li v-for="(team, index) in teams2" class="mb-1 px-0 py-1 text-gray-100 flex flex-row  border-gray-300 rounded rounded-lg">
+                        <input type="checkbox" v-model="selectedTeam2" :value="index"><span class="text-sm">
+                            <span v-if="team.alias" class="ml-1 text-sm">[{{ team.alias }}]</span>
+                            <span class="ml-1 text-sm">{{ team.name }}</span>
+                            <span v-if="team.captain" class="ml-1 text-sm">[{{ team.captain.name }}]</span>
+                        </span>
+                    </li>
+              </ul>
+            </nav>
+            <button v-if="teams1.length > 0"
                     class="border border-indigo-500 bg-indigo-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-indigo-600 focus:outline-none focus:shadow-outline"
                     @click="compareTeams"
             >

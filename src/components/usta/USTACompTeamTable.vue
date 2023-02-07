@@ -27,7 +27,7 @@ export default {
                 <span v-if="team1.team.captain">{{team1.team.captain.name}} </span>
             </div>
             <div class="flex justify-center flex-grow w-0 ">
-                <span v-if="team1.team.captain">{{team2.team.captain.name}} </span>
+                <span v-if="team2.team.captain">{{team2.team.captain.name}} </span>
             </div>
         </div>
         <div class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold">
@@ -52,7 +52,7 @@ export default {
                 {{team2.currentScore}}
             </div>
         </div>
-        <div v-if="team1.bestUTRSingle" class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold">
+        <div class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold">
             <div class="w-40">Best double by UTR:</div>
             <div class="flex justify-center flex-grow w-0 text-sm">
                 <img v-if="team1.bestUTRDouble.totalUTR > team2.bestUTRDouble.totalUTR" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
@@ -74,8 +74,30 @@ export default {
                 <LinePlayerInfo :player1="team2.bestUTRSingle.player" matchType="S" />
             </div>
         </div>
+        <div class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold">
+            <div class="w-40">Best double by DR:</div>
+            <div class="flex justify-center flex-grow w-0 text-sm">
+                <img v-if="team1.bestDRDouble.totalDR > team2.bestDRDouble.totalDR" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                <LinePlayerInfo :player1="team1.bestDRDouble.player1" :player2="team1.bestDRDouble.player2" matchType="D" />
+            </div>
+            <div class="flex justify-center flex-grow w-0 text-sm">
+                <img v-if="team1.bestDRDouble.totalDR < team2.bestDRDouble.totalDR" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                <LinePlayerInfo :player1="team2.bestDRDouble.player1" :player2="team2.bestDRDouble.player2" matchType="D" />
+            </div>
+        </div>
+        <div v-if="team1.bestDRSingle" class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold bg-slate-400">
+            <div class="w-40">Best single by DR:</div>
+            <div class="flex justify-center flex-grow w-0 text-sm" >
+                <img v-if="team1.bestDRSingle.dynamicRating > team2.bestUTRSingle.dynamicRating" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                <LinePlayerInfo :player1="team1.bestDRSingle.player" matchType="S" />
+            </div>
+            <div class="flex justify-center flex-grow w-0 text-sm">
+                <img v-if="team1.bestDRSingle.dynamicRating < team2.bestDRSingle.dynamicRating" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                <LinePlayerInfo :player1="team2.bestDRSingle.player" matchType="S" />
+            </div>
+        </div>
         <div class="flex items-center h-12 px-4 bg-gray-100 border-b border-gray-500">
-            <div class="text-lg">Lines</div>
+            <div class="text-lg font-semibold">Lines</div>
         </div>
         <div v-if="team1.doubleLineStats">
             <div v-for="(doubleLineStat, index) in team1.doubleLineStats" >

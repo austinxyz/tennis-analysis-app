@@ -78,7 +78,7 @@ export default {
             </label>
             <div v-if="divisions.length >0" style="min-width: 300px" class="w-full block tracking-wide  text-grey-darker text-xs font-bold mb-2">
                 <v-select
-                    label="label"
+                    :getOptionLabel="division => division.label"
                     :options="divisions"
                     :value="division"
                     v-model="division"
@@ -90,6 +90,7 @@ export default {
             </label>
             <div v-if="flights.length > 0" class="w-full block tracking-wide  text-grey-darker text-xs font-bold mb-2">
                 <v-select
+                    :getOptionLabel="flight => flight.label"
                     :reduce="(option) => option.label"
                     :options="flights"
                     :value="flight"
