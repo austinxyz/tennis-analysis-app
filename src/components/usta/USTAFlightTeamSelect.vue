@@ -72,6 +72,7 @@ export default {
             this.flight={};
             this.teams=[];
             this.result={};
+            this.selectedTeam=[];
             this.loading = false;
         },
 
@@ -82,6 +83,7 @@ export default {
             const response = await axios.get(url);
             this.teams = response.data;
             this.result = {};
+            this.selectedTeam=[];
             this.loading = false;
         },
     },
@@ -135,9 +137,9 @@ export default {
               <ul class="ml-1">
                     <li v-for="(team, index) in teams" class="mb-1 px-0 py-1 text-gray-100 flex flex-row  border-gray-300 hover:text-black hover:bg-gray-300  hover:font-bold rounded rounded-lg">
                         <input type="checkbox" v-model="selectedTeam" :value="index"><span class="text-sm">
-                            [{{team.areaCode}}-{{team.flight}}]
                             <span v-if="team.alias" class="ml-1 text-sm">[{{ team.alias }}]</span>
                             <span class="ml-1 text-sm">{{ team.name }}</span>
+                            <span v-if="team.captain" class="ml-1 text-sm">[{{ team.captain.name }}]</span>
                         </span>
                     </li>
               </ul>
