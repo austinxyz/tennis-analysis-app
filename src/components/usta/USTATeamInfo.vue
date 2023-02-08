@@ -103,7 +103,7 @@ export default {
 </script>
 
 <template>
-    <div v-if="team" class="border-transparent rounded-lg text-center px-4 pt-2 pb-1 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
+    <div v-if="team.id" class="border-transparent rounded-lg text-center px-4 pt-2 pb-1 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
        <div class="font-bold text-2xl text-left pb-2">
         <span class="w-1/2 text-left">Team :
             <a :href="'/usta/team?teamId=' + team.id" class="underline" target="_blank">

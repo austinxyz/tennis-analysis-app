@@ -18,16 +18,16 @@ export default {
      <div class="p-5 flex flex-col w-full justify-center rounded-lg z-10 shadow-lg border border-gray-500">
         <div class="flex items-center h-20 px-4 border-b border-gray-500">
             <div class="w-40"></div>
-            <div class="flex-grow text-lg font-semibold text-center justify-center">{{ team1.teamName }} <span v-if="team1.team.alias">({{team1.team.alias}}) </span></div>
-            <div class="flex-grow text-lg font-semibold text-center justify-center">{{ team2.teamName }} <span v-if="team2.team.alias">({{team2.team.alias}}) </span></div>
+            <div class="flex-grow text-lg font-semibold text-center justify-center">{{ team1.teamName }} <span v-if="team1.alias">({{team1.alias}}) </span></div>
+            <div class="flex-grow text-lg font-semibold text-center justify-center">{{ team2.teamName }} <span v-if="team2.alias">({{team2.alias}}) </span></div>
         </div>
         <div class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold bg-slate-400">
             <div class="w-40">Captain:</div>
             <div class="flex justify-center flex-grow w-0">
-                <span v-if="team1.team.captain">{{team1.team.captain.name}} </span>
+                <span v-if="team1.captain">{{team1.captain.name}} </span>
             </div>
             <div class="flex justify-center flex-grow w-0 ">
-                <span v-if="team2.team.captain">{{team2.team.captain.name}} </span>
+                <span v-if="team2.captain">{{team2.captain.name}} </span>
             </div>
         </div>
         <div class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold">
@@ -67,11 +67,11 @@ export default {
             <div class="w-40">Best single by UTR:</div>
             <div class="flex justify-center flex-grow w-0 text-sm" >
                 <img v-if="team1.bestUTRSingle.sutr > team2.bestUTRSingle.sutr" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
-                <LinePlayerInfo :player1="team1.bestUTRSingle.player" matchType="S" />
+                <LinePlayerInfo :player1="team1.bestUTRSingle" matchType="S" />
             </div>
             <div class="flex justify-center flex-grow w-0 text-sm">
                 <img v-if="team1.bestUTRSingle.sutr < team2.bestUTRSingle.sutr" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
-                <LinePlayerInfo :player1="team2.bestUTRSingle.player" matchType="S" />
+                <LinePlayerInfo :player1="team2.bestUTRSingle" matchType="S" />
             </div>
         </div>
         <div class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold">
@@ -89,11 +89,11 @@ export default {
             <div class="w-40">Best single by DR:</div>
             <div class="flex justify-center flex-grow w-0 text-sm" >
                 <img v-if="team1.bestDRSingle.dynamicRating > team2.bestUTRSingle.dynamicRating" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
-                <LinePlayerInfo :player1="team1.bestDRSingle.player" matchType="S" />
+                <LinePlayerInfo :player1="team1.bestDRSingle" matchType="S" />
             </div>
             <div class="flex justify-center flex-grow w-0 text-sm">
                 <img v-if="team1.bestDRSingle.dynamicRating < team2.bestDRSingle.dynamicRating" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
-                <LinePlayerInfo :player1="team2.bestDRSingle.player" matchType="S" />
+                <LinePlayerInfo :player1="team2.bestDRSingle" matchType="S" />
             </div>
         </div>
         <div class="flex items-center h-12 px-4 bg-gray-100 border-b border-gray-500">

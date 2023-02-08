@@ -45,9 +45,9 @@ export default {
 </script>
 
 <template>
-    <div class="w-1/2  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
+    <div v-if="team.id" class="w-full  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
         <label class="block text-gray-700 font-bold mb-2 px-2 ">
-            Team : {{team.teamName}} <span v-if="team.team.alias"> ({{team.team.alias}}) </span> - W/L ({{team.currentWinMatchNo}}/{{team.totalMatchNo - team.currentWinMatchNo}}) - Score: {{team.currentScore}}
+            Team : {{team.name}} <span v-if="team.alias"> ({{team.alias}}) </span> - W/L ({{team.currentWinMatchNo}}/{{team.totalMatchNo - team.currentWinMatchNo}}) - Score: {{team.currentScore}}
         </label>
         <div>
         <div v-for="(linestat, key) in team.doubleLineStats" class="w-full border-collapse border-spacing-0 border border-slate-100">
@@ -93,7 +93,7 @@ export default {
         <div v-if="team.singleLineStats">
          <div v-for="(linestat, key) in team.singleLineStats" class="w-full border-collapse border-spacing-0 border border-slate-100">
              <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                 Line: {{key}} (W:{{linestat.winMatchNo}} / L:{{linestat.lostMatchNo}})
+                 Line: {{key}} (W:{{linestat.winMatchNo}} / L:{{linestat.lostMatchNo}}) - {{(linestat.winPrecent*100).toFixed(2)}} %)
              </label>
              <table class="min-w-full border-collapse border-spacing-0 border border-slate-400">
                  <thead>

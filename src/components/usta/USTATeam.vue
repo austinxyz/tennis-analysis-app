@@ -4,6 +4,7 @@ import USTAPlayer from "./USTAPlayer.vue";
 import USTATeamInfo from "./USTATeamInfo.vue";
 import USTAPlayerList from "./USTAPlayerList.vue";
 import USTATeamMatches from "./USTATeamMatches.vue";
+import USTATeamLinesStat from "./USTATeamLinesStat.vue";
 
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
@@ -134,13 +135,48 @@ export default {
             this.loading = false;
 
         },
+
+        async showLines(team) {
+
+            this.loading = true;
+            this.tab = 'lines';
+
+            if (team.id == null || team.id == '') {
+                return;
+            }
+
+            if (team.id != this.currentTeamId) {
+                this.matches = [];
+                this.currPlayer = {};
+                this.currentTeamId = team.id;
+            } else {
+                if (team.doubleLineStats != null && team.doubleLineStats.D1 !=null) {
+                    this.loading = false;
+                    return;
+                }
+            }
+
+            var url = this.getBaseURL() + "/usta/teams/" + team.id + "/lineStat";
+
+            try {
+                 const response = await axios.get(url);
+                 this.$emit('update:team', response.data);
+            } catch(error) {
+
+            };
+
+            this.loading = false;
+
+        },
+
     },
 
     components: {
         USTAPlayer,
         USTATeamInfo,
         USTAPlayerList,
-        USTATeamMatches
+        USTATeamMatches,
+        USTATeamLinesStat,
     }
 }
 </script>
@@ -167,6 +203,14 @@ export default {
                     id="matches-tab" data-tabs-target="#matches" type="button" role="tab" aria-controls="dashboard" aria-selected="true" @click="showMatches(team)">
                     Matches</button>
                 </li>
+                <li class="mr-2" role="presentation">
+                    <button v-if="tab=='lines'" class="inline-block text-blue-500 bg-gray-600 hover:text-blue-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300"
+                    id="lines-tab" data-tabs-target="#lines" type="button" role="tab" aria-controls="dashboard" aria-selected="true" @click="showLines(team)">
+                    Lines</button>
+                    <button v-else class="inline-block text-gray-500 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300"
+                    id="lines-tab" data-tabs-target="#lines" type="button" role="tab" aria-controls="dashboard" aria-selected="true" @click="showLines(team)">
+                    Lines</button>
+                </li>
             </ul>
         </div>
         <div id="myTabContent">
@@ -186,6 +230,12 @@ export default {
             </div>
             <div v-else class="bg-gray-50 p-4 rounded-lg dark:bg-gray-800 hidden" id="matches" role="tabpanel" aria-labelledby="matches-tab">
                    <USTATeamMatches :team="team" v-model:matches="matches" @change="changeTeam" />
+            </div>
+            <div v-if="tab=='lines'" class="bg-gray-50 p-2 rounded-lg dark:bg-gray-800" id="lines" role="tabpanel" aria-labelledby="lines-tab">
+                    <USTATeamLinesStat :team="team"/>
+            </div>
+            <div v-else class="bg-gray-50 p-4 rounded-lg dark:bg-gray-800 hidden" id="lines" role="tabpanel" aria-labelledby="lines-tab">
+                   <USTATeamLinesStat :team="team"/>
             </div>
         </div>
     </div>
