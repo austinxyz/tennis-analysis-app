@@ -16,23 +16,25 @@ export default {
     emits: ['update:team'],
 
     mounted() {
-        this.lineups= [
-                    {name:'D1',
-                    player1:{},
-                    player2:{}},
-                    {name:'D2',
-                    player1:{},
-                    player2:{}},
-                    {name:'D3',
+        if (this.lineups.length == 0) {
+            this.lineups= [
+                        {name:'D1',
+                        player1:{},
+                        player2:{}},
+                        {name:'D2',
+                        player1:{},
+                        player2:{}},
+                        {name:'D3',
+                        player1:{},
+                        player2:{}}
+                    ];
+            if (this.matchType == '40+Adult') {
+                this.lineups.push(
+                    {name:'S1',
                     player1:{},
                     player2:{}}
-                ];
-        if (this.matchType == '40+Adult') {
-            this.lineups.push(
-                {name:'S1',
-                player1:{},
-                player2:{}}
-            )
+                )
+            }
         }
     },
 

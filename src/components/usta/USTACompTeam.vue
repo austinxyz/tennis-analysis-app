@@ -15,9 +15,6 @@ export default {
         matchType: {type: String},
     },
 
-    watch: {
-    },
-
     methods: {
 
         getBaseURL() {

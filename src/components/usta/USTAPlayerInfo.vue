@@ -42,7 +42,7 @@ export default {
 
             var url = this.getBaseURL() + "/usta/players/" + player.id + "/utrs?action=refreshValue";
             const res = await axios.get(url);
-
+            //onsole.log(res.data);
             this.$emit('update:player', res.data);
             this.$emit('change', res.data);
             this.loading = false;
