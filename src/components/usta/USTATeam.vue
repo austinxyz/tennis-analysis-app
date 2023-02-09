@@ -29,7 +29,6 @@ export default {
 
     watch: {
         team(newTeam, oldTeam) {
-            //console.log(newTeam.name);
             if (newTeam == null || newTeam.id == null) {
                 return;
             }
@@ -182,7 +181,7 @@ export default {
 </script>
 
 <template>
-    <div style="min-width: 1000px" class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
+    <div v-if="team.id" style="min-width: 1000px" class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
         <USTATeamInfo :team="team" @change="teamRefresh" />
 
         <div  class="border-b border-gray-200 dark:border-gray-700 mb-2">

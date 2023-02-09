@@ -46,7 +46,7 @@ export default {
             var url = "http://localhost:8080/usta/flights/" + flight.id + "/teams";
             const response = await axios.get(url);
             this.teams = response.data;
-            this.team = this.teams[0];
+            //this.team = this.teams[0];
             this.loading = false;
         },
 
