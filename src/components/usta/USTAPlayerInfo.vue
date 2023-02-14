@@ -32,7 +32,7 @@ export default {
             }
         },
 
-        async refreshTeamUTRInfo(player) {
+        async refreshPlayerUTRValue(player) {
 
             this.loading = true;
 
@@ -40,7 +40,7 @@ export default {
                 return;
             }
 
-            var url = this.getBaseURL() + "/usta/players/" + player.id + "/utrs?action=refreshValue";
+            var url = this.getBaseURL() + "/usta/players/" + player.id + "/utrs?action=refreshUTRValue";
             const res = await axios.get(url);
             //onsole.log(res.data);
             this.$emit('update:player', res.data);
@@ -49,7 +49,7 @@ export default {
 
         },
 
-        async refreshTeamUTRValue(player) {
+        async refreshPlayerUTRInfo(player) {
 
             this.loading = true;
 
@@ -57,7 +57,7 @@ export default {
                 return;
             }
 
-            var url = this.getBaseURL() + "/players/" + player.id + "?action=updateUTRId";
+            var url = this.getBaseURL() + "/usta/players/" + player.id + "/utrs?action=refreshUTRId";
             const res = await axios.get(url);
 
             this.$emit('update:player', res.data);
@@ -99,11 +99,11 @@ export default {
             <span class="w-1/5 text-left">Age : {{player.ageRange}}</span>
             <span class="w-1/4 text-left">Lefty : {{player.lefty?'Yes':'No'}}</span>
             <div class="w-3/20 h-6">
-               <button type="button" @click="refreshTeamUTRInfo(player)">
-                   <img src="/utr.svg" class="w-6 h-5" alt="Fetch UTR" title="fetch UTR"/>
-               </button>
-               <button type="button" @click="refreshTeamUTRValue(player)">
+               <button type="button" @click="refreshPlayerUTRValue(player)">
                    <img src="/utr.svg" class="w-6 h-5"  alt="Fetch UTR Value" title="fetch UTR Value"/>
+               </button>
+               <button type="button" @click="refreshPlayerUTRInfo(player)">
+                   <img src="/utr.svg" class="w-6 h-5" alt="Fetch UTR" title="fetch UTR"/>
                </button>
             </div>
         </div>

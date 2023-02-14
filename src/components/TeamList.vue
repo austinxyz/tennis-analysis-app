@@ -4,16 +4,26 @@ import axios from "axios";
 
 export default {
 
-    mounted() {
-        axios.get("http://localhost:8080/teams")
-            .then(response => {
-                this.teams = response.data;
-            })
+    async mounted() {
+
+        this.loading = true;
+
+        var url = "http://localhost:8080/teams";
+        try {
+            const response = await axios.get(url);
+            this.teams = response.data;
+
+        } catch(error) {
+
+        };
+
+        this.loading = false;
     },
 
     data() {
   	    return {
 	        teams: [],
+            loading: false,
   	    }
     }
 }
@@ -38,5 +48,11 @@ export default {
           </li>
       </ul>
     </nav>
+
+    <div v-if="loading" class="px-5 py-5">
+        <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
+          <span class="sr-only">Loading...</span>
+        </div>
+    </div>
 </template>
 

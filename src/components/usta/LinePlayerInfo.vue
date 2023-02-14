@@ -17,7 +17,7 @@ export default {
         <img v-if="winner" src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
         <span v-if="matchType === 'S'">
             <a :href="'player?ustaId=' + player1.ustaNorcalId" class="underline" target="_blank">
-                {{ player1.name }} ({{player1.gender}}) </a>
+                {{ player1.name }} ({{player1.gender}}) {{player1.ustaRating}} </a>
                 <span v-if="player1.sutrstatus === 'Rated'" class="font-semibold" >
                     - {{ player1.sutr }} (S)
                 </span>
@@ -29,7 +29,7 @@ export default {
         <span v-else class="font-light flex flex-col" >
             <span class="flex flex-row">
             <a :href="'player?ustaId=' + player1.ustaNorcalId" class="underline" target="_blank">
-                {{ player1.name }} ({{player1.gender}}) </a>
+                {{ player1.name }} ({{player1.gender}}) {{player1.ustaRating}} -</a>
                 <span v-if="player1.dutrstatus === 'Rated'" class="font-semibold" >
                     &nbsp- {{ player1.dutr }} (D)
                 </span>
@@ -40,7 +40,7 @@ export default {
             </span>
             <span v-if="player2" class="flex flex-row">
             <a :href="'player?ustaId=' + player2.ustaNorcalId" class="underline" target="_blank">
-                {{ player2.name }} ({{player2.gender}}) </a>
+                {{ player2.name }} ({{player2.gender}}) {{player2.ustaRating}} - </a>
                 <span v-if="player2.dutrstatus === 'Rated'" class="font-semibold" >
                     &nbsp- {{ player2.dutr }} (D)
                 </span>

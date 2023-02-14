@@ -125,7 +125,7 @@ export default {
                 const response = await axios.get(url);
                 this.scores = response.data;
             } catch(error) {
-
+                console.log(error);
             };
 
             this.loading = false;

@@ -8,7 +8,10 @@ const BASE_URL_PROD = 'http://localhost:8080';
 
 export default {
 
-    mounted() {
+    async mounted() {
+
+        this.loading = true;
+
         let clubId = this.$route.query.club;
 
         if (clubId == null) {
@@ -17,11 +20,15 @@ export default {
 
         var url = this.getBaseURL() + "/club/" + clubId;
 
-        axios.get(url)
-            .then(response => {
-                this.club = response.data;
-            })
+        try {
+            const response = await axios.get(url);
+            this.club = response.data;
 
+        } catch(error) {
+
+        };
+
+        this.loading = false;
     },
 
     methods: {
@@ -59,6 +66,7 @@ export default {
             divisions: [],
             eventName: '',
             team: {},
+            loading: false,
   	    }
     },
 
@@ -70,6 +78,11 @@ export default {
 
 <template>
     <div class="flex flex-row min-h-screen w-full bg-gray-100 text-gray-700" x-data="layout">
+        <div v-if="loading" class="px-5 py-5">
+            <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
+              <span class="sr-only">Loading...</span>
+            </div>
+        </div>
         <div class="bg-white shadow-dashboard px-2 py-2 rounded-lg m-1">
             <span class="flex w-90 px-4 py-2 font-large bg-slate-700 text-gray-100 text-center"> {{ club.name}} </span>
             <nav class="flex flex-col bg-slate-700 w-60 px-2 py-1 text-gray-900 border border-purple-900">

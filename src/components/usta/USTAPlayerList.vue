@@ -37,7 +37,7 @@ export default {
                 return;
             }
 
-            var url = this.getBaseURL() + "/players/utr/" + player.utrId + "?action=refreshUTR";
+            var url = this.getBaseURL() + "/players/utr/" + player.utrId + "?action=refreshUTRValue";
             const response = await axios.get(url);
 
             this.$emit('update:currentPlayer', response.data);
