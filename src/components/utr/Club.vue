@@ -23,6 +23,8 @@ export default {
         try {
             const response = await axios.get(url);
             this.club = response.data;
+            this.divisions=[];
+            this.team ={};
 
         } catch(error) {
 
@@ -48,6 +50,7 @@ export default {
                 .then(response => {
                     this.divisions = response.data.divisions;
                     this.eventName = response.data.name;
+                    this.team = {};
                 }).catch ((error) => {
                     this.divisions=[];
                     this.eventName= '';
