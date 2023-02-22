@@ -1,8 +1,8 @@
 # Tennis Analysis
 
-this application is mainly to analysis UTR player for matches.
+this application is mainly to analysis UTR and USTA player for matches.
 
-now it includes two functions
+now it includes three functions
 
 ## UTR matches
 
@@ -18,6 +18,20 @@ now it includes two functions
 - It will list all teams for Zijing Cup, show all team members and top 5 pair (based on authorized UTR, grant by orginizer) for each line, there are 5 lines (D1, D2, D3, Mixed, Women)
 
 - By selecting team to compare, with fixed player in one or multiple lines, show the top 5 possibility and compare the lineup.
+
+## USTA matches
+
+- League, by selecting 2023 divisions, flights (at present with SB/MP/LP area), to list all teams, you can review team's player, matches info, and dig into perticular player's info and analysis upcoming two team's match.
+
+- Team, search by name, to list teams and show team's basic information, players, matches, and dig into perticular player's info.
+
+- Player, search by name, to list players and show player's basic information, attended teams, usta matches and utr matches
+
+- Player Finder, use differenct criteria to find top players - combined utr, usta rating, age range etc.
+
+- Player Stat, use different criteria to do statisitics - find utr range and mean utr player.
+
+- Team Analysis, by selecting two teams in same league, compare team's player, historical lines, matches and compare success rate, top player/pair between two teams.
 
 
 # How to install
