@@ -30,7 +30,7 @@ export default {
                 return;
             }
 
-            var url = this.getBaseURL() + "/usta/players/" + player.id + "/utrs?action=refreshValue";
+            var url = this.getBaseURL() + "/usta/players/" + player.playerId + "/utrs?action=refreshValue";
             const res = await axios.get(url);
 
             this.$emit('update:player', res.data);

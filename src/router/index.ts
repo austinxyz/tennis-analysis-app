@@ -61,10 +61,6 @@ const router = createRouter({
         },
         {
             path: 'player',
-            component:() => import("../views/usta/USTAPlayerSearchView.vue"),
-        },
-        {
-            path: 'playerfinder',
             component:() => import("../views/usta/USTAPlayerFinderView.vue"),
         },
         {
@@ -75,7 +71,6 @@ const router = createRouter({
             path: 'playerstat',
             component:() => import("../views/usta/USTAPlayerStatView.vue"),
         }
-
       ]
     },
   ],

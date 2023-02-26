@@ -77,11 +77,14 @@ export default {
             this.loading = true;
             this.tab = 'teams';
 
-            if (player.id == null || player.id == '') {
+            console.log(player.id);
+
+            if (player.playerId == null || player.playerId == '') {
+                this.loading = false;
                 return;
             }
 
-            if (player.id != this.currPlayer.id) {
+            if (player.playerId != this.currPlayer.playerId) {
                 this.teams = [];
                 this.currPlayer = player;
             }
@@ -91,11 +94,12 @@ export default {
                 return;
             }
 
-            var url = this.getBaseURL() + "/players/" + player.id + "/teams";
+            var url = this.getBaseURL() + "/players/" + player.playerId + "/teams";
             try {
                 const response = await axios.get(url);
                 this.teams = response.data;
             } catch(error) {
+                console.log(url);
             };
             this.loading = false;
 
@@ -106,11 +110,12 @@ export default {
             this.loading = true;
             this.tab = 'matches';
 
-            if (player.id == null || player.id == '') {
+            if (player.playerId == null || player.playerId == '') {
+                this.loading = false;
                 return;
             }
 
-            if (player.id != this.currPlayer.id) {
+            if (player.playerId != this.currPlayer.playerId) {
                 this.scores = [];
                 this.currPlayer = player;
             }
@@ -120,7 +125,7 @@ export default {
                 return;
             }
 
-            var url = this.getBaseURL() + "/usta/players/" + player.id + "/scores";
+            var url = this.getBaseURL() + "/usta/players/" + player.playerId + "/scores";
             try {
                 const response = await axios.get(url);
                 this.scores = response.data;
@@ -137,7 +142,7 @@ export default {
             this.loading = true;
             this.tab = 'matches';
 
-            var url = this.getBaseURL() + "/usta/players/" + this.player.id + "/scores";
+            var url = this.getBaseURL() + "/usta/players/" + this.player.playerId + "/scores";
             try {
                 const response = await axios.get(url);
                 this.scores = response.data;
@@ -154,20 +159,23 @@ export default {
             this.loading = true;
             this.tab = 'utrmatches';
 
-            if (player.id == null || player.id == '') {
+            if (player.playerId == null || player.playerId == '') {
+                this.loading = false;
                 return;
             }
 
-            if (player.id != this.currPlayer.id) {
+            if (player.playerId != this.currPlayer.playerId) {
                 this.playerresult = [];
                 this.currPlayer = player;
             }
 
             var url = this.getBaseURL() + "/playerresult/?id=" + player.utrId;
+                            console.log(url);
             try {
                 const response = await axios.get(url);
                 this.playerresult = response.data;
             } catch(error) {
+                console.log(url);
             };
 
             this.loading = false;
@@ -199,7 +207,7 @@ export default {
 
 <template>
 
-<div v-if="player.id" style="min-width: 1000px" class="min-w-full mx-auto">
+<div v-if="player.playerId" style="min-width: 1000px" class="min-w-full mx-auto">
     <USTAPlayerInfo :player="player" @change="refreshPlayer"/>
     <div  class="border-b border-gray-200 dark:border-gray-700 mb-2">
         <ul class="flex -mb-px" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">

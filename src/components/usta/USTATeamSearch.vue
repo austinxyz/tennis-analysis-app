@@ -4,6 +4,8 @@ import axios from "axios";
 import USTATeam from "./USTATeam.vue";
 import USTATeamList from "./USTATeamList.vue";
 import 'vue-select/dist/vue-select.css';
+const BASE_URL = 'http://localhost:8080';
+const BASE_URL_PROD = 'http://localhost:8080';
 
 export default {
 
@@ -15,9 +17,34 @@ export default {
            return x.label = x.name;
         });
         this.teams=[];
+
+        let teamId = this.$route.query.teamId;
+
+        if (teamId == null) {
+            return;
+        }
+
+        var url = this.getBaseURL() + "/usta/teams/" + teamId;
+        try {
+            const res = await axios.get(url);
+            this.team = res.data;
+            this.teams.push(this.team);
+            this.query=this.team.name;
+        } catch (error) {
+        };
+
     },
 
     methods: {
+
+        getBaseURL() {
+            if (process.env.NODE_ENV === 'production') {
+                return BASE_URL_PROD;
+            } else {
+                return BASE_URL;
+            }
+        },
+
         async selectTeam(team) {
             this.loading = true;
             this.team = {};
@@ -50,6 +77,16 @@ export default {
             this.loading = false;
         },
 
+        async searchTeam() {
+            var url = this.getBaseURL() + "/usta/search/teams?query=" + this.query;
+            try {
+                const response = await axios.get(url);
+                this.flight={};
+                this.teams = response.data;
+                this.team = {};
+            } catch(error) {
+            };
+        },
     },
     data() {
   	    return {
@@ -61,6 +98,7 @@ export default {
 	        team: {},
 	        loading: false,
 	        divName: '',
+            query: '',
   	    }
     },
     components: {
@@ -73,8 +111,19 @@ export default {
 <template>
     <div class="flex flex-row min-h-screen w-full bg-gray-100 text-gray-700" x-data="layout">
         <div v-if="divisions.length >0" class="bg-white shadow-dashboard w-90 px-2 py-2 rounded-lg m-2">
+            <label class="border-transparent rounded-lg text-center px-2 py-1 mx-auto md:mx-0 my-2 bg-gray-100 font-normal z-10 shadow-lg">
+              USTA Team:
+            </label>
+            <input v-model="query" class="border-b-2 border-gray-300" >
+            <button
+                    class="border border-indigo-500 bg-indigo-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-indigo-600 focus:outline-none focus:shadow-outline"
+                    @click="searchTeam"
+            >
+             Search
+            </button>
+
             <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                Division:
+                Division
             </label>
             <div v-if="divisions.length >0" style="min-width: 300px" class="w-full block tracking-wide  text-grey-darker text-xs font-bold mb-2">
                 <v-select
@@ -86,7 +135,7 @@ export default {
                    ></v-select>
             </div>
             <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                Flight:
+                Flight
             </label>
             <div v-if="flights.length > 0" class="w-full block tracking-wide  text-grey-darker text-xs font-bold mb-2">
                 <v-select
@@ -98,6 +147,9 @@ export default {
                     @option:selected="selectFlight"
                    ></v-select>
             </div>
+            <label class="block text-gray-700 font-bold mb-2 px-2 ">
+                Teams
+            </label>
             <USTATeamList :teams="teams" v-model:team="team" />
         </div>
 

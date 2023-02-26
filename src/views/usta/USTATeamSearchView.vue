@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import SearchUSTATeam from "../../components/usta/SearchUSTATeam.vue";
+import USTATeamSearch from "../../components/usta/USTATeamSearch.vue";
 </script>
 
 <template>
 
-    <SearchUSTATeam />
+    <USTATeamSearch />
 
 </template>

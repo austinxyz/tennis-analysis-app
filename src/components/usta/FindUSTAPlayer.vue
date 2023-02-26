@@ -8,6 +8,24 @@ const BASE_URL_PROD = 'http://localhost:8080';
 
 export default {
 
+    async mounted() {
+        let ustaId = this.$route.query.ustaId;
+
+        if (ustaId == null) {
+            return;
+        }
+
+        var url = this.getBaseURL() + "/players/usta/" + ustaId;
+        try {
+            const res = await axios.get(url);
+            this.currentPlayer = res.data;
+            this.players.push(this.currentPlayer);
+            this.query=this.currentPlayer.name;
+        } catch (error) {
+        };
+
+    },
+
     methods: {
 
         getBaseURL() {
@@ -16,6 +34,22 @@ export default {
             } else {
                 return BASE_URL;
             }
+        },
+
+        async searchPlayer() {
+            var url = this.getBaseURL() + "/players/search?name=" + this.query;
+            try {
+                const response = await axios.get(url);
+                this.players = response.data;
+                this.team = {};
+                this.teams = [];
+                this.currentPlayer = this.players[0];
+            } catch(error) {
+                this.players = [];
+                this.team = {};
+                this.teams = [];
+                this.currentPlayer = {};
+            };
         },
 
         async findPlayers() {
@@ -95,6 +129,7 @@ export default {
             agerange:'18+',
             ratedonly: false,
             utrlimit:'',
+            query: '',
         }
     },
 
@@ -109,9 +144,28 @@ export default {
     <div class="flex flow-row">
         <div class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
             <label class="block text-gray-700 font-bold mb-2 px-2 ">
-              USTA Player Finder:
+              Quick search
             </label>
-            <hr>
+            <div class="py-2 border border-gray-300">
+                <div class="mb-2 flex flow-row">
+                    <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="usta">
+                        Name/UTR:
+                    </label>
+                    <input v-model="query" class="border-b-2 border-gray-300 mb-2 text-sm" >
+                </div>
+            </div>
+            <button
+                    class="border border-indigo-500 bg-indigo-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-indigo-600 focus:outline-none focus:shadow-outline"
+                    @click="searchPlayer"
+            >
+             Search
+            </button>
+            <hr />
+
+            <label class="block text-gray-700 font-bold mb-2 px-2 ">
+              Advanced search
+            </label>
+            <hr />
             <div class="py-2 border border-gray-300">
                 <div class="mb-2 flex flow-row">
                   <label class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="usta">
@@ -182,7 +236,7 @@ export default {
             </div>
         </div>
 
-        <div v-if="currentPlayer.id">
+        <div v-if="currentPlayer.playerId">
             <USTAPlayer :player="currentPlayer" @change="refreshPlayer"/>
         </div>
 

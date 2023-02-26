@@ -78,7 +78,7 @@ export default {
                             {{ index+1 }}
                         </td>
                         <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            <a href="#" class="underline" @click="setPlayerResult(player.id, player.name)">
+                            <a href="#" class="underline" @click="setPlayerResult(player.playerId, player.name)">
                             {{ player.name }}
                             </a>
                             {{ player.gender }}

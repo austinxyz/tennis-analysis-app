@@ -5,18 +5,13 @@ import USTATeamInfo from "./USTATeamInfo.vue";
 import USTAPlayerList from "./USTAPlayerList.vue";
 import USTATeamMatches from "./USTATeamMatches.vue";
 import USTATeamLinesStat from "./USTATeamLinesStat.vue";
-
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
-
 export default {
-
     props: {
         team: {type: Object}
     },
-
     emits: ['update:team'],
-
     data() {
         return {
             loading: false,
@@ -26,7 +21,6 @@ export default {
             currentTeamId: '',
         };
     },
-
     watch: {
         team(newTeam, oldTeam) {
             if (newTeam == null || newTeam.id == null) {
@@ -41,33 +35,22 @@ export default {
             }
         }
     },
-
     methods: {
-
         teamRefresh(team) {
             this.$emit('update:team', team);
         },
-
         changeTeam(team) {
-
             this.loading = true;
-
             this.$emit('update:team', team);
-
             this.currentPlayer = {};
-
             this.loading = false;
         },
-
         async refreshPlayer(player) {
-
             var url = this.getBaseURL() + "/usta/teams/" + this.team.id;
             try {
                 const response = await axios.get(url);
                 this.$emit('update:team', response.data);
-
                 let players = response.data.players;
-
                 for (let i = 0; i < players.length; i++) {
                     if (players[i].id == player.id) {
                         this.currentPlayer = players[i];
@@ -75,75 +58,53 @@ export default {
                     }
                 }
             } catch(error) {
-
             };
         },
-
         getBaseURL() {
             if (process.env.NODE_ENV === 'production') {
                 return BASE_URL_PROD;
             } else {
                 return BASE_URL;
             }
-
         },
-
         showPlayers(team) {
-
             this.tab = 'players';
-
             if (team.id == null || team.id == '') {
                 return;
             }
-
             if (team.id != this.team.id) {
              this.currPlayer = {};
             }
-
         },
-
         async showMatches(team) {
-
             this.loading = true;
             this.tab = 'matches';
-
             if (team.id == null || team.id == '') {
                 return;
             }
-
             if (team.id != this.currentTeamId) {
                 this.matches = [];
                 this.currPlayer = {};
                 this.currentTeamId = team.id;
             }
-
             if (this.matches.length > 0) {
                  this.loading = false;
                  return;
             }
-
             var url = this.getBaseURL() + "/usta/teams/" + team.id + "/matches";
-
             try {
              const response = await axios.get(url);
              this.matches = response.data;
             } catch(error) {
-
             };
-
             this.loading = false;
-
         },
-
         async showLines(team) {
-
             this.loading = true;
             this.tab = 'lines';
-
             if (team.id == null || team.id == '') {
                 return;
             }
-
             if (team.id != this.currentTeamId) {
                 this.matches = [];
                 this.currPlayer = {};
@@ -154,22 +115,15 @@ export default {
                     return;
                 }
             }
-
             var url = this.getBaseURL() + "/usta/teams/" + team.id + "/lineStat";
-
             try {
                  const response = await axios.get(url);
                  this.$emit('update:team', response.data);
             } catch(error) {
-
             };
-
             this.loading = false;
-
         },
-
     },
-
     components: {
         USTAPlayer,
         USTATeamInfo,
@@ -245,4 +199,3 @@ export default {
       </div>
     </div>
 </template>
-

@@ -106,7 +106,7 @@ export default {
                     {{ player.ustaRating}}
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ player.winNo}} / {{player.lostNo}} <span v-if="player.qualifiedPo">^</span>
+                    {{ player.winNo}} / {{player.lostNo}}<span v-if="player.qualifiedPo">^</span>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     {{ player.dynamicRating}}
