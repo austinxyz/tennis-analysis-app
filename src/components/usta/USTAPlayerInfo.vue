@@ -40,9 +40,8 @@ export default {
                 return;
             }
 
-            var url = this.getBaseURL() + "/usta/players/" + player.playerId + "/utrs?action=refreshUTRValue";
+            var url = this.getBaseURL() + "/usta/players/" + player.id + "/utrs?action=refreshUTRValue";
             const res = await axios.get(url);
-            //onsole.log(res.data);
             this.$emit('update:player', res.data);
             this.$emit('change', res.data);
             this.loading = false;
@@ -57,7 +56,7 @@ export default {
                 return;
             }
 
-            var url = this.getBaseURL() + "/usta/players/" + player.playerId + "/utrs?action=refreshUTRId";
+            var url = this.getBaseURL() + "/usta/players/" + player.id + "/utrs?action=refreshUTRId";
             const res = await axios.get(url);
 
             this.$emit('update:player', res.data);

@@ -2,7 +2,7 @@
 import axios from "axios";
 import USTAPlayer from "./USTAPlayer.vue";
 import USTATeamInfo from "./USTATeamInfo.vue";
-import USTAPlayerList from "./USTAPlayerList.vue";
+import USTATeamMemberList from "./USTATeamMemberList.vue";
 import USTATeamMatches from "./USTATeamMatches.vue";
 import USTATeamLinesStat from "./USTATeamLinesStat.vue";
 const BASE_URL = 'http://localhost:8080';
@@ -39,27 +39,24 @@ export default {
         teamRefresh(team) {
             this.$emit('update:team', team);
         },
+
         changeTeam(team) {
             this.loading = true;
             this.$emit('update:team', team);
             this.currentPlayer = {};
             this.loading = false;
         },
+
         async refreshPlayer(player) {
             var url = this.getBaseURL() + "/usta/teams/" + this.team.id;
             try {
                 const response = await axios.get(url);
                 this.$emit('update:team', response.data);
-                let players = response.data.players;
-                for (let i = 0; i < players.length; i++) {
-                    if (players[i].id == player.id) {
-                        this.currentPlayer = players[i];
-                        return;
-                    }
-                }
+                this.currentPlayer = player;
             } catch(error) {
             };
         },
+
         getBaseURL() {
             if (process.env.NODE_ENV === 'production') {
                 return BASE_URL_PROD;
@@ -67,6 +64,7 @@ export default {
                 return BASE_URL;
             }
         },
+
         showPlayers(team) {
             this.tab = 'players';
             if (team.id == null || team.id == '') {
@@ -76,6 +74,7 @@ export default {
              this.currPlayer = {};
             }
         },
+
         async showMatches(team) {
             this.loading = true;
             this.tab = 'matches';
@@ -99,6 +98,7 @@ export default {
             };
             this.loading = false;
         },
+
         async showLines(team) {
             this.loading = true;
             this.tab = 'lines';
@@ -127,7 +127,7 @@ export default {
     components: {
         USTAPlayer,
         USTATeamInfo,
-        USTAPlayerList,
+        USTATeamMemberList,
         USTATeamMatches,
         USTATeamLinesStat,
     }
@@ -173,10 +173,10 @@ export default {
                 </div>
             </div>
             <div v-if="tab=='players'" class="bg-gray-50 p-2 rounded-lg dark:bg-gray-800" id="players" role="tabpanel" aria-labelledby="players-tab">
-                    <USTAPlayerList v-if="team.players" :players="team.players" v-model:currentPlayer="currentPlayer" showMode="parent"/>
+                    <USTATeamMemberList v-if="team.players" :members="team.players" v-model:currentPlayer="currentPlayer" showMode="parent"/>
             </div>
             <div v-else class="bg-gray-50 p-4 rounded-lg dark:bg-gray-800 hidden" id="teams" role="tabpanel" aria-labelledby="teams-tab">
-                    <USTAPlayerList v-if="team.players" :players="team.players" v-model:currentPlayer="currentPlayer" showMode="parent"/>
+                    <USTATeamMemberList v-if="team.players" :members="team.players" v-model:currentPlayer="currentPlayer" showMode="parent"/>
             </div>
             <div v-if="tab=='matches'" class="bg-gray-50 p-2 rounded-lg dark:bg-gray-800" id="matches" role="tabpanel" aria-labelledby="matches-tab">
                     <USTATeamMatches :team="team" v-model:matches="matches" @change="changeTeam" />

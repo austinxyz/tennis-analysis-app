@@ -77,14 +77,12 @@ export default {
             this.loading = true;
             this.tab = 'teams';
 
-            console.log(player.id);
-
-            if (player.playerId == null || player.playerId == '') {
+            if (player.id == null || player.id == '') {
                 this.loading = false;
                 return;
             }
 
-            if (player.playerId != this.currPlayer.playerId) {
+            if (player.id != this.currPlayer.id) {
                 this.teams = [];
                 this.currPlayer = player;
             }
@@ -94,7 +92,7 @@ export default {
                 return;
             }
 
-            var url = this.getBaseURL() + "/players/" + player.playerId + "/teams";
+            var url = this.getBaseURL() + "/players/" + player.id + "/teams";
             try {
                 const response = await axios.get(url);
                 this.teams = response.data;
@@ -110,12 +108,12 @@ export default {
             this.loading = true;
             this.tab = 'matches';
 
-            if (player.playerId == null || player.playerId == '') {
+            if (player.id == null || player.id == '') {
                 this.loading = false;
                 return;
             }
 
-            if (player.playerId != this.currPlayer.playerId) {
+            if (player.id != this.currPlayer.id) {
                 this.scores = [];
                 this.currPlayer = player;
             }
@@ -125,7 +123,7 @@ export default {
                 return;
             }
 
-            var url = this.getBaseURL() + "/usta/players/" + player.playerId + "/scores";
+            var url = this.getBaseURL() + "/usta/players/" + player.id + "/scores";
             try {
                 const response = await axios.get(url);
                 this.scores = response.data;
@@ -142,7 +140,7 @@ export default {
             this.loading = true;
             this.tab = 'matches';
 
-            var url = this.getBaseURL() + "/usta/players/" + this.player.playerId + "/scores";
+            var url = this.getBaseURL() + "/usta/players/" + this.player.id + "/scores";
             try {
                 const response = await axios.get(url);
                 this.scores = response.data;
@@ -159,12 +157,12 @@ export default {
             this.loading = true;
             this.tab = 'utrmatches';
 
-            if (player.playerId == null || player.playerId == '') {
+            if (player.id == null || player.id == '') {
                 this.loading = false;
                 return;
             }
 
-            if (player.playerId != this.currPlayer.playerId) {
+            if (player.id != this.currPlayer.id) {
                 this.playerresult = [];
                 this.currPlayer = player;
             }
@@ -207,7 +205,7 @@ export default {
 
 <template>
 
-<div v-if="player.playerId" style="min-width: 1000px" class="min-w-full mx-auto">
+<div v-if="player.id" style="min-width: 1000px" class="min-w-full mx-auto">
     <USTAPlayerInfo :player="player" @change="refreshPlayer"/>
     <div  class="border-b border-gray-200 dark:border-gray-700 mb-2">
         <ul class="flex -mb-px" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
@@ -244,16 +242,16 @@ export default {
             </div>
         </div>
         <div v-if="tab=='teams'" class="bg-gray-50 p-2 rounded-lg dark:bg-gray-800" id="teams" role="tabpanel" aria-labelledby="teams-tab">
-                <USTAPlayerTeams v-model:team="team" :teams="teams"/>
+                <USTAPlayerTeams  :teammembers="teams"/>
         </div>
         <div v-else class="bg-gray-50 p-4 rounded-lg dark:bg-gray-800 hidden" id="teams" role="tabpanel" aria-labelledby="teams-tab">
-                <USTAPlayerTeams v-model:team="team" :teams="teams"/>
+                <USTAPlayerTeams  :teammembers="teams"/>
         </div>
         <div v-if="tab=='matches'" class="bg-gray-50 p-2 rounded-lg dark:bg-gray-800" id="matches" role="tabpanel" aria-labelledby="matches-tab">
-                <USTAPlayerMatches :scores="scores" @change="refreshScores"/>
+                <USTAPlayerMatches :scores="scores" />
         </div>
         <div v-else class="bg-gray-50 p-4 rounded-lg dark:bg-gray-800 hidden" id="matches" role="tabpanel" aria-labelledby="matches-tab">
-                <USTAPlayerMatches :scores="scores" @change="refreshScores"/>
+                <USTAPlayerMatches :scores="scores" />
         </div>
         <div v-if="tab=='utrmatches'" class="bg-gray-50 p-2 rounded-lg dark:bg-gray-800" id="utrmatches" role="tabpanel" aria-labelledby="utrmatches-tab">
                 <PlayerResult :result="playerresult"/>

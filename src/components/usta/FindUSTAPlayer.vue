@@ -236,7 +236,7 @@ export default {
             </div>
         </div>
 
-        <div v-if="currentPlayer.playerId">
+        <div v-if="currentPlayer.id">
             <USTAPlayer :player="currentPlayer" @change="refreshPlayer"/>
         </div>
 
