@@ -52,7 +52,7 @@ export default {
         <div>
         <div v-for="(linestat, key) in team.doubleLineStats" class="w-full border-collapse border-spacing-0 border border-slate-100">
             <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                Line: {{key}} (W:{{linestat.winMatchNo}} / L:{{linestat.lostMatchNo}} - {{(linestat.winPrecent*100).toFixed(2)}} %)
+                Line: {{key}} (W:{{linestat.winMatchNo}} / L:{{linestat.lostMatchNo}} - {{(linestat.winPrecent*100).toFixed(2)}} %) [Normal:{{linestat.normalNo}} vs. Surprised W/L:{{linestat.surprisedWin}}/{{linestat.surprisedLost}}]
             </label>
             <table class="min-w-full border-collapse border-spacing-0 border border-slate-400">
                 <thead>
@@ -93,7 +93,7 @@ export default {
         <div v-if="team.singleLineStats">
          <div v-for="(linestat, key) in team.singleLineStats" class="w-full border-collapse border-spacing-0 border border-slate-100">
              <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                 Line: {{key}} (W:{{linestat.winMatchNo}} / L:{{linestat.lostMatchNo}}) - {{(linestat.winPrecent*100).toFixed(2)}} %)
+                 Line: {{key}} (W:{{linestat.winMatchNo}} / L:{{linestat.lostMatchNo}}) - {{(linestat.winPrecent*100).toFixed(2)}} %) [Normal:{{linestat.normalNo}} vs. Surprised W/L:{{linestat.surprisedWin}}/{{linestat.surprisedLost}}]
              </label>
              <table class="min-w-full border-collapse border-spacing-0 border border-slate-400">
                  <thead>

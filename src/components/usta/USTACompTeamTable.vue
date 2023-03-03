@@ -123,6 +123,17 @@ export default {
                         {{team2.doubleLineStats[index].winMatchNo}} / {{team2.doubleLineStats[index].lostMatchNo}} ({{(team2.doubleLineStats[index].winPrecent*100).toFixed(2)}} %)
                     </div>
                 </div>
+                <div class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold bg-slate-200">
+                    <div class="w-40">{{doubleLineStat.lineName}} Average UTR:</div>
+                    <div class="flex justify-center flex-grow w-0 text-sm font-semibold" >
+                        <img v-if="doubleLineStat.averageUTRs > team2.doubleLineStats[index].averageUTRs" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                        {{doubleLineStat.averageUTRs.toFixed(2)}}
+                    </div>
+                    <div class="flex justify-center flex-grow w-0 text-sm font-semibold">
+                        <img v-if="doubleLineStat.averageUTRs < team2.doubleLineStats[index].averageUTRs" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                        {{team2.doubleLineStats[index].averageUTRs.toFixed(2)}}
+                    </div>
+                </div>
             </div>
         </div>
         <div v-if="team1.singleLineStats">
@@ -147,6 +158,17 @@ export default {
                     <div class="flex justify-center flex-grow w-0 text-sm font-semibold">
                         <img v-if="singleLineStat.winPrecent < team2.singleLineStats[index].winPrecent" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
                         {{team2.singleLineStats[index].winMatchNo}} / {{team2.singleLineStats[index].lostMatchNo}} ({{(team2.singleLineStats[index].winPrecent*100).toFixed(2)}} %)
+                    </div>
+                </div>
+                <div class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold bg-slate-200">
+                    <div class="w-40">{{singleLineStat.lineName}} Average UTR:</div>
+                    <div class="flex justify-center flex-grow w-0 text-sm font-semibold" >
+                        <img v-if="singleLineStat.averageUTR > team2.singleLineStats[index].averageUTR" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                        {{singleLineStat.averageUTR.toFixed(2)}}
+                    </div>
+                    <div class="flex justify-center flex-grow w-0 text-sm font-semibold">
+                        <img v-if="singleLineStat.averageUTR < team2.singleLineStats[index].averageUTR" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                        {{team2.singleLineStats[index].averageUTR.toFixed(2)}}
                     </div>
                 </div>
             </div>

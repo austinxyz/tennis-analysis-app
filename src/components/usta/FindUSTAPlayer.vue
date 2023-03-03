@@ -81,7 +81,10 @@ export default {
 
         async refreshPlayer(player) {
 
-            var url = this.getBaseURL() + "/players/searchUTR?" +
+            var url = this.getBaseURL() + "/players/search?name=" + this.query;
+
+            if (this.query ==null) {
+                url = this.getBaseURL() + "/players/searchUTR?" +
                 "gender=" + this.gender +
                 "&USTARating=" + this.ustaRating +
                 "&type=" + this.playertype +
@@ -90,9 +93,11 @@ export default {
                 "&ageRange=" + this.agerange +
                 "&ratedOnly=" + this.ratedonly +
                 "&size=" + this.pagesize;
-            if (this.utrlimit !=null && this.utrlimit != '') {
-                url = url + "&utrLimit=" + this.utrlimit;
+                if (this.utrlimit !=null && this.utrlimit != '') {
+                    url = url + "&utrLimit=" + this.utrlimit;
+                }
             }
+
             try {
                 const response = await axios.get(url);
                 this.players = response.data;

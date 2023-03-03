@@ -35,7 +35,7 @@ export default {
         },
 
         async savePlayer() {
-            const res = await axios.put('http://localhost:8080/players/' + this.player.playerId,
+            const res = await axios.put('http://localhost:8080/players/' + this.player.id,
                 {
                    utrId: this.utrId,
                    ustaId: this.ustaId,
