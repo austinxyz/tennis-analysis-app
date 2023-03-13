@@ -11,6 +11,10 @@ export default {
         openScoreComments() {
             this.showModal = true;
         },
+
+        replaceWithBr() {
+            return this.comment.replace(/\n/g, "<br />");
+        }
     },
 
     data() {
@@ -31,7 +35,7 @@ export default {
     </a>
     <Modal v-model="showModal" title="Match Memo" >
         <div class="min-w-full">
-            {{comment}}
+            <p v-html="replaceWithBr()"/>
         </div>
     </Modal>
 </template>
