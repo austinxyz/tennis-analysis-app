@@ -51,9 +51,9 @@ export default {
                 </tr>
               </thead>
               <tbody>
-                 <tr v-for="memberScore in scores" class="even:bg-slate-50 odd:bg-slate-400">
+                 <tr v-for="(memberScore, index) in scores" class="even:bg-slate-50 odd:bg-slate-400">
                     <td class="w-1/20 px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
-                        {{ memberScore.matchDate }}
+                        {{ index+1 }} - {{ memberScore.matchDate }}
                     </td>
                     <td class="w-1/20 px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
                         {{ memberScore.lineName }}
