@@ -131,9 +131,14 @@ export default {
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     {{ match.matchDate }}
                 </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                <td v-if="match.homeTeamId == team.id" class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                      <a href="#" class="underline" @click="changeTeam(match.guestTeamId)">
                         {{match.guestTeamName}}
+                    </a>
+                </td>
+                <td v-else class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                     <a href="#" class="underline" @click="changeTeam(match.homeTeamId)">
+                        {{match.homeTeamName}}
                     </a>
                 </td>
                 <td v-if="match.homeTeamId == team.id" class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
