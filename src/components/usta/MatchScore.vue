@@ -3,7 +3,7 @@ import LineScore from "./LineScore.vue";
 export default {
 
     props: {
-        scoreCard: { type: Object},
+        match: { type: Object},
     },
 
     emits: ['change'],
@@ -23,7 +23,7 @@ export default {
 </script>
 
 <template>
-        <table v-if="scoreCard.scores" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
+        <table v-if="match.lines" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
           <thead>
             <tr>
                 <th class="w-1/20 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
@@ -31,14 +31,14 @@ export default {
                 </th>
                 <th class="w-2/5 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                 <div class="flex flex-row align-middle">
-                    <img v-if="scoreCard.homeWin" src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
-                    <span class="align-middle"> Home Team - {{scoreCard.homeTeamName}} - {{scoreCard.homeTeamPoint}}</span>
+                    <img v-if="match.homeWin" src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                    <span class="align-middle"> Home Team - {{match.homeTeamName}} - {{match.homePoint}}</span>
                 </div>
                 </th>
                 <th class="w-2/5 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
                 <div class="flex flex-row align-middle">
-                    <img v-if="!scoreCard.homeWin" src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
-                    <span class="align-middle" > Visitor Team - {{scoreCard.guestTeamName}} - {{scoreCard.guestTeamPoint}}  </span>
+                    <img v-if="!match.homeWin" src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                    <span class="align-middle" > Visitor Team - {{match.guestTeamName}} - {{match.guestPoint}}  </span>
                 </div>
                 </th>
                 <th class="w-1/10 px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
@@ -50,7 +50,7 @@ export default {
             </tr>
           </thead>
           <tbody>
-             <tr v-for="lineScore in scoreCard.scores" class="even:bg-slate-50 odd:bg-slate-200">
+             <tr v-for="lineScore in match.lines" class="even:bg-slate-50 odd:bg-slate-200">
                 <LineScore :lineScore="lineScore" @change="refreshScore"/>
               </tr>
           </tbody>

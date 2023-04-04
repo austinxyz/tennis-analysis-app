@@ -43,13 +43,13 @@ export default {
 
 <template>
         <td class="w-1/20 px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
-            {{ lineScore.homeLine.name }}
+            {{ lineScore.name }}
         </td>
         <td class="w-1/3 px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
-            <LinePlayerInfo :player1="lineScore.homeLine.player1" :player2="lineScore.homeLine.player2" :winner="lineScore.homeTeamWin" :matchType="lineScore.homeLine.type" />
+            <LinePlayerInfo :player1="lineScore.homePlayer1" :player2="lineScore.homePlayer2" :winner="lineScore.homeTeamWin" :matchType="lineScore.type" />
         </td>
         <td class="w-1/3 px-3 py-2  border-b text-blue-900 border-gray-500 text-sm leading-5">
-            <LinePlayerInfo :player1="lineScore.guestLine.player1" :player2="lineScore.guestLine.player2" :winner="!lineScore.homeTeamWin" :matchType="lineScore.guestLine.type" />
+            <LinePlayerInfo :player1="lineScore.guestPlayer1" :player2="lineScore.guestPlayer2" :winner="!lineScore.homeTeamWin" :matchType="lineScore.type" />
         </td>
         <td class="w-1/10 px-3 py-2 border-b text-blue-900 border-gray-500 text-sm leading-5">
             {{lineScore.score}}
