@@ -72,6 +72,34 @@ export default {
             this.loading = false;
         },
 
+        async exportTeam(team) {
+
+            this.loading = true;
+
+            if (team.id == null || team.id == '') {
+                return;
+            }
+
+            var url = this.getBaseURL() + "/usta/exportExcel/team/" + team.id;
+            const res = await axios({
+              method: 'get',
+              url,
+              responseType: 'arraybuffer',
+            });
+
+            this.forceFileDownload(res, team.name + ".xlsx");
+
+            this.loading = false;
+        },
+
+        forceFileDownload(response, title) {
+              const url = window.URL.createObjectURL(new Blob([response.data]))
+              const link = document.createElement('a')
+              link.href = url;
+              link.setAttribute('download', title)
+              document.body.appendChild(link)
+              link.click();
+        },
 
         async refreshTeamDRValue(team) {
 
@@ -113,12 +141,15 @@ export default {
        </div>
        <hr />
        <div class="text-sm my-3 flex flex-row">
-        <span class="w-1/4 text-left">Area : {{team.area}} </span>
-        <span class="w-1/4 text-left">Flight : {{team.flight}}</span>
-        <span class="w-1/4 text-left">
+        <span class="w-1/5 text-left">Area : {{team.area}} </span>
+        <span class="w-1/5 text-left">Flight : {{team.flight}}</span>
+        <span class="w-1/5 text-left">
             <a href="#" class="underline" @click="updatePlayers(team)"> Update Players </a>
         </span>
-        <span class="w-1/4 text-right">
+        <span class="w-1/5 text-left">
+            <a href="#" class="underline" @click="exportTeam(team)"> Export </a>
+        </span>
+        <span class="w-1/5 text-right">
             <button type="button" @click="refreshTeamUTRValue(team)">
                 <img src="/utr.svg" width="30" height="30" alt="Fetch UTR Value" title="fetch UTR Value"/>
             </button>

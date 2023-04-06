@@ -16,7 +16,7 @@ export default {
 
     watch: {
         matches(newMatches, oldMatches) {
-            this.scoreCard={};
+            this.lineScores=[];
         }
     },
 
@@ -70,14 +70,14 @@ export default {
 
             this.$emit('change', response.data);
 
-            this.scoreCard = {},
+            this.lineScores = [],
 
             this.loading = false;
         },
 
         showScoreDetail(match) {
 
-            this.scoreCard = match.scoreCard;
+            this.match = match;
 
         },
 
@@ -86,7 +86,7 @@ export default {
     data() {
         return {
             loading: false,
-            scoreCard: {},
+            match: {},
         }
     },
 
@@ -131,34 +131,39 @@ export default {
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     {{ match.matchDate }}
                 </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                     <a href="#" class="underline" @click="changeTeam(match.opponentTeamId)">
-                        {{match.opponentTeamName}}
+                <td v-if="match.homeTeamId == team.id" class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                     <a href="#" class="underline" @click="changeTeam(match.guestTeamId)">
+                        {{match.guestTeamName}}
                     </a>
                 </td>
-                <td v-if="match.home" class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                <td v-else class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                     <a href="#" class="underline" @click="changeTeam(match.homeTeamId)">
+                        {{match.homeTeamName}}
+                    </a>
+                </td>
+                <td v-if="match.homeTeamId == team.id" class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     Home
                 </td>
                 <td v-else class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     Away
                 </td>
-                <td v-if="match.scoreCard" class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                <td v-if="match.lines.length >0" class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     <a href="#score_anchor" class="underline" @click="showScoreDetail(match)">
-                        {{match.point}} - {{match.opponentPoint}}
+                        {{match.homePoint}} - {{match.guestPoint}}
                     </a>
                 </td>
                 <td v-else class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     -
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                     <a :href="'/usta/teamanalysis?team1=' + team.id + '&team2=' + match.opponentTeamId" class="underline" target="_blank">
+                     <a :href="'/usta/teamanalysis?team1=' + match.homeTeamId + '&team2=' + match.guestTeamId" class="underline" target="_blank">
                         Analysis
                     </a>
                 </td>
               </tr>
           </tbody>
         </table>
-        <MatchScore :scoreCard="scoreCard" @change="refreshScoreCard"/>
+        <MatchScore :match="match" @change="refreshScoreCard"/>
         <div v-if="loading" class="px-5 py-5">
             <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
               <span class="sr-only">Loading...</span>
