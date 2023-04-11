@@ -11,7 +11,7 @@ const BASE_URL_PROD = 'http://localhost:8080';
 export default {
 
     async mounted() {
-        var url = "http://localhost:8080/usta/current/leagues/";
+        var url = "http://localhost:8080/usta/current/leagues";
         const response = await axios.get(url);
         this.leagues = response.data;
         this.leagues.map(function (x){

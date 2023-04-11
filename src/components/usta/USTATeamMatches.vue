@@ -148,9 +148,12 @@ export default {
                     Away
                 </td>
                 <td v-if="match.lines.length >0" class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <a href="#score_anchor" class="underline" @click="showScoreDetail(match)">
+                    <a v-if="match.homeTeamId == team.id" href="#score_anchor" class="underline" @click="showScoreDetail(match)">
                         {{match.homePoint}} - {{match.guestPoint}}
                     </a>
+                     <a v-else href="#score_anchor" class="underline" @click="showScoreDetail(match)">
+                         {{match.guestPoint}} - {{match.homePoint}}
+                     </a>
                 </td>
                 <td v-else class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     -
