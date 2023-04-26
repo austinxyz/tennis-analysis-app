@@ -73,6 +73,17 @@ const router = createRouter({
         }
       ]
     },
+    {
+      path: "/event",
+      name: "event",
+      component: () => import("../views/event/EventView.vue"),
+      children: [
+        {
+            path: 'buildteam',
+            component:() => import("../views/event/CandidateView.vue"),
+        }
+      ]
+    },
   ],
 });
 
