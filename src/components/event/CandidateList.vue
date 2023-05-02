@@ -28,7 +28,7 @@ export default {
             var url = this.getBaseURL() + "/players/" + member.playerId + "?action=fetch";
             const response = await axios.get(url);
             let player = response.data;
-
+            console.log(player);
             this.$emit('update:currentPlayer', player);
             this.$emit('changePlayer', player);
         },

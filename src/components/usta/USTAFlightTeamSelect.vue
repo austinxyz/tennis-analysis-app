@@ -21,6 +21,8 @@ export default {
 
             if (this.team1.name.indexOf("40A") > 0) {
                 this.matchType = "40+Adult";
+            } else if (this.team1.name.indexOf("18A") > 0) {
+                this.matchType = "18+Adult";
             } else {
                 this.matchType = "Mixed";
             }

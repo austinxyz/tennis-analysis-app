@@ -15,7 +15,6 @@ export default {
         return {
             loading: false,
             currentPlayer: {},
-
             tab: 'candidates',
         };
     },
@@ -26,7 +25,6 @@ export default {
     methods: {
 
         async refreshPlayer(player) {
-
             try {
                 this.currentPlayer = player;
             } catch(error) {

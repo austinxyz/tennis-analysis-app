@@ -35,6 +35,18 @@ export default {
                     player2:{}}
                 )
             }
+            if (this.matchType == '18+Adult') {
+                this.lineups.push(
+                    {name:'S1',
+                    player1:{},
+                    player2:{}}
+                )
+                this.lineups.push(
+                    {name:'S2',
+                    player1:{},
+                    player2:{}}
+                )
+            }
         }
     },
 
@@ -108,6 +120,37 @@ export default {
                     }
                     if (this.selectPlayers[i] == 'None') {
                         this.lineups[3].player1 = {};
+                    }
+                }
+
+                if (this.matchType == '18+Adult') {
+                    if (this.lineups.length == 3) {
+                        this.lineups.push(
+                            {name:'S1',
+                            player1:{},
+                            player2:{}}
+                        )
+                        this.lineups.push(
+                            {name:'S2',
+                            player1:{},
+                            player2:{}}
+                        )
+                    }
+                    if (this.selectPlayers[i] == 's1') {
+                        this.lineups[3].player1 = this.team.players[i];
+                    }
+
+                    if (this.selectPlayers[i] == 's2') {
+                        this.lineups[4].player1 = this.team.players[i];
+                    }
+
+                    if (this.selectPlayers[i] == 'None') {
+                        if (this.lineups[3].player1.id == this.team.players[i].id) {
+                            this.lineups[3].player1 = {};
+                        }
+                        if (this.lineups[4].player1.id == this.team.players[i].id) {
+                            this.lineups[4].player1 = {};
+                        }
                     }
                 }
 
@@ -234,6 +277,8 @@ export default {
                                 <option value="d2">D2</option>
                                 <option value="d3">D3</option>
                                 <option v-if="matchType == '40+Adult'" value="s1">S1</option>
+                                <option v-if="matchType == '18+Adult'" value="s1">S1</option>
+                                <option v-if="matchType == '18+Adult'" value="s2">S2</option>
                                 <option value="None">None</option>
                             </select>
                         </td>
