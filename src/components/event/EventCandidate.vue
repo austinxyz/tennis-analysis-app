@@ -1,7 +1,7 @@
 <script>
 
 import axios from "axios";
-import Division from "./Division.vue";
+import CandidateTeam from "./CandidateTeam.vue";
 import 'vue-select/dist/vue-select.css';
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
@@ -36,8 +36,18 @@ export default {
             this.div = {};
         },
 
-        selectDiv(div) {
+        async selectDiv(div) {
             this.div = div;
+            console.log(div);
+            var url = "http://localhost:8080/utr/candidateTeams/"+div.id;
+            try {
+                console.log(url);
+                const response = await axios.get(url);
+                this.candidateTeam = response.data;
+                console.log(this.candidateTeam);
+            } catch (error) {
+                console.log(error);
+            };
         },
 
     },
@@ -47,11 +57,12 @@ export default {
             event: {},
   	        divisions: [],
   	        div: {},
+  	        candidateTeam: {},
   	        loading: false,
   	    }
     },
     components: {
-        Division,
+        CandidateTeam,
     }
 }
 </script>
@@ -94,7 +105,7 @@ export default {
             </div>
         </div>
         <div v-else class="m-2 flex flow-row">
-            <Division v-model:division="div"/>
+            <CandidateTeam v-model:candidateTeam="candidateTeam"/>
         </div>
 
     </div>

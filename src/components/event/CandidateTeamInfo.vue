@@ -6,10 +6,10 @@ const BASE_URL_PROD = 'http://localhost:8080';
 export default {
 
     props: {
-        division: { type: Object},
+        candidateTeam: { type: Object},
     },
 
-    emits: ["update:division", "change"],
+    emits: ["update:candidateTeam", "change"],
 
     methods: {
 
@@ -22,32 +22,32 @@ export default {
         },
 
 
-        async refreshDivisionUTRValue(div) {
+        async refreshCandidateTeamUTRValue(team) {
 
             this.loading = true;
 
-            if (div.id == null || div.id == '') {
+            if (team.id == null || team.id == '') {
                 return;
             }
 
-            var url = this.getBaseURL() + "/utr/divisions/" + div.id + "/utrs?action=refreshValue";
+            var url = this.getBaseURL() + "/utr/candidateTeams/" + team.teamId + "/utrs?action=refreshValue";
             const res = await axios.get(url);
 
-            this.$emit('update:division', res.data);
+            this.$emit('update:candidateTeam', res.data);
             this.$emit('change', res.data);
 
             this.loading = false;
         },
 
-        async exportDivision(div) {
+        async exportCandidateTeam(team) {
 
             this.loading = true;
 
-            if (div.id == null || div.id == '') {
+            if (team.id == null || team.id == '') {
                 return;
             }
 
-            var url = this.getBaseURL() + "/utr/exportExcel/divisions/" + div.id;
+            var url = this.getBaseURL() + "/utr/exportExcel/divisions/" + team.teamId;
             const res = await axios({
               method: 'get',
               url,
@@ -82,19 +82,19 @@ export default {
 </script>
 
 <template>
-    <div v-if="division.id" class="border-transparent rounded-lg text-center px-4 pt-2 pb-1 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
+    <div v-if="candidateTeam.teamId" class="border-transparent rounded-lg text-center px-4 pt-2 pb-1 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
        <div class="font-bold text-2xl text-left pb-2">
         <span class="w-1/2 text-left">Team :
-           {{division.chineseName}} ({{division.englishName}})
+           {{candidateTeam.displayName}} ({{candidateTeam.englishName}})
          </span>
        </div>
        <hr />
        <div class="text-sm my-3 flex flex-row">
         <span class="w-1/5 text-left">
-            <a href="#" class="underline" @click="exportDivision(division)"> Export </a>
+            <a href="#" class="underline" @click="exportCandidateTeam(candidateTeam)"> Export </a>
         </span>
         <span class="w-1/5 text-right">
-            <button type="button" @click="refreshDivisionUTRValue(division)">
+            <button type="button" @click="refreshCandidateTeamUTRValue(candidateTeam)">
                 <img src="/utr.svg" width="30" height="30" alt="Fetch UTR Value" title="fetch UTR Value"/>
             </button>
         </span>
