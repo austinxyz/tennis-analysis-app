@@ -56,6 +56,10 @@ const router = createRouter({
             component:() => import("../views/usta/USTALeagueView.vue"),
         },
         {
+            path: 'candidateteam',
+            component:() => import("../views/usta/USTACandidateTeamView.vue"),
+        },
+        {
             path: 'team',
             component:() => import("../views/usta/USTATeamSearchView.vue"),
         },

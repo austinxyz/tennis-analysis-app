@@ -18,6 +18,13 @@ export default {
         this.event = this.events[0];
         this.divisions=this.event.divisions;
         this.div = this.divisions[0];
+        var url = "http://localhost:8080/utr/candidateTeams/"+this.div.id;
+        try {
+            const response = await axios.get(url);
+            this.candidateTeam = response.data;
+        } catch (error) {
+            console.log(error);
+        };
     },
 
     methods: {
@@ -38,16 +45,15 @@ export default {
 
         async selectDiv(div) {
             this.div = div;
-            console.log(div);
+            this.loading = true;
             var url = "http://localhost:8080/utr/candidateTeams/"+div.id;
             try {
-                console.log(url);
                 const response = await axios.get(url);
                 this.candidateTeam = response.data;
-                console.log(this.candidateTeam);
             } catch (error) {
                 console.log(error);
             };
+            this.loading = false;
         },
 
     },
