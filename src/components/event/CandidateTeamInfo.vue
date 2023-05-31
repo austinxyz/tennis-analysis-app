@@ -26,11 +26,12 @@ export default {
 
             this.loading = true;
 
-            if (team.id == null || team.id == '') {
+            if (team.teamId == null || team.teamId == '') {
                 return;
             }
 
             var url = this.getBaseURL() + "/utr/candidateTeams/" + team.teamId + "/utrs?action=refreshValue";
+            console.log(url);
             const res = await axios.get(url);
 
             this.$emit('update:candidateTeam', res.data);
@@ -43,7 +44,7 @@ export default {
 
             this.loading = true;
 
-            if (team.id == null || team.id == '') {
+            if (team.teamId == null || team.teamId == '') {
                 return;
             }
 
@@ -54,7 +55,7 @@ export default {
               responseType: 'arraybuffer',
             });
 
-            this.forceFileDownload(res, div.name + ".xlsx");
+            this.forceFileDownload(res, team.name + ".xlsx");
 
             this.loading = false;
         },
