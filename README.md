@@ -2,7 +2,7 @@
 
 this application is mainly to analysis UTR and USTA player for matches.
 
-now it includes three functions
+now it includes four functions
 
 ## UTR matches
 
@@ -23,6 +23,8 @@ now it includes three functions
 
 - League, by selecting 2023 divisions, flights (at present with SB/MP/LP area), to list all teams, you can review team's player, matches info, and dig into perticular player's info and analysis upcoming two team's match.
 
+- Candidate Team, list the candidate teams and show team's basic information, candidates
+
 - Team, search by name, to list teams and show team's basic information, players, matches, and dig into perticular player's info.
 
 - Player, search by name, to list players and show player's basic information, attended teams, usta matches and utr matches
@@ -33,6 +35,9 @@ now it includes three functions
 
 - Team Analysis, by selecting two teams in same league, compare team's player, historical lines, matches and compare success rate, top player/pair between two teams.
 
+## Event
+
+- Team build, to list team will potenial candidates, top pairs based on line
 
 # How to install
 
