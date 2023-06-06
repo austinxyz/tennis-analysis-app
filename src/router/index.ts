@@ -85,6 +85,10 @@ const router = createRouter({
         {
             path: 'buildteam',
             component:() => import("../views/event/CandidateView.vue"),
+        },
+        {
+            path: 'utrleague',
+            component:() => import("../views/event/UTRLeagueView.vue"),
         }
       ]
     },
