@@ -107,25 +107,20 @@ export default {
                     {{ member.ustaRating}}
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ member.matchUTR}}
+                    {{ member.utr}}
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <span v-if="member.dutrstatus === 'Rated'" class="font-semibold" >
-                        {{ member.dutr }} (D)
+                    <span v-if="member.dUTRStatus === 'Rated'" class="font-semibold" >
+                        {{ member.dUTR }} (D)
                     </span>
                     <span v-else class="font-light" >
-                        {{ member.dutr }} (D)
+                        {{ member.dUTR }} (D)
                     </span> /
-                    <span v-if="member.sutrstatus === 'Rated'" class="font-semibold" >
-                        {{ member.sutr }} (S)
+                    <span v-if="member.sUTRStatus === 'Rated'" class="font-semibold" >
+                        {{ member.sUTR }} (S)
                     </span>
                     <span v-else class="font-light" >
-                        {{ member.sutr }} (S)
-                    </span>
-                    <span v-if="!member.refreshedUTR && member.utrId!=null">
-                         <a href="#" class="underline" @click="refreshUTR(member)">
-                            Refresh UTR
-                         </a>
+                        {{ member.sUTR }} (S)
                     </span>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">

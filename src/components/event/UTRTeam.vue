@@ -2,6 +2,7 @@
 import axios from "axios";
 import USTAPlayer from "../usta/USTAPlayer.vue";
 import UTRTeamMemberList from "./UTRTeamMemberList.vue";
+import UTRTeamLines from "./UTRTeamLines.vue";
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
 export default {
@@ -57,10 +58,21 @@ export default {
             }
         },
 
+        showLines(team) {
+            this.tab = 'lines';
+            if (team.teamId == null || team.teamId == '') {
+                return;
+            }
+            if (team.teamId != this.team.teamId) {
+                this.currPlayer = {};
+            }
+        },
+
     },
     components: {
         USTAPlayer,
         UTRTeamMemberList,
+        UTRTeamLines
     }
 }
 </script>
@@ -83,6 +95,14 @@ export default {
                     id="players-tab" data-tabs-target="#players" type="button" role="tab" aria-controls="profile" aria-selected="false" @click="showPlayers(team)">
                     Players</button>
                 </li>
+                <li class="mr-2" role="presentation">
+                    <button v-if="tab=='lines'" class="inline-block text-blue-500 bg-gray-600 hover:text-blue-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300 active"
+                    id="lines-tab" data-tabs-target="#lines" type="button" role="tab" aria-controls="profile" aria-selected="false" @click="showLines(team)">
+                    Candidates</button>
+                    <button v-else class="inline-block text-gray-500 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300"
+                    id="lines-tab" data-tabs-target="#lines" type="button" role="tab" aria-controls="profile" aria-selected="false" @click="showLines(team)">
+                    Lines</button>
+                </li>
             </ul>
         </div>
         <div id="myTabContent">
@@ -96,6 +116,12 @@ export default {
             </div>
             <div v-else class="bg-gray-50 p-4 rounded-lg dark:bg-gray-800 hidden" id="teams" role="tabpanel" aria-labelledby="teams-tab">
                     <UTRTeamMemberList v-if="team.players" :members="team.players" v-model:currentPlayer="currentPlayer" showMode="parent"/>
+            </div>
+            <div v-if="tab=='lines'" class="bg-gray-50 p-2 rounded-lg dark:bg-gray-800" id="lines" role="tabpanel" aria-labelledby="lines-tab">
+                    <UTRTeamLines v-if="team.lines" :team="team" />
+            </div>
+            <div v-else class="bg-gray-50 p-4 rounded-lg dark:bg-gray-800 hidden" id="lines" role="tabpanel" aria-labelledby="lines-tab">
+                    <UTRTeamLines v-if="team.lines" :team="team" />
             </div>
         </div>
     </div>
