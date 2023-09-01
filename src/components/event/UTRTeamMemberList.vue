@@ -25,7 +25,7 @@ export default {
         },
 
         async setPlayer(member) {
-            var url = this.getBaseURL() + "/players/" + member.playerId + "?action=fetch";
+            var url = this.getBaseURL() + "/players/utr/" + member.id + "?action=search";
             const response = await axios.get(url);
             let player = response.data;
 
@@ -38,7 +38,7 @@ export default {
             this.loading = true;
 
             if (member.utrId == null || member.utrId == '') {
-                return;
+               return;
             }
 
             var url = this.getBaseURL() + "/players/utr/" + member.utrId + "?action=refreshUTRValue";
