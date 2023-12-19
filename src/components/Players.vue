@@ -4,6 +4,7 @@ export default {
 
   props: {
     teamName: { type: String},
+    teamUTR: { type: Number},
     players: { type: Array},
   },
 
@@ -16,7 +17,7 @@ export default {
           <thead>
             <tr>
                 <th colspan="5" class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    {{ teamName }}
+                    {{ teamName }} :  {{teamUTR.toFixed(2)}}
                 </th>
             </tr>
             <tr>

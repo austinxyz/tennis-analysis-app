@@ -9,9 +9,10 @@ export default {
     props: {
         vTeamName: {type: String},
         vLineup: {type: Object},
+        vTeamUTR: {type: Number},
     },
 
-    emits: ['update:vTeamName', 'update:vLineup'],
+    emits: ['update:vTeamName', 'update:vLineup', 'update:vTeamUTR'],
 
     methods: {
         getLineString(player1, player2) {
@@ -30,11 +31,13 @@ export default {
                 .then(response => {
                     this.teamName = response.data.displayName;
                     this.players = response.data.players;
+                    this.teamUTR = response.data.teamUTR;
                     this.players.map(function (x){
                        return x.label = x.name + '(' + x.gender + ')-' + x.utr;
                     });
                     this.players.push({label:"Any", name:""});
                     this.$emit('update:vTeamName', this.teamName);
+                    this.$emit('update:vTeamUTR', this.teamUTR);
                     this.reset();
                     this.$emit('update:vLineup', this.lineup);
                 })
@@ -131,6 +134,7 @@ export default {
             .then(response => {
                 this.teamName = response.data.displayName;
                 this.players = response.data.players;
+                this.teamUTR = response.data.teamUTR;
                 this.players.map(function (x){
                    return x.label = x.name + '(' + x.gender + ')-' + x.utr;
                 });
@@ -141,11 +145,12 @@ export default {
     data() {
   	    return {
             teamName: '',
+            teamUTR: 0,
             players: [],
             lineups: [],
             lineup:{},
 	        teams: [],
-	        team: 'ZJU-BYD',
+	        team: 'ZJU-HQU-CMU',
 	        d1player1: '',
 	        d1player2: '',
 	        d2player1: '',

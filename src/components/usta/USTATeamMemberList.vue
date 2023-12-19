@@ -115,7 +115,8 @@ export default {
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     {{ member.dynamicRating}}
                 </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5 flex flex-row align-middle">
+                    <img v-if="member.utrrequriedRefresh" src="/Expired.svg" alt="Expried" class="h-5 w-5"/>
                     <span v-if="member.dutrstatus === 'Rated'" class="font-semibold" >
                         {{ member.dutr }} (D)
                     </span>

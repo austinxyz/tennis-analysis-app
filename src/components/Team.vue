@@ -8,6 +8,7 @@ export default {
   data() {
     return {
         teamName: '',
+        teamUTR: 0,
         players: [],
         d1:[],
         d2:[],
@@ -21,12 +22,13 @@ export default {
     let teamId = this.$route.query.team;
 
     if (teamId == null) {
-        teamId = "ZJU-BYD";
+        teamId = "ZJU-HUQ-CMU";
     }
 
     axios.get("http://localhost:8080/team?team=" + teamId)
         .then(response => {
             this.teamName = response.data.displayName;
+            this.teamUTR = response.data.teamUTR;
             this.players = response.data.players;
             this.d1 = response.data.d1.topPairs;
             this.d2 = response.data.d2.topPairs;
@@ -46,7 +48,7 @@ export default {
 <template>
        <div class="m-2 flex flow-row">
             <div class="w-50 min-w-fit">
-                <Players :teamName="teamName" :players="players" />
+                <Players :teamName="teamName" :teamUTR="teamUTR" :players="players" />
             </div>
             <div>
                 <div class="flex flex-row">

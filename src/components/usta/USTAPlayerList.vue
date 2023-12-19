@@ -106,7 +106,8 @@ export default {
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     {{ player.dynamicRating}}
                 </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5 flex flex-row align-middle">
+                    <img v-if="player.utrrequriedRefresh" src="/Expired.svg" alt="Expried" class="h-5 w-5"/>
                     <span v-if="player.dutrstatus === 'Rated'" class="font-semibold" >
                         {{ player.dutr }} (D)
                     </span>
