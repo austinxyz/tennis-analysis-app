@@ -22,6 +22,10 @@ export default {
             return;
         }
 
+        if (this.player== null || this.player.utrId == null) {
+            return;
+        }
+
         var url = this.getBaseURL() + "/playerresult?id=" + this.player.utrId;
         try {
             const response = await axios.get(url);
@@ -168,7 +172,6 @@ export default {
             }
 
             var url = this.getBaseURL() + "/playerresult/?id=" + player.utrId;
-                            console.log(url);
             try {
                 const response = await axios.get(url);
                 this.playerresult = response.data;

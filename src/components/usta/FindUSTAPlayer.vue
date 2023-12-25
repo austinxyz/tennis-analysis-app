@@ -61,6 +61,7 @@ export default {
                 "&start=" + this.start +
                 "&ageRange=" + this.agerange +
                 "&ratedOnly=" + this.ratedonly +
+                "&asc=" + this.asc +
                 "&size=" + this.pagesize;
             if (this.utrlimit !=null && this.utrlimit != '') {
                 url = url + "&utrLimit=" + this.utrlimit;
@@ -82,8 +83,7 @@ export default {
         async refreshPlayer(player) {
 
             var url = this.getBaseURL() + "/players/search?name=" + this.query;
-
-            if (this.query ==null) {
+            if (this.query==null || this.query=='') {
                 url = this.getBaseURL() + "/players/searchUTR?" +
                 "gender=" + this.gender +
                 "&USTARating=" + this.ustaRating +
@@ -92,6 +92,7 @@ export default {
                 "&start=" + this.start +
                 "&ageRange=" + this.agerange +
                 "&ratedOnly=" + this.ratedonly +
+                "&asc=" + this.asc +
                 "&size=" + this.pagesize;
                 if (this.utrlimit !=null && this.utrlimit != '') {
                     url = url + "&utrLimit=" + this.utrlimit;
@@ -135,6 +136,7 @@ export default {
             ratedonly: false,
             utrlimit:'',
             query: '',
+            asc: 'false'
         }
     },
 
@@ -220,6 +222,18 @@ export default {
                   <input type="radio" v-model="agerange" value="40+" /> <span class="px-2 text-sm">40+</span>
                 </div>
                 <div class="mb-2 flex flow-row">
+                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">
+                    Order:
+                  </label>
+                  <input type="radio" v-model="asc" value="false" /> <span class="px-2 text-sm">DESC</span>
+                  <input type="radio" v-model="asc" value="true" /> <span class="px-2 text-sm">ASC</span>
+                </div>
+                <div class="mb-2 flex flow-row">
+                  <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="from">
+                    From Page:
+                  </span>
+                  <input class="border-b-2 border-gray-300 mb-2 text-sm w-10"
+                    type="text" v-model="start"/>
                   <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="utr">
                     Total:
                   </span>

@@ -25,7 +25,7 @@ export default {
         },
 
         async setPlayer(player) {
-            console.log(player);
+            //console.log(player);
             this.$emit('update:currentPlayer', player);
             this.$emit('changePlayer', player);
         },
