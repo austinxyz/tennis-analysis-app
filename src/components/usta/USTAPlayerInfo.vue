@@ -65,6 +65,23 @@ export default {
 
         },
 
+        async refreshPlayerDR(player) {
+
+            this.loading = true;
+
+            if (player.id == null || player.id == '') {
+                return;
+            }
+
+            var url = this.getBaseURL() + "/usta/players/" + player.id + "/utrs?action=refreshDR";
+            const res = await axios.get(url);
+
+            this.$emit('update:player', res.data);
+            this.$emit('change', res.data);
+            this.loading = false;
+
+        },
+
         async refreshPlayer(player) {
             this.$emit('update:player', player);
             this.$emit('change', player);
@@ -98,12 +115,7 @@ export default {
             <span class="w-1/5 text-left">Age : {{player.ageRange}}</span>
             <span class="w-1/4 text-left">Lefty : {{player.lefty?'Yes':'No'}}</span>
             <div class="w-3/20 h-6">
-               <button type="button" @click="refreshPlayerUTRValue(player)">
-                   <img src="/utr.svg" class="w-6 h-5"  alt="Fetch UTR Value" title="fetch UTR Value"/>
-               </button>
-               <button type="button" @click="refreshPlayerUTRInfo(player)">
-                   <img src="/utr.svg" class="w-6 h-5" alt="Fetch UTR" title="fetch UTR"/>
-               </button>
+
             </div>
         </div>
         <hr />
@@ -111,11 +123,24 @@ export default {
            <span class="w-1/5 text-left ">USTA Rating :  {{player.ustaRating}}</span>
            <span class="w-1/5 whitespace-no-wrap text-left">USTA ID : <a :href="player.tennisLinkURL" class="underline" target="_blank"> {{player.ustaId}}</a></span>
            <span class="w-1/5 text-left">USTA Norcal ID : <a :href="player.noncalLink" class="underline" target="_blank"> {{player.ustaNorcalId}}</a></span>
-           <span class="w-2/5 text-left">Tennis Record DR : <a :href="player.tennisRecordLink" class="underline" target="_blank"> {{player.dynamicRating}}</a></span>
+           <span class="w-2/5 text-left">Tennis Record DR : <a :href="player.tennisRecordLink" class="underline" target="_blank"> {{player.dynamicRating}}</a>
+             <button v-if="player.tennisRecordLink" class="mx-2" type="button" @click="refreshPlayerDR(player)">
+                 <img src="/recruiting50x50.png" width="15" height="15" alt="Fetch DR" title="fetch DR"/>
+             </button>
+           </span>
         </div>
         <hr />
         <div class="text-sm my-3 flex flex-row">
-          <span class="w-1/5 text-left ">UTR ID : <a :href="'https://app.universaltennis.com/profiles/' + player.utrId" class="underline" target="_blank"> {{player.utrId}}</a></span>
+          <span v-if="player.utrId" class="w-1/5 text-left ">UTR ID : <a :href="'https://app.universaltennis.com/profiles/' + player.utrId" class="underline" target="_blank"> {{player.utrId}}</a>
+           <button type="button" @click="refreshPlayerUTRValue(player)">
+               <img src="/utr.svg" class="w-6 h-5"  alt="Fetch UTR Value" title="fetch UTR Value"/>
+           </button>
+          </span>
+          <span v-else class="w-1/5 text-left ">UTR ID :
+           <button type="button" @click="refreshPlayerUTRInfo(player)">
+               <img src="/utr.svg" class="w-6 h-5" alt="Fetch UTR ID" title="fetch UTR ID"/>
+           </button>
+          </span>
           <span class="w-1/5 text-left ">Single UTR :  {{player.sutr}} ({{player.sutrstatus}})</span>
           <span class="w-1/5 text-left ">Double UTR :  {{player.dutr}} ({{player.dutrstatus}})</span>
           <span class="w-2/5 text-left ">WPct : {{ (player.successRate * 100).toFixed(2) }} % (Latest)/ {{ (player.wholeSuccessRate * 100).toFixed(2) }}%</span>

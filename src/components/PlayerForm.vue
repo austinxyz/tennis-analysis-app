@@ -23,6 +23,7 @@ export default {
             this.utrId = newPlayer.utrId;
             this.ustaId = newPlayer.ustaId;
             this.ustaNorcalId = newPlayer.ustaNorcalId;
+            this.ustaRating = newPlayer.ustaRating;
             this.summary = newPlayer.summary;
             this.memo = newPlayer.memo;
             this.lefty = newPlayer.lefty;
@@ -40,6 +41,7 @@ export default {
                    utrId: this.utrId,
                    ustaId: this.ustaId,
                    ustaNorcalId: this.ustaNorcalId,
+                   ustaRating: this.ustaRating,
                    summary: this.summary,
                    memo: this.memo,
                    lefty: this.lefty
@@ -61,6 +63,7 @@ export default {
             utrId: this.player.utrId,
             ustaId: this.player.ustaId,
             ustaNorcalId: this.player.ustaNorcalId,
+            ustaRating: this.player.ustaRating,
             summary: this.player.summary,
             memo: this.player.memo,
             lefty: this.player.lefty,
@@ -113,6 +116,13 @@ export default {
               </label>
               <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text" id="ustaNorcalId" v-model="ustaNorcalId">
+            </div>
+            <div class="mb-6">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="ustarating">
+                USTA Rating
+              </label>
+              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text" id="ustaRating" v-model="ustaRating">
             </div>
             <div class="mb-6">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="ustaid">
