@@ -119,6 +119,15 @@ export default {
 
         },
 
+        async incPage() {
+            this.start = this.start+1;
+            this.findPlayers();
+        },
+
+        async decPage() {
+            this.start = this.start-1;
+            this.findPlayers();
+        },
     },
 
     data() {
@@ -130,7 +139,7 @@ export default {
             playertype:'double',
             utr: '',
             gender: 'M',
-            start:'0',
+            start:0,
             pagesize:'10',
             agerange:'18+',
             ratedonly: false,
@@ -229,11 +238,17 @@ export default {
                   <input type="radio" v-model="asc" value="true" /> <span class="px-2 text-sm">ASC</span>
                 </div>
                 <div class="mb-2 flex flow-row">
-                  <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="from">
-                    From Page:
-                  </span>
-                  <input class="border-b-2 border-gray-300 mb-2 text-sm w-10"
-                    type="text" v-model="start"/>
+                    <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="from">
+                      Page:
+                    </span>
+                    <a v-if="start>0" href="#" class="underline text-sm font-bold mb-2 px-2" @click="decPage">
+                       Prev
+                    </a>
+                    <input class="border-b-2 border-gray-300 mb-2 text-sm w-10"
+                        type="text" v-model="start"/>
+                    <a href="#" class="underline text-sm font-bold mb-2 px-2" @click="incPage">
+                       Next
+                    </a>
                   <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="utr">
                     Total:
                   </span>
