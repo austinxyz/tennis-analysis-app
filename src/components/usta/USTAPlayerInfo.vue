@@ -58,9 +58,9 @@ export default {
 
             var url = this.getBaseURL() + "/usta/players/" + player.id + "/utrs?action=refreshUTRId";
             const res = await axios.get(url);
-
             this.$emit('update:player', res.data);
             this.$emit('change', res.data);
+            console.log(this.player);
             this.loading = false;
 
         },

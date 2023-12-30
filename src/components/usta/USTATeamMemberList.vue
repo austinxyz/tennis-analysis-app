@@ -107,7 +107,7 @@ export default {
                     </a>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ member.ustaRating}}
+                    {{ member.rating}}
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     {{ member.winNo}} / {{member.lostNo}}<span v-if="member.qualifiedPo">^</span>
