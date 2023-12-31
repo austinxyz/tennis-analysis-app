@@ -82,41 +82,7 @@ export default {
 
         async refreshPlayer(player) {
 
-            var url = this.getBaseURL() + "/players/search?name=" + this.query;
-            if (this.query==null || this.query=='') {
-                url = this.getBaseURL() + "/players/searchUTR?" +
-                "gender=" + this.gender +
-                "&USTARating=" + this.ustaRating +
-                "&type=" + this.playertype +
-                "&utr=" + this.utr +
-                "&start=" + this.start +
-                "&ageRange=" + this.agerange +
-                "&ratedOnly=" + this.ratedonly +
-                "&asc=" + this.asc +
-                "&size=" + this.pagesize;
-                if (this.utrlimit !=null && this.utrlimit != '') {
-                    url = url + "&utrLimit=" + this.utrlimit;
-                }
-            }
-
-            try {
-                const response = await axios.get(url);
-                this.players = response.data;
-                this.team = {};
-                this.teams = [];
-                for (let i = 0; i < this.players.length; i++) {
-                    if (this.players[i].id == player.id) {
-                        this.currentPlayer = this.players[i];
-                        return;
-                    }
-                }
-            } catch(error) {
-                this.players = [];
-                this.team = {};
-                this.teams = [];
-                this.currentPlayer = {};
-            };
-
+            this.currentPlayer = player;
         },
 
         async incPage() {

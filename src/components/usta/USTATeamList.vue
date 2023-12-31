@@ -83,7 +83,7 @@ export default {
                     {{ team.captainName}} </a>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ team.teamScore.toFixed(2)}}
+                    {{ team.teamRating.toFixed(2)}}
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     <a :href="team.tennisRecordLink" class="underline" target="_blank">

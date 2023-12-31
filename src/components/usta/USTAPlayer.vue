@@ -22,7 +22,7 @@ export default {
             return;
         }
 
-        if (this.player== null || this.player.utrId == null) {
+        if (this.player== null || this.player.utrId == null || this.player.utrId=='') {
             return;
         }
 

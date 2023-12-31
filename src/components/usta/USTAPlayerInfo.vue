@@ -42,6 +42,7 @@ export default {
 
             var url = this.getBaseURL() + "/usta/players/" + player.id + "/utrs?action=refreshUTRValue";
             const res = await axios.get(url);
+
             this.$emit('update:player', res.data);
             this.$emit('change', res.data);
             this.loading = false;
@@ -60,7 +61,7 @@ export default {
             const res = await axios.get(url);
             this.$emit('update:player', res.data);
             this.$emit('change', res.data);
-            console.log(this.player);
+
             this.loading = false;
 
         },

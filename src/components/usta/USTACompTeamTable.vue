@@ -42,6 +42,28 @@ export default {
             </div>
         </div>
         <div class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold bg-slate-400">
+            <div class="w-40">Rating:</div>
+            <div class="flex justify-center flex-grow w-0">
+                <img v-if="team1.teamRating > team2.teamRating" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                {{team1.teamRating.toFixed(2)}}
+            </div>
+            <div class="flex justify-center flex-grow w-0 ">
+                <img v-if="team1.teamRating < team2.teamRating" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                {{team2.teamRating.toFixed(2)}}
+            </div>
+        </div>
+        <div class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold bg-slate-400">
+            <div class="w-40">Strongest Rating:</div>
+            <div class="flex justify-center flex-grow w-0">
+                <img v-if="team1.teamStrongestRating > team2.teamStrongestRating" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                {{team1.teamStrongestRating.toFixed(2)}}
+            </div>
+            <div class="flex justify-center flex-grow w-0 ">
+                <img v-if="team1.teamStrongestRating < team2.teamStrongestRating" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
+                {{team2.teamStrongestRating.toFixed(2)}}
+            </div>
+        </div>
+        <div class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold bg-slate-400">
             <div class="w-40">Score:</div>
             <div class="flex justify-center flex-grow w-0">
                 <img v-if="team1.currentScore > team2.currentScore" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>
