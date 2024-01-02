@@ -62,6 +62,7 @@ export default {
                 "&ageRange=" + this.agerange +
                 "&ratedOnly=" + this.ratedonly +
                 "&asc=" + this.asc +
+                "&bayArea=" + this.bayAreaOnly +
                 "&size=" + this.pagesize;
             if (this.utrlimit !=null && this.utrlimit != '') {
                 url = url + "&utrLimit=" + this.utrlimit;
@@ -111,7 +112,8 @@ export default {
             ratedonly: false,
             utrlimit:'',
             query: '',
-            asc: 'false'
+            asc: 'false',
+            bayAreaOnly: 'false',
         }
     },
 
@@ -195,6 +197,13 @@ export default {
                   </label>
                   <input type="radio" v-model="agerange" value="18+" /> <span class="px-2 text-sm">18+</span>
                   <input type="radio" v-model="agerange" value="40+" /> <span class="px-2 text-sm">40+</span>
+                </div>
+                <div class="mb-2 flex flow-row">
+                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">
+                    Bay Area Only
+                  </label>
+                  <input type="radio" v-model="bayAreaOnly" value="true" /> <span class="px-2 text-sm">Yes</span>
+                  <input type="radio" v-model="bayAreaOnly" value="false" /> <span class="px-2 text-sm">No</span>
                 </div>
                 <div class="mb-2 flex flow-row">
                   <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">

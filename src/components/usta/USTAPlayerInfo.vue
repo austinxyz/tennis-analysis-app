@@ -114,7 +114,7 @@ export default {
             <span class="w-1/5 text-left">Gender : {{player.gender}} </span>
             <span class="w-1/5 text-left">Area : {{player.area}}</span>
             <span class="w-1/5 text-left">Age : {{player.ageRange}}</span>
-            <span class="w-1/4 text-left">Lefty : {{player.lefty?'Yes':'No'}}</span>
+            <span class="w-2/5 text-left">Lefty : {{player.lefty?'Yes':'No'}}</span>
             <div class="w-3/20 h-6">
 
             </div>
@@ -124,11 +124,12 @@ export default {
            <span class="w-1/5 text-left ">USTA Rating :  {{player.ustaRating}}</span>
            <span class="w-1/5 whitespace-no-wrap text-left">USTA ID : <a :href="player.tennisLinkURL" class="underline" target="_blank"> {{player.ustaId}}</a></span>
            <span class="w-1/5 text-left">USTA Norcal ID : <a :href="player.noncalLink" class="underline" target="_blank"> {{player.ustaNorcalId}}</a></span>
-           <span class="w-2/5 text-left">Tennis Record DR : <a :href="player.tennisRecordLink" class="underline" target="_blank"> {{player.dynamicRating}}</a>
-             <button v-if="player.tennisRecordLink" class="mx-2" type="button" @click="refreshPlayerDR(player)">
+           <span class="w-1/5 text-left">Bay Area Team : {{player.registeredBayArea?'Yes':'No'}}</span>
+           <span class="w-1/5 text-left">Tennis Record DR : <a :href="player.tennisRecordLink" class="underline" target="_blank"> {{player.dynamicRating}}</a></span>
+             <button v-if="player.tennisRecordLink" class="mx-1" type="button" @click="refreshPlayerDR(player)">
                  <img src="/recruiting50x50.png" width="15" height="15" alt="Fetch DR" title="fetch DR"/>
              </button>
-           </span>
+
         </div>
         <hr />
         <div class="text-sm my-3 flex flex-row">
