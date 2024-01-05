@@ -141,20 +141,18 @@ export default {
        </div>
        <hr />
        <div class="text-sm my-3 flex flex-row">
-        <span class="w-1/5 text-left">Area : {{team.area}} </span>
-        <span class="w-1/5 text-left">Flight : {{team.flight}}</span>
-        <span class="w-1/5 text-left">
+        <span class="w-1/4 text-left">Area : {{team.area}} </span>
+        <span class="w-1/4 text-left">Flight : {{team.flight}}</span>
+        <span class="w-1/4 text-left">
             <a href="#" class="underline" @click="updatePlayers(team)"> Update Players </a>
         </span>
-        <span class="w-1/5 text-left">
+        <span class="w-1/4 text-left">
             <a href="#" class="underline" @click="exportTeam(team)"> Export </a>
         </span>
-        <span class="w-1/5 text-right">
+        <span class="w-1/4 text-right">
             <button type="button" @click="refreshTeamUTRValue(team)">
                 <img src="/utr.svg" width="30" height="30" alt="Fetch UTR Value" title="fetch UTR Value"/>
             </button>
-        </span>
-        <span class="text-right">
             <button type="button" @click="refreshTeamUTRId(team)">
                 <img src="/utr.svg" width="30" height="30" alt="Fetch UTR ID" title="fetch UTR ID"/>
             </button>
@@ -166,8 +164,8 @@ export default {
            <a v-if="team.captain" :href="'/usta/player?ustaId=' + team.captain.ustaNorcalId" class="whitespace-no-wrap underline" target="_blank">
            {{team.captainName}} </a></span>
            <span class="w-1/4 text-left "><a :href="team.link" class="underline" target="_blank"> USTA Link </a></span>
-           <span class="w-2/4 text-left "><a :href="team.tennisRecordLink" class="underline" target="_blank"> TR Link </a></span>
-
+           <span class="w-1/4 text-left "><a :href="team.tennisRecordLink" class="underline" target="_blank"> TR Link </a></span>
+           <span class="w-1/4 text-left ">Rating ({{team.teamRating.toFixed(2)}}/{{team.teamStrongestRating.toFixed(2)}}) </span>
            <button type="button" @click="refreshTeamDRValue(team)" class="flex flex-row">
               <img src="/recruiting50x50.png" width="25" height="25" alt="Refresh DR" title="Refresh DR"/>
            </button>
