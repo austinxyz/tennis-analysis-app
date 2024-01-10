@@ -10,7 +10,7 @@ export default {
 
     async mounted() {
 
-        var url = "http://localhost:8080/usta/2023/leagues";
+        var url = "http://localhost:8080/usta/open/leagues";
         const response = await axios.get(url);
         this.leagues = response.data;
         this.leagues.map(function (x){
