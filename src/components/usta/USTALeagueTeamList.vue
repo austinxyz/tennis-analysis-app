@@ -58,6 +58,11 @@ export default {
     <label class="block text-gray-700 font-bold mb-2 px-2 ">
         Teams
     </label>
+    <div v-if="loading" class="px-5 py-5">
+        <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
+          <span class="sr-only">Loading...</span>
+        </div>
+    </div>
     <table v-if="teams.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
         <thead>
             <tr>
@@ -121,11 +126,7 @@ export default {
          </label>
     </div>
 
-    <div v-if="loading" class="px-5 py-5">
-        <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
-          <span class="sr-only">Loading...</span>
-        </div>
-    </div>
+
 </div>
 
 </template>

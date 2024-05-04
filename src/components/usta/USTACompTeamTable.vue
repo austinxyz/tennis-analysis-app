@@ -52,7 +52,7 @@ export default {
                 {{team2.teamRating.toFixed(2)}}
             </div>
         </div>
-        <div class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold bg-slate-400">
+        <div class="flex items-center h-12 px-4 border border-gray-500 font-medium font-semibold">
             <div class="w-40">Strongest Rating:</div>
             <div class="flex justify-center flex-grow w-0">
                 <img v-if="team1.teamStrongestRating > team2.teamStrongestRating" src="/pass.svg" alt="Win" class="h-8 w-10 pr-2"/>

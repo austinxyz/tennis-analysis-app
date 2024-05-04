@@ -4,6 +4,7 @@ import USTAPlayer from "../usta/USTAPlayer.vue";
 import CandidateTeamInfo from "./CandidateTeamInfo.vue";
 import CandidateList from "./CandidateList.vue";
 import CandidateLines from "./CandidateLines.vue";
+import CandidatePairs from "./CandidatePairs.vue";
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
 
@@ -60,12 +61,22 @@ export default {
             }
         },
 
+        showPairs(team) {
+            this.tab = 'pairs';
+            if (team.teamId == null || team.teamId == '') {
+                return;
+            }
+            if (team.teamId != this.candidateTeam.teamId) {
+                this.currPlayer = {};
+            }
+        },
     },
     components: {
         USTAPlayer,
         CandidateTeamInfo,
         CandidateList,
         CandidateLines,
+        CandidatePairs,
     }
 }
 </script>
@@ -87,10 +98,18 @@ export default {
                 <li class="mr-2" role="presentation">
                     <button v-if="tab=='lines'" class="inline-block text-blue-500 bg-gray-600 hover:text-blue-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300 active"
                     id="lines-tab" data-tabs-target="#lines" type="button" role="tab" aria-controls="profile" aria-selected="false" @click="showLines(candidateTeam)">
-                    Candidates</button>
+                    Lines Candidate</button>
                     <button v-else class="inline-block text-gray-500 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300"
                     id="lines-tab" data-tabs-target="#lines" type="button" role="tab" aria-controls="profile" aria-selected="false" @click="showLines(candidateTeam)">
-                    Candidates</button>
+                    Lines Candidate</button>
+                </li>
+                <li class="mr-2" role="presentation">
+                    <button v-if="tab=='lines'" class="inline-block text-blue-500 bg-gray-600 hover:text-blue-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300 active"
+                    id="lines-tab" data-tabs-target="#pairs" type="button" role="tab" aria-controls="profile" aria-selected="false" @click="showPairs(candidateTeam)">
+                    Pairs</button>
+                    <button v-else class="inline-block text-gray-500 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300"
+                    id="lines-tab" data-tabs-target="#paris" type="button" role="tab" aria-controls="profile" aria-selected="false" @click="showPairs(candidateTeam)">
+                    Pairs</button>
                 </li>
             </ul>
         </div>
@@ -111,6 +130,12 @@ export default {
             </div>
             <div v-else class="bg-gray-50 p-4 rounded-lg dark:bg-gray-800 hidden" id="lines" role="tabpanel" aria-labelledby="lines-tab">
                     <CandidateLines v-if="candidateTeam.lines" :candidateTeam="candidateTeam" />
+            </div>
+            <div v-if="tab=='pairs'" class="bg-gray-50 p-2 rounded-lg dark:bg-gray-800" id="pairs" role="tabpanel" aria-labelledby="lines-tab">
+                    <CandidatePairs v-if="candidateTeam.candidates" :candidateTeam="candidateTeam" />
+            </div>
+            <div v-else class="bg-gray-50 p-4 rounded-lg dark:bg-gray-800 hidden" id="pairs" role="tabpanel" aria-labelledby="lines-tab">
+                    <CandidatePairs v-if="candidateTeam.candidates" :candidateTeam="candidateTeam" />
             </div>
         </div>
     </div>
