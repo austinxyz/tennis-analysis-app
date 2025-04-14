@@ -24,6 +24,7 @@ export default {
             this.ustaId = newPlayer.ustaId;
             this.ustaNorcalId = newPlayer.ustaNorcalId;
             this.ustaRating = newPlayer.ustaRating;
+            this.dutr = newPlayer.dutr;
             this.summary = newPlayer.summary;
             this.memo = newPlayer.memo;
             this.lefty = newPlayer.lefty;
@@ -33,6 +34,17 @@ export default {
     methods: {
         openPlayer() {
             this.showModal = true;
+        },
+
+        async updateUTR() {
+            var url = "http://localhost:8080/players/utr/" + this.player.utrId + "?action=updateUTRValue"
+                + "&dutr=" + this.dutr + "&sutr=" + this.sutr;
+
+            const res = await axios.get(url);
+
+            this.$emit('update:player', res.data);
+            this.$emit('change', res.data);
+            this.showModal = false;
         },
 
         async savePlayer() {
@@ -64,6 +76,8 @@ export default {
             ustaId: this.player.ustaId,
             ustaNorcalId: this.player.ustaNorcalId,
             ustaRating: this.player.ustaRating,
+            dutr: this.player.dutr,
+            sutr: this.player.sutr,
             summary: this.player.summary,
             memo: this.player.memo,
             lefty: this.player.lefty,
@@ -141,6 +155,21 @@ export default {
                 Save
               </button>
             </div>
+            <div class="mb-6 flex py-2 content-center ">
+              <label class="block text-gray-700 text-sm font-bold mb-2 pr-2" for="dutr">
+                DUTR
+              </label>
+              <input class="border-b-2 border-gray-300" type="text" id="dutr" v-model="dutr"/>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pr-2" for="sutr">
+                SUTR
+              </label>
+              <input class="border-b-2 border-gray-300" type="text" id="sutr" v-model="sutr"/>
+            </div>
+             <div class="flex items-center justify-between">
+               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" @click="updateUTR">
+                 Update UTR
+               </button>
+             </div>
           </form>
     </Modal>
     </div>

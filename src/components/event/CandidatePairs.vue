@@ -10,12 +10,12 @@ export default {
     data() {
         return {
             bglist: {
-                D1:'px-3 bg-sky-500 w-10',
-                D2:'px-3 bg-yellow-500 w-10',
-                D3:'px-3 bg-red-500 w-10',
-                D4:'px-3 bg-purple-500 w-10',
-                WD:'px-3 bg-orange-500 w-10',
-                MD:'px-3 bg-teal-500 w-10',
+                D1:'text-white bg-blue-700 font-medium rounded-lg text-sm px-2 py-1',
+                D2:'text-white bg-orange-500 font-medium rounded-lg text-sm px-2 py-1',
+                D3:'text-white bg-yellow-500 font-medium rounded-lg text-sm px-2 py-1',
+                D4:'text-white bg-green-500 font-medium rounded-lg text-sm px-2 py-1',
+                WD:'text-white bg-red-500 font-medium rounded-lg text-sm px-2 py-1',
+                MD:'text-white bg-teal-500 font-medium rounded-lg text-sm px-2 py-1',
             }
         }
     },
@@ -44,7 +44,7 @@ export default {
                 </td>
                 <td class="px-3 py-2 bg-slate-500 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-700 tracking-wider">
                 </td>
-                <td v-for="candidate in candidateTeam.candidates" class="px-3 py-2 bg-slate-500 border-b-2 border-gray-300 text-left text-sm leading-4 text-white-700 tracking-wider">
+                <td v-for="candidate in candidateTeam.candidates" class="px-3 py-2 bg-slate-500 border-b-2 border-gray-300 text-left text-sm leading-4 text-white tracking-wider">
                     {{candidate.utr}}
                 </td>
             </tr>
@@ -52,14 +52,14 @@ export default {
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                     <span class="whitespace-nowrap" >{{ candidate1.name }}</span>
                 </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm text-blue leading-5">
                     {{ candidate1.utr }}
                 </td>
                 <td v-for="candidate2 in candidateTeam.candidates" class="whitespace-no-wrap border-2 text-blue-900 border-gray-500 text-sm leading-5">
                     <div v-for="(line, key) in candidateTeam.lines" >
-                        <span v-if="(candidate1!=candidate2) && (candidate1.utr+candidate2.utr) < line.utrLimit && (candidate1.utr+candidate2.utr) > line.utrLimit-1" :class="bglist[key]">
+                        <button v-if="(candidate1!=candidate2) && (candidate1.utr+candidate2.utr) < line.utrLimit && (candidate1.utr+candidate2.utr) > line.utrLimit-1" :class="bglist[key]">
                             {{ (candidate1.utr+candidate2.utr).toFixed(2) }}
-                        </span>
+                        </button>
                     </div>
                 </td>
             </tr>

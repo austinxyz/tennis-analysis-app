@@ -33,7 +33,7 @@ export default {
             this.$emit('changePlayer', player);
         },
 
-        async refreshUTR(member) {
+        async refreshUTRValue(member) {
 
             this.loading = true;
 
@@ -53,6 +53,8 @@ export default {
     data() {
         return {
             loading: false,
+            sutr:[],
+            dutr:[]
         }
     },
 
@@ -128,11 +130,6 @@ export default {
                     </span>
                     <span v-else class="font-light" >
                         {{ member.sutr }} (S)
-                    </span>
-                    <span v-if="!member.refreshedUTR && member.utrId!=null">
-                         <a href="#" class="underline" @click="refreshUTR(member)">
-                            Refresh UTR
-                         </a>
                     </span>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
