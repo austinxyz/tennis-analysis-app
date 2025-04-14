@@ -1,44 +1,90 @@
-# Tennis Analysis
+# 🎾 Tennis Analysis App
 
-this application is mainly to analysis UTR and USTA player for matches.
+A web application for advanced analysis of **UTR** and **USTA** players and matches — helping you scout players, compare teams, and predict outcomes with data-driven insights.
 
-now it includes four functions
+Built with **Vite** for fast performance and scalability.
 
-## UTR matches
+---
 
-- Show all events orginizated by Bay Area Tennis Club. you can see the event's divisions (teams) and see all players, for player you can see all matches for this player.
+## ✨ Features
 
-- Search perticular player by name or id and also show all matches for this player
+### 1. **UTR Matches Analysis**
 
-- Single analysis, by search two player by name or id and compare the players' utr, past matches history and list all matches with same opponents. it will give you some ideas to predict the upcoming match result.
+- View all events organized by **Bay Area Tennis Club**.
+- Explore divisions (teams), player lists, and match histories.
+- **Player Search:**  
+  Find players by name or ID to view their detailed match history.
+- **Player Comparison:**  
+  Compare two players side by side:
+    - UTR ratings
+    - Match history
+    - Common opponents
+    - Predict upcoming match results based on past data.
 
+### 2. **Zijing Cup Analysis**
 
-## Zijing Cup analysis
+- View all teams and their members.
+- For each team, display the **top 5 pairs** in each line:
+    - **Man D1**, **Man D2**, **Man D3**, **Mixed**, and **Women’s Doubles**
+- Team comparison tool:
+    - Fix players in specific lines.
+    - Explore top 5 lineup combinations.
+    - Compare lineups and potential match outcomes.
 
-- It will list all teams for Zijing Cup, show all team members and top 5 pair (based on authorized UTR, grant by orginizer) for each line, there are 5 lines (D1, D2, D3, Mixed, Women)
+### 3. **USTA Matches Analysis**
 
-- By selecting team to compare, with fixed player in one or multiple lines, show the top 5 possibility and compare the lineup.
+- **League Overview:**  
+  Browse divisions and flights (currently supports **SB(South Bay)**, **MP(Mid Peninsula)**, **LP(Lower Peninsula)** areas).  
+  View teams, players, matches, and detailed player analysis.
 
-## USTA matches
+- **Candidate Teams:**  
+  Review candidate teams with basic info and player lists.
 
-- League, by selecting 2023 divisions, flights (at present with SB/MP/LP area), to list all teams, you can review team's player, matches info, and dig into perticular player's info and analysis upcoming two team's match.
+- **Team Search:**  
+  Find teams by name. See team details, players, and match records.
 
-- Candidate Team, list the candidate teams and show team's basic information, candidates
+- **Player Search:**  
+  Look up players by name. View profile, team participation, USTA and UTR matches.
 
-- Team, search by name, to list teams and show team's basic information, players, matches, and dig into perticular player's info.
+- **Player Finder:**  
+  Discover top players by filtering:
+    - UTR
+    - USTA rating
+    - Age range
+    - Gender
+    - Bay Area
 
-- Player, search by name, to list players and show player's basic information, attended teams, usta matches and utr matches
+- **Player Statistics:**  
+  Analyze player data:
+    - UTR range
+    - Average UTR
+    - And more.
 
-- Player Finder, use differenct criteria to find top players - combined utr, usta rating, age range etc.
+- **Team Analysis:**  
+  Compare two teams within the same league:
+    - Team score
+    - Lineups
+    - Historical success rates
+    - Top-performing players and pairs
 
-- Player Stat, use different criteria to do statisitics - find utr range and mean utr player.
+### 4. **Event: Team Building**
 
-- Team Analysis, by selecting two teams in same league, compare team's player, historical lines, matches and compare success rate, top player/pair between two teams.
+- Build teams dynamically.
+- Explore potential candidates and top pairs based on event lines and team requirements.
 
-## Event
+---
 
-- Team build, to list team will potenial candidates, top pairs based on line
+## 🚀 Getting Started
 
-# How to install
+### Prerequisites
 
-it is a vite application
+- Node.js (v16+ recommended)
+- npm (comes with Node.js)
+
+### Installation
+
+```bash
+git clone https://github.com/austinxyz/tennis-analysis-app.git
+cd tennis-analysis-app
+npm install
+npm run dev
