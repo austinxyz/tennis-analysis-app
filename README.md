@@ -2,75 +2,109 @@
 
 A web application for advanced analysis of **UTR** and **USTA** players and matches — helping you scout players, compare teams, and predict outcomes with data-driven insights.
 
-Built with **Vite** for fast performance and scalability.
+Built with the **Vue.js framework** and **Tailwind CSS** for high performance and scalability.
 
 ---
 
 ## ✨ Features
 
-### 1. **UTR Matches Analysis**
+### 1. UTR Match Analysis
 
-- View all events organized by **Bay Area Tennis Club**.
-- Explore divisions (teams), player lists, and match histories.
-- **Player Search:**  
-  Find players by name or ID to view their detailed match history.
-- **Player Comparison:**  
+- Browse all events hosted by the **Bay Area Tennis Club**.
+- Explore divisions, player lists, and complete match histories.
+- **Player Search**  
+  Search for players by name or ID to view detailed match histories.
+- **Player Comparison**  
   Compare two players side by side:
-    - UTR ratings
-    - Match history
-    - Common opponents
-    - Predict upcoming match results based on past data.
+  - UTR ratings
+  - Match history
+  - Common opponents
+  - Predict outcomes of upcoming matches based on historical data
 
-### 2. **Zijing Cup Analysis**
+### 2. Zijing Cup Analysis
 
-- View all teams and their members.
-- For each team, display the **top 5 pairs** in each line:
-    - **Man D1**, **Man D2**, **Man D3**, **Mixed**, and **Women’s Doubles**
-- Team comparison tool:
-    - Fix players in specific lines.
-    - Explore top 5 lineup combinations.
-    - Compare lineups and potential match outcomes.
+- View all participating teams and their members.
+- Analyze the **top 5 player pairs** in each line:
+  - Men's Doubles D1, D2, D3
+  - Mixed Doubles
+  - Women's Doubles
+- **Team Comparison Tool**
+  - Fix players to specific lines
+  - Explore the top 5 lineup combinations
+  - Compare potential lineups and projected match outcomes
 
-### 3. **USTA Matches Analysis**
+### 3. USTA Match Analysis
 
-- **League Overview:**  
-  Browse divisions and flights (currently supports **SB(South Bay)**, **MP(Mid Peninsula)**, **LP(Lower Peninsula)** areas).  
-  View teams, players, matches, and detailed player analysis.
+- **League Overview**  
+  Browse divisions and flights across **South Bay (SB)**, **Mid Peninsula (MP)**, and **Lower Peninsula (LP)**.  
+  Access team rosters, player details, match histories, and analysis.
 
-- **Candidate Teams:**  
-  Review candidate teams with basic info and player lists.
+- **Candidate Teams**  
+  Review team profiles, including basic details and player lists.
 
-- **Team Search:**  
-  Find teams by name. See team details, players, and match records.
+- **Team Search**  
+  Find teams by name to view team details, player lineups, and match records.
 
-- **Player Search:**  
-  Look up players by name. View profile, team participation, USTA and UTR matches.
+- **Player Search**  
+  Look up players by name to access profiles, team affiliations, and USTA/UTR match histories.
 
-- **Player Finder:**  
-  Discover top players by filtering:
-    - UTR
-    - USTA rating
-    - Age range
-    - Gender
-    - Bay Area
+- **Player Finder**  
+  Discover top players using filters:
+  - UTR rating
+  - USTA rating
+  - Age range
+  - Gender
+  - Bay Area region
 
-- **Player Statistics:**  
-  Analyze player data:
-    - UTR range
-    - Average UTR
-    - And more.
+- **Player Statistics**  
+  Analyze aggregated player data:
+  - UTR range
+  - Average UTR
+  - Other performance metrics
 
-- **Team Analysis:**  
+- **Team Analysis**  
   Compare two teams within the same league:
-    - Team score
-    - Lineups
-    - Historical success rates
-    - Top-performing players and pairs
+  - Team ratings
+  - Lineup strengths
+  - Historical win rates
+  - Top players and best-performing pairs
 
-### 4. **Event: Team Building**
+### 4. Event: Team Building
 
-- Build teams dynamically.
-- Explore potential candidates and top pairs based on event lines and team requirements.
+- Build and customize teams dynamically.
+- Explore potential player candidates and top-performing pairs based on event formats and team needs.
+
+---
+
+## 🖼️ Screenshots & Demo
+
+> _📸 Add your actual images or GIFs in your repo and update the paths below._
+
+### USTA Player Overview
+![Player Overview](./docs/images/usta-player-info.png)
+
+### USTA Team Overview
+![Team Overview](./docs/images/usta-team-info.png)
+
+### USTA Team Analysis
+![Team Analysis](./docs/images/usta-team-analysis.png)
+
+### Zijing Team Analysis
+![Zijing Team Analysis](./docs/images/zijing-team-analysis.png)
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology       | Description                              |
+| ---------------- | ---------------------------------------- |
+| **Vue.js**       | Frontend framework for building the app  |         |
+| **Tailwind CSS** | Utility-first CSS framework for styling  |
+| **Pinia**        | Vue state management                     |
+| **Axios**        | HTTP client for API requests             |
+| **Chart.js**     | Data visualization and charts            |
+| **Node.js**      | Runtime environment                      |
+| **npm**          | Package manager                          |
 
 ---
 
@@ -79,7 +113,7 @@ Built with **Vite** for fast performance and scalability.
 ### Prerequisites
 
 - Node.js (v16+ recommended)
-- npm (comes with Node.js)
+- npm (comes bundled with Node.js)
 
 ### Installation
 
