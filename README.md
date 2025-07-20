@@ -45,6 +45,9 @@ Built with the **Vue.js framework** and **Tailwind CSS** for high performance an
 - **Team Search**  
   Find teams by name to view team details, player lineups, and match records.
   - Direct UTR editing for team members with visual feedback
+  - Batch UTR updates for multiple players simultaneously
+  - Checkbox selection system for efficient multi-player operations
+  - Visual indicators showing which values were recently updated
   - Automatic refresh status management
 
 - **Player Search**  
