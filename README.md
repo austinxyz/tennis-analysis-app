@@ -44,6 +44,8 @@ Built with the **Vue.js framework** and **Tailwind CSS** for high performance an
 
 - **Team Search**  
   Find teams by name to view team details, player lineups, and match records.
+  - Direct UTR editing for team members with visual feedback
+  - Automatic refresh status management
 
 - **Player Search**  
   Look up players by name to access profiles, team affiliations, and USTA/UTR match histories.
