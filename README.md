@@ -78,8 +78,6 @@ Built with the **Vue.js framework** and **Tailwind CSS** for high performance an
 
 ## 🖼️ Screenshots & Demo
 
-> _📸 Add your actual images or GIFs in your repo and update the paths below._
-
 ### USTA Player Overview
 ![Player Overview](./docs/images/usta-player-info.png)
 
