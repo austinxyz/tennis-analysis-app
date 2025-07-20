@@ -25,6 +25,7 @@ export default {
             this.ustaNorcalId = newPlayer.ustaNorcalId;
             this.ustaRating = newPlayer.ustaRating;
             this.dutr = newPlayer.dutr;
+            this.sutr = newPlayer.sutr;
             this.summary = newPlayer.summary;
             this.memo = newPlayer.memo;
             this.lefty = newPlayer.lefty;
@@ -34,6 +35,10 @@ export default {
     methods: {
         openPlayer() {
             this.showModal = true;
+        },
+        
+        openQuickUTREdit() {
+            this.showQuickUTRModal = true;
         },
 
         async updateUTR() {
@@ -45,6 +50,7 @@ export default {
             this.$emit('update:player', res.data);
             this.$emit('change', res.data);
             this.showModal = false;
+            this.showQuickUTRModal = false;
         },
 
         async savePlayer() {
@@ -82,6 +88,7 @@ export default {
             memo: this.player.memo,
             lefty: this.player.lefty,
             showModal: false,
+            showQuickUTRModal: false,
         }
     },
 };
@@ -89,8 +96,8 @@ export default {
 
 <template>
     <div>
-    <div>
-        <a x-data="{ tooltip: 'Edite' }" href="#" @click="openPlayer">
+    <div class="flex space-x-2">
+        <a x-data="{ tooltip: 'Edit Player' }" href="#" @click="openPlayer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -107,6 +114,19 @@ export default {
             />
           </svg>
         </a>
+        <a x-data="{ tooltip: 'Quick UTR Update' }" href="#" @click="openQuickUTREdit" class="text-blue-500">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke-width="1.5" 
+            stroke="currentColor" 
+            class="h-6 w-6"
+            x-tooltip="tooltip"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+        </a>
     </div>
     <Modal v-model="showModal" :title="player.name">
         <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-200 h-100">
@@ -116,6 +136,30 @@ export default {
               </label>
               <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text" id="utrId" v-model="utrId" >
+            </div>
+            <div class="mb-4 flex items-center space-x-4">
+              <div class="w-1/2">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="dutr">
+                  Doubles UTR
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="number" id="dutr" v-model="dutr" step="0.1" min="1.0" max="16.5">
+              </div>
+              <div class="w-1/2">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="sutr">
+                  Singles UTR
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="number" id="sutr" v-model="sutr" step="0.1" min="1.0" max="16.5">
+              </div>
+              <div>
+                <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-6" 
+                  type="button" @click="updateUTR" title="Update UTR Values">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
             <div class="mb-6">
               <label class="block text-gray-700 text-sm font-bold mb-2" for="ustaid">
@@ -155,22 +199,34 @@ export default {
                 Save
               </button>
             </div>
-            <div class="mb-6 flex py-2 content-center ">
-              <label class="block text-gray-700 text-sm font-bold mb-2 pr-2" for="dutr">
-                DUTR
-              </label>
-              <input class="border-b-2 border-gray-300" type="text" id="dutr" v-model="dutr"/>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pr-2" for="sutr">
-                SUTR
-              </label>
-              <input class="border-b-2 border-gray-300" type="text" id="sutr" v-model="sutr"/>
-            </div>
-             <div class="flex items-center justify-between">
-               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" @click="updateUTR">
-                 Update UTR
-               </button>
-             </div>
           </form>
+    </Modal>
+    
+    <Modal v-model="showQuickUTRModal" title="Quick UTR Update">
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4 flex items-center space-x-4">
+                <div class="w-1/2">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="quick-dutr">
+                        Doubles UTR
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="number" id="quick-dutr" v-model="dutr" step="0.1" min="1.0" max="16.5">
+                </div>
+                <div class="w-1/2">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="quick-sutr">
+                        Singles UTR
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="number" id="quick-sutr" v-model="sutr" step="0.1" min="1.0" max="16.5">
+                </div>
+            </div>
+            <div class="flex items-center justify-end">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+                    type="button" @click="updateUTR">
+                    Update UTR
+                </button>
+            </div>
+        </div>
     </Modal>
     </div>
 </template>

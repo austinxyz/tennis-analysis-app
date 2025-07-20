@@ -123,6 +123,17 @@ export default {
             };
             this.loading = false;
         },
+        
+        updateTeamMembers(updatedMembers) {
+            // Create a new team object with the updated members
+            const updatedTeam = {
+                ...this.team,
+                players: updatedMembers
+            };
+            
+            // Emit the updated team
+            this.$emit('update:team', updatedTeam);
+        },
     },
     components: {
         USTAPlayer,
@@ -173,10 +184,22 @@ export default {
                 </div>
             </div>
             <div v-if="tab=='players'" class="bg-gray-50 p-2 rounded-lg dark:bg-gray-800" id="players" role="tabpanel" aria-labelledby="players-tab">
-                    <USTATeamMemberList v-if="team.players" :members="team.players" v-model:currentPlayer="currentPlayer" showMode="parent"/>
+                    <USTATeamMemberList 
+                        v-if="team.players" 
+                        :members="team.players" 
+                        v-model:currentPlayer="currentPlayer" 
+                        @update:members="updateTeamMembers"
+                        showMode="parent"
+                    />
             </div>
             <div v-else class="bg-gray-50 p-4 rounded-lg dark:bg-gray-800 hidden" id="teams" role="tabpanel" aria-labelledby="teams-tab">
-                    <USTATeamMemberList v-if="team.players" :members="team.players" v-model:currentPlayer="currentPlayer" showMode="parent"/>
+                    <USTATeamMemberList 
+                        v-if="team.players" 
+                        :members="team.players" 
+                        v-model:currentPlayer="currentPlayer" 
+                        @update:members="updateTeamMembers"
+                        showMode="parent"
+                    />
             </div>
             <div v-if="tab=='matches'" class="bg-gray-50 p-2 rounded-lg dark:bg-gray-800" id="matches" role="tabpanel" aria-labelledby="matches-tab">
                     <USTATeamMatches :team="team" v-model:matches="matches" @change="changeTeam" />
