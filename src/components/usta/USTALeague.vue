@@ -51,6 +51,29 @@ export default {
                 }
             }
         },
+
+        async createLeague() {
+            try {
+                const leagueName = this.league.name.replace("Norcal", "").trim();
+                const requestBody = {
+                    id: 0,
+                    name: leagueName,
+                    status: "Open",
+                    year: this.league.year
+                };
+                
+                const response = await axios.post('http://localhost:8080/usta/leagues', requestBody);
+                if (response.status === 200 || response.status === 201) {
+                    // Update the current league to show it's now in the database
+                    this.league.inDB = true;
+                    // Show success message or handle as needed
+                    alert("League successfully created in database!");
+                }
+            } catch (error) {
+                console.error("Error creating league:", error);
+                alert("Failed to create league. Please try again.");
+            }
+        },
     },
     data() {
   	    return {
@@ -86,6 +109,30 @@ export default {
                    ></v-select>
             </div>
 
+            <!-- League Information Display -->
+            <div v-if="league && Object.keys(league).length > 0" class="bg-blue-50 p-3 rounded-md mb-4 border border-blue-200">
+                <h3 class="text-lg font-semibold text-blue-800 mb-2">League Information</h3>
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                    <div class="font-medium text-gray-700">Name:</div>
+                    <div>{{ league.name }}</div>
+                    <div class="font-medium text-gray-700">Year:</div>
+                    <div>{{ league.year }}</div>
+                    <div class="font-medium text-gray-700">In Database:</div>
+                    <div>
+                        <span v-if="league.inDB" class="text-green-600 font-medium">Yes</span>
+                        <span v-else class="text-red-600 font-medium">No</span>
+                    </div>
+                    <div v-if="!league.inDB" class="col-span-2 mt-2">
+                        <button 
+                            @click="createLeague" 
+                            class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm transition-colors duration-200"
+                        >
+                            Create League in Database
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <label class="block text-gray-700 font-bold mb-2 px-2 ">
                 Divisions
             </label>
@@ -106,4 +153,3 @@ export default {
     </div>
 
 </template>
-
