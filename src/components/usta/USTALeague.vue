@@ -34,6 +34,14 @@ export default {
 
         selectDiv(league) {
             this.divisions = league.divisions;
+            // Reset division and teams when a new league is selected
+            this.division = {};
+            this.teams = [];
+            
+            // Reset flights in the USTALeagueDivList component
+            if (this.$refs.divList) {
+                this.$refs.divList.flights = [];
+            }
         },
 
         refreshDivisions(div) {
@@ -94,12 +102,12 @@ export default {
 
 <template>
     <div class="flex flex-row min-h-screen w-full bg-gray-100 text-gray-700" x-data="layout">
-        <div v-if="leagues.length >0" class="bg-white shadow-dashboard w-90 px-2 py-2 rounded-lg m-2">
+        <div v-if="leagues.length >0" class="bg-white shadow-lg w-90 px-4 py-4 rounded-lg m-2">
 
-            <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                Leagues
-            </label>
-            <div v-if="leagues.length >0" style="min-width: 300px" class="w-full block tracking-wide  text-grey-darker text-xs font-bold mb-2">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 px-2">
+                USTA Leagues
+            </h2>
+            <div v-if="leagues.length >0" style="min-width: 300px" class="w-full block tracking-wide text-grey-darker text-sm mb-4">
                 <v-select
                     :getOptionLabel="leagues => leagues.label"
                     :options="leagues"
@@ -133,10 +141,10 @@ export default {
                 </div>
             </div>
 
-            <label class="block text-gray-700 font-bold mb-2 px-2 ">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3 px-2">
                 Divisions
-            </label>
-            <USTALeagueDivList :divisions="divisions" v-model:division="division" v-model:teams="teams" :leagueName="league.name" @refresh="refreshDivisions"/>
+            </h3>
+            <USTALeagueDivList ref="divList" :divisions="divisions" v-model:division="division" v-model:teams="teams" :leagueName="league.name" @refresh="refreshDivisions"/>
 
         </div>
 
@@ -146,7 +154,7 @@ export default {
             </div>
         </div>
 
-        <div v-else class="bg-white shadow-dashboard w-90 px-2 py-2 rounded-lg m-2">
+        <div v-else class="bg-white shadow-lg w-90 px-4 py-4 rounded-lg m-2">
             <USTALeagueTeamList v-model:teams="teams" v-model:division="division" @refresh="refreshTeams"/>
         </div>
 

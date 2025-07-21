@@ -35,6 +35,8 @@ export default {
             const res = await axios.get(url);
             this.$emit('update:teams', res.data);
             this.$emit('update:division', div);
+            // Reset flights when a new division is selected
+            this.flights = [];
         },
 
         async importTeams(flight) {
@@ -101,7 +103,7 @@ export default {
                     USTA Link
                 </th>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Imported?
+                    Status
                 </th>
             </tr>
         </thead>
@@ -119,25 +121,31 @@ export default {
                     <a :href="division.link" target="_blank" class="underline"> USTA Link</a>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <a v-if="!division.inDB" href="#" class="underline" @click="importDivision(division)">
+                    <button 
+                        v-if="!division.inDB" 
+                        @click="importDivision(division)" 
+                        class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded text-sm transition-colors duration-200"
+                    >
                         Import
-                    </a>
-                    <a v-else href="#" class="underline" @click="getFlights(division)">
-                        Flights
-                    </a>
+                    </button>
+                    <button 
+                        v-else 
+                        @click="getFlights(division)" 
+                        class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm transition-colors duration-200"
+                    >
+                        View Flights
+                    </button>
                 </td>
             </tr>
         </tbody>
     </table>
-    <div v-else>
-         <label class="block text-gray-700 text-sm font-bold mb-2 px-2 ">
-           No Divisions are found!
-         </label>
+    <div v-else class="bg-gray-50 p-4 rounded-md border border-gray-200 text-center">
+        <p class="text-gray-600">No divisions found for this league.</p>
     </div>
-    <label v-if="division.name" class="block text-gray-700 font-bold mb-2 px-2 ">
+    <h3 v-if="division && division.name" class="text-lg font-semibold text-gray-800 mb-3 px-2">
         {{division.name}} - Flights
-    </label>
-    <table v-if="flights.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
+    </h3>
+    <table v-if="division && division.name && flights.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
         <thead>
             <tr>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
@@ -166,9 +174,13 @@ export default {
                     <a :href="flight.link" target="_blank" class="underline"> USTA Link</a>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <a v-if="flight.link" href="#" class="underline" @click="importTeams(flight)">
+                    <button 
+                        v-if="flight.link" 
+                        @click="importTeams(flight)" 
+                        class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded text-sm transition-colors duration-200"
+                    >
                         Import Teams
-                    </a>
+                    </button>
                     <span v-else> N/A </span>
                 </td>
             </tr>
@@ -182,4 +194,3 @@ export default {
 </div>
 
 </template>
-

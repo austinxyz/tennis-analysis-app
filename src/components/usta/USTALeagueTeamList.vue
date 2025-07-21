@@ -55,9 +55,9 @@ export default {
 <template>
 
 <div class="max-w-2xl mx-auto px-2">
-    <label class="block text-gray-700 font-bold mb-2 px-2 ">
+    <h3 class="text-lg font-semibold text-gray-800 mb-3 px-2">
         Teams
-    </label>
+    </h3>
     <div v-if="loading" class="px-5 py-5">
         <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
           <span class="sr-only">Loading...</span>
@@ -82,7 +82,7 @@ export default {
                     USTA Link
                 </th>
                 <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Imported
+                    Status
                 </th>
             </tr>
         </thead>
@@ -112,22 +112,25 @@ export default {
                     </a>
                 </td>
                 <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <span v-if="team.inDB">Imported</span>
-                    <a v-if="!team.inDB && division.inDB" href="#" class="underline" @click="importTeam(team)">
+                    <svg v-if="team.inDB" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <button 
+                        v-if="!team.inDB && division.inDB" 
+                        @click="importTeam(team)" 
+                        class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded text-sm transition-colors duration-200"
+                    >
                         Import
-                    </a>
+                    </button>
                 </td>
             </tr>
         </tbody>
     </table>
-    <div v-else>
-         <label class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="usta">
-           No Teams are found!
-         </label>
+    <div v-else class="bg-gray-50 p-4 rounded-md border border-gray-200 text-center">
+        <p class="text-gray-600">No teams found for this division.</p>
     </div>
 
 
 </div>
 
 </template>
-
