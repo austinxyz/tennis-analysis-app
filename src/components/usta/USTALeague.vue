@@ -1,163 +1,210 @@
-<script>
+<script setup lang="ts">
+import { ref, onMounted, watch } from "vue";
 
+// Define types for our data structures
+interface League {
+  id?: number;
+  name: string;
+  label?: string;
+  year: number;
+  inDB?: boolean;
+  divisions: Division[];
+}
+
+interface Division {
+  id?: number;
+  name: string;
+  flights?: Flight[];
+  [key: string]: any;
+}
+
+interface Flight {
+  id?: number;
+  name: string;
+  [key: string]: any;
+}
+
+interface Team {
+  id?: number;
+  name: string;
+  [key: string]: any;
+}
 import axios from "axios";
-import 'vue-select/dist/vue-select.css';
 import USTALeagueDivList from "./USTALeagueDivList.vue";
 import USTALeagueTeamList from "./USTALeagueTeamList.vue";
+import Card from "../ui/card.vue";
+import CardHeader from "../ui/card-header.vue";
+import CardTitle from "../ui/card-title.vue";
+import CardContent from "../ui/card-content.vue";
+import Button from "../ui/button.vue";
+import Badge from "../ui/badge.vue";
+import Select from "../ui/select.vue";
 
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
 
-export default {
-
-    async mounted() {
-        var url = "http://localhost:8080/usta/current/leagues";
-        const response = await axios.get(url);
-        this.leagues = response.data;
-        this.leagues.map(function (x){
-           return x.label = x.name;
-        });
-        this.league= this.leagues[0];
-        this.divisions = this.leagues[0].divisions;
-
-    },
-
-    methods: {
-
-        getBaseURL() {
-            if (process.env.NODE_ENV === 'production') {
-                return BASE_URL_PROD;
-            } else {
-                return BASE_URL;
-            }
-        },
-
-        selectDiv(league) {
-            this.divisions = league.divisions;
-            // Reset division and teams when a new league is selected
-            this.division = {};
-            this.teams = [];
-            
-            // Reset flights in the USTALeagueDivList component
-            if (this.$refs.divList) {
-                this.$refs.divList.flights = [];
-            }
-        },
-
-        refreshDivisions(div) {
-            for (let i = 0; i < this.divisions.length; i++) {
-                if (this.divisions[i].name == div.name) {
-                    this.divisions[i] = div;
-                }
-            }
-        },
-
-        refreshTeams(team) {
-            for (let i = 0; i < this.teams.length; i++) {
-                if (this.teams[i].name == team.name) {
-                    this.teams[i].id = team.id;
-                }
-            }
-        },
-
-        async createLeague() {
-            try {
-                const leagueName = this.league.name.replace("Norcal", "").trim();
-                const requestBody = {
-                    id: 0,
-                    name: leagueName,
-                    status: "Open",
-                    year: this.league.year
-                };
-                
-                const response = await axios.post('http://localhost:8080/usta/leagues', requestBody);
-                if (response.status === 200 || response.status === 201) {
-                    // Update the current league to show it's now in the database
-                    this.league.inDB = true;
-                    // Show success message or handle as needed
-                    alert("League successfully created in database!");
-                }
-            } catch (error) {
-                console.error("Error creating league:", error);
-                alert("Failed to create league. Please try again.");
-            }
-        },
-    },
-    data() {
-  	    return {
-  	        divisions: [],
-  	        division: {},
-            leagues:[],
-            league: {},
-            teams: [],
-	        loading: false,
-  	    }
-    },
-    components: {
-        USTALeagueDivList,
-        USTALeagueTeamList
-    }
+const divisions = ref<Division[]>([]);
+const division = ref<Division>({} as Division);
+const leagues = ref<League[]>([]);
+const league = ref<League>({} as League);
+const teams = ref<Team[]>([]);
+const loading = ref(false);
+// Define a type for the USTALeagueDivList component ref
+interface DivListRef {
+  flights: Flight[];
+  [key: string]: any;
 }
+
+const divListRef = ref<DivListRef | null>(null);
+
+onMounted(async () => {
+    const url = "http://localhost:8080/usta/current/leagues";
+    const response = await axios.get<League[]>(url);
+    leagues.value = response.data;
+    leagues.value.forEach(function (x) {
+        x.label = x.name;
+    });
+    if (leagues.value.length > 0) {
+        league.value = leagues.value[0];
+        divisions.value = leagues.value[0].divisions || [];
+    }
+});
+
+const getBaseURL = () => {
+    if (process.env.NODE_ENV === 'production') {
+        return BASE_URL_PROD;
+    } else {
+        return BASE_URL;
+    }
+};
+
+const selectDiv = (selectedLeague: League) => {
+    divisions.value = selectedLeague.divisions || [];
+    // Reset division and teams when a new league is selected
+    division.value = {} as Division;
+    teams.value = [];
+    
+    // Reset flights in the USTALeagueDivList component
+    if (divListRef.value && divListRef.value.flights) {
+        divListRef.value.flights = [];
+    }
+};
+
+const refreshDivisions = (div: Division) => {
+    for (let i = 0; i < divisions.value.length; i++) {
+        if (divisions.value[i].name === div.name) {
+            divisions.value[i] = div;
+        }
+    }
+};
+
+const refreshTeams = (team: Team) => {
+    for (let i = 0; i < teams.value.length; i++) {
+        if (teams.value[i].name === team.name) {
+            teams.value[i].id = team.id;
+        }
+    }
+};
+
+const createLeague = async () => {
+    try {
+        const leagueName = league.value.name.replace("Norcal", "").trim();
+        const requestBody = {
+            id: 0,
+            name: leagueName,
+            status: "Open",
+            year: league.value.year
+        };
+        
+        const response = await axios.post('http://localhost:8080/usta/leagues', requestBody);
+        if (response.status === 200 || response.status === 201) {
+            // Update the current league to show it's now in the database
+            league.value.inDB = true;
+            // Show success message or handle as needed
+            alert("League successfully created in database!");
+        }
+    } catch (error) {
+        console.error("Error creating league:", error);
+        alert("Failed to create league. Please try again.");
+    }
+};
 </script>
 
 <template>
-    <div class="flex flex-row min-h-screen w-full bg-gray-100 text-gray-700" x-data="layout">
-        <div v-if="leagues.length >0" class="bg-white shadow-lg w-90 px-4 py-4 rounded-lg m-2">
-
-            <h2 class="text-xl font-bold text-gray-800 mb-4 px-2">
-                USTA Leagues
-            </h2>
-            <div v-if="leagues.length >0" style="min-width: 300px" class="w-full block tracking-wide text-grey-darker text-sm mb-4">
-                <v-select
-                    :getOptionLabel="leagues => leagues.label"
-                    :options="leagues"
-                    :value="league"
-                    v-model="league"
-                    @option:selected="selectDiv"
-                   ></v-select>
-            </div>
-
-            <!-- League Information Display -->
-            <div v-if="league && Object.keys(league).length > 0" class="bg-blue-50 p-3 rounded-md mb-4 border border-blue-200">
-                <h3 class="text-lg font-semibold text-blue-800 mb-2">League Information</h3>
-                <div class="grid grid-cols-2 gap-2 text-sm">
-                    <div class="font-medium text-gray-700">Name:</div>
-                    <div>{{ league.name }}</div>
-                    <div class="font-medium text-gray-700">Year:</div>
-                    <div>{{ league.year }}</div>
-                    <div class="font-medium text-gray-700">In Database:</div>
-                    <div>
-                        <span v-if="league.inDB" class="text-green-600 font-medium">Yes</span>
-                        <span v-else class="text-red-600 font-medium">No</span>
-                    </div>
-                    <div v-if="!league.inDB" class="col-span-2 mt-2">
-                        <button 
-                            @click="createLeague" 
-                            class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm transition-colors duration-200"
-                        >
-                            Create League in Database
-                        </button>
-                    </div>
+    <div class="flex flex-col md:flex-row gap-6 w-full">
+        <Card v-if="leagues.length > 0" class="w-full md:w-1/2">
+            <CardHeader>
+                <CardTitle>USTA Leagues</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div v-if="leagues.length > 0" class="mb-6">
+                    <label class="text-sm font-medium mb-2 block">Select League</label>
+                    <Select
+                        :options="leagues"
+                        v-model="league"
+                        labelKey="name"
+                        @option:selected="selectDiv"
+                        placeholder="Select a league"
+                    />
                 </div>
+
+                <!-- League Information Display -->
+                <Card v-if="league && Object.keys(league).length > 0" class="mb-6">
+                    <CardHeader>
+                        <CardTitle class="text-base">League Information</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div class="font-medium">Name:</div>
+                            <div>{{ league.name }}</div>
+                            <div class="font-medium">Year:</div>
+                            <div>{{ league.year }}</div>
+                            <div class="font-medium">In Database:</div>
+                            <div>
+                                <Badge v-if="league.inDB" variant="success">Yes</Badge>
+                                <Badge v-else variant="destructive">No</Badge>
+                            </div>
+                            <div v-if="!league.inDB" class="col-span-2 mt-4">
+                                <Button 
+                                    @click="createLeague" 
+                                    variant="default"
+                                    size="sm"
+                                >
+                                    Create League in Database
+                                </Button>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <div>
+                    <h3 class="text-base font-semibold mb-3">Divisions</h3>
+                    <USTALeagueDivList 
+                        ref="divListRef" 
+                        :divisions="divisions" 
+                        v-model:division="division" 
+                        v-model:teams="teams" 
+                        :leagueName="league.name" 
+                        @refresh="refreshDivisions"
+                    />
+                </div>
+            </CardContent>
+        </Card>
+
+        <div v-if="loading" class="flex items-center justify-center w-full md:w-1/2">
+            <div class="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent text-primary rounded-full" role="status" aria-label="loading">
+                <span class="sr-only">Loading...</span>
             </div>
-
-            <h3 class="text-lg font-semibold text-gray-800 mb-3 px-2">
-                Divisions
-            </h3>
-            <USTALeagueDivList ref="divList" :divisions="divisions" v-model:division="division" v-model:teams="teams" :leagueName="league.name" @refresh="refreshDivisions"/>
-
         </div>
 
-        <div v-if="loading" class="px-5 py-5">
-            <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
-              <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-
-        <div v-else class="bg-white shadow-lg w-90 px-4 py-4 rounded-lg m-2">
-            <USTALeagueTeamList v-model:teams="teams" v-model:division="division" @refresh="refreshTeams"/>
-        </div>
-
+        <Card v-else class="w-full md:w-1/2">
+            <CardContent class="pt-6">
+                <USTALeagueTeamList 
+                    v-model:teams="teams" 
+                    v-model:division="division" 
+                    @refresh="refreshTeams"
+                />
+            </CardContent>
+        </Card>
     </div>
-
 </template>

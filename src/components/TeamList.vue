@@ -1,58 +1,56 @@
-<script>
-
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import axios from "axios";
+import { cn } from "../lib/utils/cn";
+import { Users } from "lucide-vue-next";
+import { RouterLink } from 'vue-router';
 
-export default {
-
-    async mounted() {
-
-        this.loading = true;
-
-        var url = "http://localhost:8080/teams";
-        try {
-            const response = await axios.get(url);
-            this.teams = response.data;
-
-        } catch(error) {
-
-        };
-
-        this.loading = false;
-    },
-
-    data() {
-  	    return {
-	        teams: [],
-            loading: false,
-  	    }
-    }
+interface Team {
+  name: string;
+  displayName: string;
+  [key: string]: any;
 }
+
+const teams = ref<Team[]>([]);
+const loading = ref(false);
+
+onMounted(async () => {
+  loading.value = true;
+  
+  try {
+    const url = "http://localhost:8080/teams";
+    const response = await axios.get(url);
+    teams.value = response.data;
+  } catch(error) {
+    console.error("Error fetching teams:", error);
+  } finally {
+    loading.value = false;
+  }
+});
 </script>
 
 <template>
-  <nav class="flex flex-col bg-slate-700 w-60 px-2 py-2 text-gray-900 border border-purple-900">
-    <ul class="ml-1">
-          <li v-for="team in teams" class="mb-1 px-0 py-2 text-gray-100 flex flex-row  border-gray-300 hover:text-black   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
-            <span>
-               <svg class="fill-current h-5 w-5 " viewBox="0 0 24 24">
-               <path
-                   d="M16 20h4v-4h-4m0-2h4v-4h-4m-6-2h4V4h-4m6
-                                4h4V4h-4m-6 10h4v-4h-4m-6 4h4v-4H4m0 10h4v-4H4m6
-                                4h4v-4h-4M4 8h4V4H4v4z"
-                   ></path>
-               </svg>
-            </span>
-            <a :href="'?team=' + team.name">
-                <span class="ml-1">{{ team.displayName }}</span>
-            </a>
-          </li>
-      </ul>
-    </nav>
-
-    <div v-if="loading" class="px-5 py-5">
-        <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
-          <span class="sr-only">Loading...</span>
-        </div>
+  <div>
+    <h3 class="text-lg font-semibold mb-4">Teams</h3>
+    
+    <div v-if="loading" class="flex justify-center py-4">
+      <div class="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" aria-label="loading"></div>
     </div>
+    
+    <div v-else class="space-y-1">
+      <RouterLink 
+        v-for="team in teams" 
+        :key="team.name"
+        :to="{ path: '/zijing/team', query: { team: team.name } }"
+        class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+      >
+        <Users class="mr-2 h-4 w-4" />
+        <span>{{ team.displayName }}</span>
+      </RouterLink>
+      
+      <div v-if="teams.length === 0" class="text-sm text-muted-foreground px-3 py-2">
+        No teams found
+      </div>
+    </div>
+  </div>
 </template>
-

@@ -1,83 +1,106 @@
-<script>
+<script setup lang="ts">
+import { ref, watch } from 'vue';
+import Card from "./ui/card.vue";
+import CardHeader from "./ui/card-header.vue";
+import CardTitle from "./ui/card-title.vue";
+import CardContent from "./ui/card-content.vue";
+import { ListChecks } from "lucide-vue-next";
 
-export default {
+interface Pair {
+  pairInfo: string;
+  totalUTR: number;
+  [key: string]: any;
+}
 
-    props: {
-        lineups: { type: Array},
-        lineup: {type: Object},
-    },
+interface LineupItem {
+  pair: Pair;
+  [key: string]: any;
+}
 
-    emits: ['update:lineup', "change"],
+interface Lineup {
+  D1: LineupItem;
+  D2: LineupItem;
+  D3: LineupItem;
+  WD: LineupItem;
+  MD: LineupItem;
+  [key: string]: any;
+}
 
-    data() {
-        return {
-            d_lineupindex: 0,
-        };
-    },
+const props = defineProps({
+  lineups: { 
+    type: Array as () => Lineup[],
+    default: () => []
+  },
+  lineup: {
+    type: Object as () => Lineup,
+    required: true
+  },
+});
 
-    methods: {
-        onChange(value) {
-            let lineup = this.lineups[this.d_lineupindex];
-            this.$emit('update:lineup', lineup);
-            this.$emit('change', value);
-        },
-    },
+const emit = defineEmits(['update:lineup', 'change']);
+
+const lineupIndex = ref(0);
+
+watch(() => props.lineups, (newLineups) => {
+  if (newLineups.length > 0) {
+    lineupIndex.value = 0;
+  }
+}, { immediate: true });
+
+const onChange = (index: number) => {
+  lineupIndex.value = index;
+  const selectedLineup = props.lineups[index];
+  emit('update:lineup', selectedLineup);
+  emit('change', selectedLineup);
 };
 </script>
 
 <template>
-      <div class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-        <table class="border-collapse border-spacing-0 border border-slate-400">
+  <Card v-if="lineups.length > 0" class="mt-6">
+    <CardHeader>
+      <CardTitle class="flex items-center text-base">
+        <ListChecks class="mr-2 h-4 w-4" />
+        Available Lineups
+      </CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div class="relative overflow-x-auto rounded-md border">
+        <table class="w-full text-sm">
           <thead>
-            <tr>
-                <th colspan="6" class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Lineup:
-                </th>
-            </tr>
-            <tr>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    #
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    D1
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    D2
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    D3
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    MD
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    WD
-                </th>
+            <tr class="bg-muted/50 border-b">
+              <th class="px-4 py-2 text-left font-medium">#</th>
+              <th class="px-4 py-2 text-left font-medium">D1</th>
+              <th class="px-4 py-2 text-left font-medium">D2</th>
+              <th class="px-4 py-2 text-left font-medium">D3</th>
+              <th class="px-4 py-2 text-left font-medium">MD</th>
+              <th class="px-4 py-2 text-left font-medium">WD</th>
             </tr>
           </thead>
           <tbody>
-             <tr v-for="(lineup, index) in lineups" class="even:bg-slate-50 odd:bg-slate-400">
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <input type="radio" :value="index" v-model="d_lineupindex" @change="onChange"/>
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ lineup.D1.pair.pairInfo }}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ lineup.D2.pair.pairInfo }}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ lineup.D3.pair.pairInfo }}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ lineup.MD.pair.pairInfo }}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ lineup.WD.pair.pairInfo }}
-                </td>
-              </tr>
+            <tr 
+              v-for="(lineup, index) in lineups" 
+              :key="index"
+              class="border-b hover:bg-muted/50 transition-colors"
+              :class="{ 'bg-muted/30': lineupIndex === index }"
+            >
+              <td class="px-4 py-2 whitespace-nowrap">
+                <input 
+                  type="radio" 
+                  :value="index" 
+                  :checked="lineupIndex === index"
+                  @change="onChange(index)"
+                  class="h-4 w-4 text-primary border-primary focus:ring-primary"
+                />
+              </td>
+              <td class="px-4 py-2 whitespace-nowrap">{{ lineup.D1.pair.pairInfo }}</td>
+              <td class="px-4 py-2 whitespace-nowrap">{{ lineup.D2.pair.pairInfo }}</td>
+              <td class="px-4 py-2 whitespace-nowrap">{{ lineup.D3.pair.pairInfo }}</td>
+              <td class="px-4 py-2 whitespace-nowrap">{{ lineup.MD.pair.pairInfo }}</td>
+              <td class="px-4 py-2 whitespace-nowrap">{{ lineup.WD.pair.pairInfo }}</td>
+            </tr>
           </tbody>
         </table>
       </div>
+    </CardContent>
+  </Card>
 </template>
-

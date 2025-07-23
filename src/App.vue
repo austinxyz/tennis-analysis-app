@@ -1,42 +1,75 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
+import { ref } from "vue";
+import Button from "./components/ui/button.vue";
+import { Menu, X } from "lucide-vue-next";
+
+const isMenuOpen = ref(false);
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
+
+const navItems = [
+  { name: "About", path: "/" },
+  { name: "USTA", path: "/usta" },
+  { name: "UTR", path: "/utr" },
+  { name: "紫荆杯", path: "/zijing" },
+  { name: "活动", path: "/event" },
+];
 </script>
 
 <template>
-    <nav class="flex-col flex-grow bg-slate-700 hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row ">
-        <div class="relative z-1 h-12 mx-auto px-5 max-w-7xl flex items-center justify-between text-white">
-            <ul class="flex items-center gap-5">
-                <li>
-                    <router-link class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" to="/">
-                        About
-                    </router-link>
-                </li>
-                <li>
-                    <router-link class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" to="/usta">
-                        USTA
-                    </router-link>
-                </li>
-                <li>
-                    <router-link class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                    to="/utr">
-                        UTR
-                    </router-link>
-                </li>
-                <li>
-                    <router-link class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                    to="/zijing">
-                        紫荆杯
-                    </router-link>
-                </li>
-                <li>
-                    <router-link class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                    to="/event">
-                        活动
-                    </router-link>
-                </li>
-            </ul>
+  <div class="flex flex-col min-h-screen">
+    <header class="bg-background border-b">
+      <div class="container mx-auto px-4">
+        <div class="flex h-16 items-center justify-between">
+          <div class="flex items-center">
+            <a href="/" class="text-xl font-bold text-primary">网球分析系统</a>
+          </div>
+          
+          <!-- Mobile menu button -->
+          <div class="md:hidden">
+            <Button variant="ghost" size="icon" @click="toggleMenu">
+              <Menu v-if="!isMenuOpen" class="h-6 w-6" />
+              <X v-else class="h-6 w-6" />
+            </Button>
+          </div>
+          
+          <!-- Desktop navigation -->
+          <nav class="hidden md:flex items-center space-x-4">
+            <RouterLink 
+              v-for="item in navItems" 
+              :key="item.path" 
+              :to="item.path"
+              class="px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground"
+              :class="$route.path === item.path ? 'bg-accent text-accent-foreground' : 'text-foreground'"
+            >
+              {{ item.name }}
+            </RouterLink>
+          </nav>
         </div>
-    </nav>
-    <router-view></router-view>
+      </div>
+      
+      <!-- Mobile navigation -->
+      <div v-if="isMenuOpen" class="md:hidden">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+          <RouterLink 
+            v-for="item in navItems" 
+            :key="item.path" 
+            :to="item.path"
+            class="block px-3 py-2 rounded-md text-base font-medium"
+            :class="$route.path === item.path ? 'bg-accent text-accent-foreground' : 'text-foreground hover:bg-accent hover:text-accent-foreground'"
+            @click="isMenuOpen = false"
+          >
+            {{ item.name }}
+          </RouterLink>
+        </div>
+      </div>
+    </header>
+    
+    <main class="flex-1">
+      <RouterView />
+    </main>
+  </div>
 </template>
-

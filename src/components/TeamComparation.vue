@@ -1,52 +1,97 @@
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import TeamSelect from "./TeamSelect.vue";
 import LineupCompTable from "./LineupCompTable.vue";
+import Card from "./ui/card.vue";
+import CardHeader from "./ui/card-header.vue";
+import CardTitle from "./ui/card-title.vue";
+import CardContent from "./ui/card-content.vue";
+import { Scale } from "lucide-vue-next";
 
-export default {
-
-  data() {
-    return {
-        teamName1: '',
-        teamName2: '',
-        team1UTR:0,
-        team2UTR:0,
-        lineup1: {
-            D1: {pair: {pairInfo: ''}},
-            D2: {pair: {pairInfo: ''}},
-            D3: {pair: {pairInfo: ''}},
-            WD: {pair: {pairInfo: ''}},
-            MD: {pair: {pairInfo: ''}},
-        },
-        lineup2: {
-            D1: {pair: {pairInfo: ''}},
-            D2: {pair: {pairInfo: ''}},
-            D3: {pair: {pairInfo: ''}},
-            WD: {pair: {pairInfo: ''}},
-            MD: {pair: {pairInfo: ''}},
-        },
-    };
-  },
-
-  components: {
-    TeamSelect,
-    LineupCompTable,
-  }
+interface Pair {
+  pairInfo: string;
+  totalUTR: number;
+  [key: string]: any;
 }
+
+interface LineupItem {
+  pair: Pair;
+  [key: string]: any;
+}
+
+interface Lineup {
+  D1: LineupItem;
+  D2: LineupItem;
+  D3: LineupItem;
+  WD: LineupItem;
+  MD: LineupItem;
+  [key: string]: any;
+}
+
+const teamName1 = ref('');
+const teamName2 = ref('');
+const team1UTR = ref(0);
+const team2UTR = ref(0);
+const lineup1 = ref<Lineup>({
+  D1: { pair: { pairInfo: '', totalUTR: 0 } },
+  D2: { pair: { pairInfo: '', totalUTR: 0 } },
+  D3: { pair: { pairInfo: '', totalUTR: 0 } },
+  WD: { pair: { pairInfo: '', totalUTR: 0 } },
+  MD: { pair: { pairInfo: '', totalUTR: 0 } },
+});
+const lineup2 = ref<Lineup>({
+  D1: { pair: { pairInfo: '', totalUTR: 0 } },
+  D2: { pair: { pairInfo: '', totalUTR: 0 } },
+  D3: { pair: { pairInfo: '', totalUTR: 0 } },
+  WD: { pair: { pairInfo: '', totalUTR: 0 } },
+  MD: { pair: { pairInfo: '', totalUTR: 0 } },
+});
 </script>
 
 <template>
-    <div class="w-1/2 align-middle inline-block min-w-fit shadow bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg">
-        <div class="flex flex-row min-h-screen w-full bg-gray-100 text-gray-700" x-data="layout">
-            <div class="m-2 w-1/2 flow-row">
-                <TeamSelect v-model:vTeamName="teamName1" v-model:vLineup="lineup1" v-model:vTeamUTR="team1UTR"/>
-            </div>
-            <div>
-                <LineupCompTable :teamName1="teamName1" :teamName2="teamName2" :lineup1="lineup1" :lineup2="lineup2" :team1UTR="team1UTR" :team2UTR="team2UTR"/>
-            </div>
-            <div class="m-2 w-1/2 flow-row">
-                <TeamSelect v-model:vTeamName="teamName2" v-model:vLineup="lineup2" v-model:vTeamUTR="team2UTR"/>
-            </div>
-        </div>
-   </div>
+  <div>
+    <Card class="mb-6">
+      <CardHeader>
+        <CardTitle class="flex items-center">
+          <Scale class="mr-2 h-5 w-5 text-primary" />
+          Team Comparison
+        </CardTitle>
+      </CardHeader>
+    </Card>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <Card>
+        <CardContent class="pt-6">
+          <TeamSelect 
+            v-model:vTeamName="teamName1" 
+            v-model:vLineup="lineup1" 
+            v-model:vTeamUTR="team1UTR"
+          />
+        </CardContent>
+      </Card>
+      
+      <Card>
+        <CardContent class="pt-6">
+          <LineupCompTable 
+            :teamName1="teamName1" 
+            :teamName2="teamName2" 
+            :lineup1="lineup1" 
+            :lineup2="lineup2" 
+            :team1UTR="team1UTR" 
+            :team2UTR="team2UTR"
+          />
+        </CardContent>
+      </Card>
+      
+      <Card>
+        <CardContent class="pt-6">
+          <TeamSelect 
+            v-model:vTeamName="teamName2" 
+            v-model:vLineup="lineup2" 
+            v-model:vTeamUTR="team2UTR"
+          />
+        </CardContent>
+      </Card>
+    </div>
+  </div>
 </template>
-

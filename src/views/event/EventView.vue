@@ -1,43 +1,69 @@
 <script setup lang="ts">
+import { ref } from "vue";
+import SidebarNav from "../../components/ui/sidebar-nav.vue";
+import { 
+  Users, 
+  Trophy, 
+  Menu, 
+  X 
+} from "lucide-vue-next";
+import Button from "../../components/ui/button.vue";
+
+const isMenuOpen = ref(false);
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
+
+const sidebarItems = [
+  {
+    title: "Build Team",
+    href: "/event/buildteam",
+    icon: Users
+  },
+  {
+    title: "UTR League",
+    href: "/event/utrleague",
+    icon: Trophy
+  }
+];
 </script>
 
 <template>
-    <div class="flex flex-no-wrap">
-        <div style="min-height: 716px" class="min-h-max w-50 absolute sm:relative bg-gray-800 shadow md:h-full flex-col justify-between hidden sm:flex">
-            <div class="px-2">
-                <span class="w-40 flex px-4 py-2 font-large text-gray-100 text-center"> UTR </span>
-                <ul class="mt-12">
-                    <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
-                           <router-link to="/event/buildteam" class="flex flex-row py-2 mt-2 text-normal font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-grid" width="18" height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                     <path stroke="none" d="M0 0h24v24H0z"></path>
-                                     <rect x="4" y="4" width="6" height="6" rx="1"></rect>
-                                     <rect x="14" y="4" width="6" height="6" rx="1"></rect>
-                                     <rect x="4" y="14" width="6" height="6" rx="1"></rect>
-                                     <rect x="14" y="14" width="6" height="6" rx="1"></rect>
-                                 </svg>
-                                 <span class="px-2 text-sm font-semibold whitespace-no-wrap">
-                                 Build Team
-                                 </span>
-                            </router-link>
-                    </li>
-                    <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
-                           <router-link to="/event/utrleague" class="flex flex-row py-2 mt-2 text-normal font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-grid" width="18" height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                     <path stroke="none" d="M0 0h24v24H0z"></path>
-                                     <rect x="4" y="4" width="6" height="6" rx="1"></rect>
-                                     <rect x="14" y="4" width="6" height="6" rx="1"></rect>
-                                     <rect x="4" y="14" width="6" height="6" rx="1"></rect>
-                                     <rect x="14" y="14" width="6" height="6" rx="1"></rect>
-                                 </svg>
-                                 <span class="px-2 text-sm font-semibold whitespace-no-wrap">
-                                 UTR League
-                                 </span>
-                            </router-link>
-                    </li>
-                </ul>
-            </div>
+  <div class="flex min-h-screen">
+    <!-- Sidebar for desktop -->
+    <aside class="hidden md:flex w-64 flex-col bg-card border-r h-screen">
+      <div class="p-6">
+        <h2 class="text-2xl font-bold text-primary">活动</h2>
+        <div class="mt-6">
+          <SidebarNav :items="sidebarItems" />
         </div>
-        <router-view></router-view>
+      </div>
+    </aside>
+
+    <!-- Mobile menu button -->
+    <div class="md:hidden fixed top-4 left-4 z-50">
+      <Button variant="outline" size="icon" @click="toggleMenu">
+        <Menu v-if="!isMenuOpen" class="h-5 w-5" />
+        <X v-else class="h-5 w-5" />
+      </Button>
     </div>
+
+    <!-- Mobile sidebar -->
+    <aside 
+      v-if="isMenuOpen" 
+      class="fixed inset-0 z-40 md:hidden"
+    >
+      <div class="fixed inset-0 bg-background/80 backdrop-blur-sm" @click="toggleMenu"></div>
+      <div class="fixed inset-y-0 left-0 w-3/4 max-w-xs bg-card border-r p-6 shadow-lg">
+        <h2 class="text-2xl font-bold text-primary mb-6">活动</h2>
+        <SidebarNav :items="sidebarItems" @click="toggleMenu" />
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 p-6 md:p-8">
+      <router-view></router-view>
+    </main>
+  </div>
 </template>

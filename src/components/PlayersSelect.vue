@@ -1,56 +1,90 @@
-<script>
-import 'vue-select/dist/vue-select.css';
+<script setup lang="ts">
+import { computed } from 'vue';
+import Select from "./ui/select.vue";
 
-export default {
-    props: {
-        players: { type: Array},
-        lineName: { type: String},
-        player1: {type: String},
-        player2: {type: String},
-    },
+interface Player {
+  id?: string;
+  name: string;
+  gender?: string;
+  utr?: number;
+  label?: string;
+  [key: string]: any;
+}
 
-    emits: ['update:player1','update:player2'],
+const props = defineProps({
+  players: { 
+    type: Array as () => Player[],
+    required: true
+  },
+  lineName: { 
+    type: String,
+    required: true
+  },
+  player1: {
+    type: String,
+    default: ''
+  },
+  player2: {
+    type: String,
+    default: ''
+  },
+});
 
-    methods: {
-        setPlayer1(value) {
-            this.$emit('update:player1', value.name);
-        },
-        setPlayer2(value) {
-            this.$emit('update:player2', value.name);
-        },
-    },
+const emit = defineEmits(['update:player1', 'update:player2']);
+
+const player1Object = computed(() => {
+  return props.players.find(p => p.name === props.player1) || undefined;
+});
+
+const player2Object = computed(() => {
+  return props.players.find(p => p.name === props.player2) || undefined;
+});
+
+const setPlayer1 = (value: Player) => {
+  if (value) {
+    emit('update:player1', value.name);
+  } else {
+    emit('update:player1', '');
+  }
+};
+
+const setPlayer2 = (value: Player) => {
+  if (value) {
+    emit('update:player2', value.name);
+  } else {
+    emit('update:player2', '');
+  }
 };
 </script>
 
 <template>
-  <div class="md:flex">
-    <div class="md:w-1/2 mb-2 md:mb-0">
-      <label class="block tracking-wide text-grey-darker text-xs font-bold mb-2">
-        {{lineName}} Player 1
-      </label>
-      <div class="block tracking-wide  text-grey-darker text-xs font-bold mb-2">
-        <v-select label="label"
-            :reduce="(option) => option.name"
-            :options="players"
-            :value="player1"
-            @option:selected="setPlayer1"
-           ></v-select>
-      </div>
-    </div>
-    <div class="md:w-1/2 px-3">
-      <label class="block tracking-wide text-grey-darker text-xs font-bold mb-2">
-        {{lineName}}  Player 2
-      </label>
-      <div class="block tracking-wide text-grey-darker text-xs font-bold mb-2">
-        <v-select label="label"
-          :reduce="(option) => option.name"
+  <div class="border rounded-md p-3">
+    <div class="text-sm font-medium mb-3">{{ lineName }} Line</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="text-xs font-medium mb-1 block text-muted-foreground">
+          {{ lineName }} Player 1
+        </label>
+        <Select
           :options="players"
-          :value="player2"
+          :modelValue="player1Object"
+          labelKey="label"
+          @option:selected="setPlayer1"
+          placeholder="Select player 1"
+        />
+      </div>
+      <div>
+        <label class="text-xs font-medium mb-1 block text-muted-foreground">
+          {{ lineName }} Player 2
+        </label>
+        <Select
+          :options="players"
+          :modelValue="player2Object"
+          labelKey="label"
           @option:selected="setPlayer2"
-         >
-         </v-select>
+          placeholder="Select player 2"
+        />
       </div>
     </div>
   </div>
 </template>
-

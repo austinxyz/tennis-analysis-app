@@ -11,7 +11,7 @@ const router = createRouter({
     {
         path: "/zijing",
         name: "zijing",
-        component: () => import("../views/zijing/ZijingView.vue"),
+        component: () => import("../views/zijing/ZiJingViewNew.vue"),
         children: [
           {
             path: "team",

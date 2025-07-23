@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import TeamComparation from "../../components/TeamComparation.vue";
+import Card from "../../components/ui/card.vue";
+import CardContent from "../../components/ui/card-content.vue";
 </script>
 
 <template>
-    <div class="flex flex-row min-h-screen w-full bg-gray-100 text-gray-700" x-data="layout">
-        <TeamComparation />
-    </div>
+  <Card class="w-full">
+    <CardContent class="pt-6">
+      <TeamComparation />
+    </CardContent>
+  </Card>
 </template>

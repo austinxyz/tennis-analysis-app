@@ -1,65 +1,73 @@
-<script>
+<script setup lang="ts">
+interface Player {
+  id: string;
+  name: string;
+  gender: string;
+  utr: number;
+  dUTR: number;
+  dUTRStatus: string;
+  [key: string]: any;
+}
 
-export default {
-
-  props: {
-    teamName: { type: String},
-    teamUTR: { type: Number},
-    players: { type: Array},
+defineProps({
+  teamName: { 
+    type: String,
+    required: true
   },
-
-};
+  teamUTR: { 
+    type: Number,
+    required: true
+  },
+  players: { 
+    type: Array as () => Player[],
+    required: true
+  },
+});
 </script>
 
 <template>
-      <div class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-        <table class="border-collapse border-spacing-0 border border-slate-400">
-          <thead>
-            <tr>
-                <th colspan="5" class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    {{ teamName }} :  {{teamUTR.toFixed(2)}}
-                </th>
-            </tr>
-            <tr>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    #
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Name
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Gender
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    UTR
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Latest UTR
-                </th>
-            </tr>
-          </thead>
-          <tbody>
-             <tr v-for="(player, index) in players" class="even:bg-slate-50 odd:bg-slate-400">
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ index+1 }}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <a :href="'https://app.universaltennis.com/profiles/' + player.id" class="underline">
-                    {{ player.name }}
-                    </a>
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ player.gender }}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ player.utr }}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ player.dUTR }} ({{player.dUTRStatus}})
-                </td>
-              </tr>
-          </tbody>
-        </table>
-      </div>
+  <div class="relative overflow-x-auto rounded-md border">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-muted/50 border-b">
+          <th class="px-4 py-2 text-left font-medium">#</th>
+          <th class="px-4 py-2 text-left font-medium">Name</th>
+          <th class="px-4 py-2 text-left font-medium">Gender</th>
+          <th class="px-4 py-2 text-left font-medium">UTR</th>
+          <th class="px-4 py-2 text-left font-medium">Latest UTR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr 
+          v-for="(player, index) in players" 
+          :key="player.id"
+          class="border-b hover:bg-muted/50 transition-colors"
+        >
+          <td class="px-4 py-2 whitespace-nowrap">{{ index + 1 }}</td>
+          <td class="px-4 py-2 whitespace-nowrap">
+            <a 
+              :href="`https://app.universaltennis.com/profiles/${player.id}`" 
+              class="text-primary hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ player.name }}
+            </a>
+          </td>
+          <td class="px-4 py-2 whitespace-nowrap">{{ player.gender }}</td>
+          <td class="px-4 py-2 whitespace-nowrap">{{ player.utr }}</td>
+          <td class="px-4 py-2 whitespace-nowrap">
+            {{ player.dUTR }} 
+            <span class="text-xs text-muted-foreground">({{ player.dUTRStatus }})</span>
+          </td>
+        </tr>
+        
+        <tr v-if="players.length === 0">
+          <td colspan="5" class="px-4 py-4 text-center text-muted-foreground">
+            No players found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
-
