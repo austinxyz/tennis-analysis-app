@@ -1,69 +1,68 @@
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
+import Button from "../ui/button.vue";
+import Badge from "../ui/badge.vue";
 
-export default {
+interface TeamMember {
+    teamId?: string | number;
+    teamName?: string;
+    teamAlias?: string;
+    divisionName?: string;
+    flightName?: string;
+    winNo?: number;
+    lostNo?: number;
+    [key: string]: any;
+}
 
-    props: {
-        teammembers: { type: Array},
-    },
+const props = defineProps({
+    teammembers: { type: Array as () => TeamMember[], required: true }
+});
 
-    methods: {
+const loading = ref(false);
 
-    },
-
-    data() {
-        return {
-            loading: false,
-        }
-    },
-
-    components: {
-
-    }
+// Helper function to open links in a new tab
+const openInNewTab = (url: string) => {
+    window.open(url, '_blank');
 };
 </script>
 
 <template>
-    <table v-if="teammembers.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
-        <thead>
-            <tr>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    #
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Division Name
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Flight Name
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Team Name
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    W/L
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(member, index) in teammembers" class="even:bg-slate-50 odd:bg-slate-400">
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ index+1 }}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{member.divisionName}}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{member.flightName}}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <a :href="'/usta/team?teamId=' + member.teamId" class="underline" target="_blank">
-                        <span v-if="member.teamAlias">[{{ member.teamAlias }}] </span> {{member.teamName}}
-                    </a>
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ member.winNo}} / {{member.lostNo}}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div v-if="teammembers.length > 0" class="relative overflow-x-auto rounded-md border">
+        <table class="w-full text-sm text-left">
+            <thead class="text-xs uppercase bg-muted">
+                <tr>
+                    <th scope="col" class="px-4 py-3">#</th>
+                    <th scope="col" class="px-4 py-3">Division Name</th>
+                    <th scope="col" class="px-4 py-3">Flight Name</th>
+                    <th scope="col" class="px-4 py-3">Team Name</th>
+                    <th scope="col" class="px-4 py-3">W/L</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(member, index) in teammembers" :key="index" class="border-b hover:bg-muted/50">
+                    <td class="px-4 py-3">{{ index + 1 }}</td>
+                    <td class="px-4 py-3">{{ member.divisionName }}</td>
+                    <td class="px-4 py-3">{{ member.flightName }}</td>
+                    <td class="px-4 py-3">
+                        <Button 
+                            variant="link" 
+                            class="p-0 h-auto text-primary"
+                            @click="openInNewTab('/usta/team?teamId=' + member.teamId)"
+                        >
+                            <span v-if="member.teamAlias" class="text-muted-foreground">[{{ member.teamAlias }}]</span>
+                            {{ member.teamName }}
+                        </Button>
+                    </td>
+                    <td class="px-4 py-3">
+                        <Badge variant="outline">
+                            {{ member.winNo }} / {{ member.lostNo }}
+                        </Badge>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div v-else class="text-center py-8 text-muted-foreground">
+        No team memberships found!
+    </div>
 </template>
-

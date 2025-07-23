@@ -159,56 +159,56 @@ const updateTeamMembers = (updatedMembers) => {
 
 <template>
     <div v-if="team.id" class="w-full">
-        <Card class="mb-4">
-            <CardContent class="pt-6">
-                <USTATeamInfo :team="team" @change="teamRefresh" />
-            </CardContent>
-        </Card>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-7">
+                <Card class="mb-4">
+                    <CardContent class="pt-6">
+                        <USTATeamInfo :team="team" @change="teamRefresh" />
+                    </CardContent>
+                </Card>
 
-        <Card>
-            <div class="border-b px-4">
-                <div class="flex flex-wrap -mb-px">
-                    <Button 
-                        variant="ghost" 
-                        :class="cn(
-                            'relative rounded-none border-b-2 border-transparent px-4 py-2 text-sm font-medium',
-                            tab === 'players' ? 'border-primary text-primary' : 'text-muted-foreground hover:text-foreground'
-                        )"
-                        @click="showPlayers(team)"
-                    >
-                        Players
-                    </Button>
-                    <Button 
-                        variant="ghost" 
-                        :class="cn(
-                            'relative rounded-none border-b-2 border-transparent px-4 py-2 text-sm font-medium',
-                            tab === 'matches' ? 'border-primary text-primary' : 'text-muted-foreground hover:text-foreground'
-                        )"
-                        @click="showMatches(team)"
-                    >
-                        Matches
-                    </Button>
-                    <Button 
-                        variant="ghost" 
-                        :class="cn(
-                            'relative rounded-none border-b-2 border-transparent px-4 py-2 text-sm font-medium',
-                            tab === 'lines' ? 'border-primary text-primary' : 'text-muted-foreground hover:text-foreground'
-                        )"
-                        @click="showLines(team)"
-                    >
-                        Lines
-                    </Button>
-                </div>
-            </div>
+                <Card>
+                    <div class="border-b px-4">
+                        <div class="flex flex-wrap -mb-px">
+                            <Button 
+                                variant="ghost" 
+                                :class="cn(
+                                    'relative rounded-none border-b-2 border-transparent px-4 py-2 text-sm font-medium',
+                                    tab === 'players' ? 'border-primary text-primary' : 'text-muted-foreground hover:text-foreground'
+                                )"
+                                @click="showPlayers(team)"
+                            >
+                                Players
+                            </Button>
+                            <Button 
+                                variant="ghost" 
+                                :class="cn(
+                                    'relative rounded-none border-b-2 border-transparent px-4 py-2 text-sm font-medium',
+                                    tab === 'matches' ? 'border-primary text-primary' : 'text-muted-foreground hover:text-foreground'
+                                )"
+                                @click="showMatches(team)"
+                            >
+                                Matches
+                            </Button>
+                            <Button 
+                                variant="ghost" 
+                                :class="cn(
+                                    'relative rounded-none border-b-2 border-transparent px-4 py-2 text-sm font-medium',
+                                    tab === 'lines' ? 'border-primary text-primary' : 'text-muted-foreground hover:text-foreground'
+                                )"
+                                @click="showLines(team)"
+                            >
+                                Lines
+                            </Button>
+                        </div>
+                    </div>
 
-            <CardContent>
-                <div v-if="loading" class="flex justify-center py-4">
-                    <div class="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" aria-label="loading"></div>
-                </div>
-                
-                <div v-else-if="tab === 'players'" class="p-2">
-                    <div class="flex flex-col md:flex-row gap-6">
-                        <div class="w-full md:w-3/5">
+                    <CardContent>
+                        <div v-if="loading" class="flex justify-center py-4">
+                            <div class="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" aria-label="loading"></div>
+                        </div>
+                        
+                        <div v-else-if="tab === 'players'" class="p-2">
                             <USTATeamMemberList 
                                 v-if="team.players" 
                                 :members="team.players" 
@@ -219,30 +219,32 @@ const updateTeamMembers = (updatedMembers) => {
                             />
                         </div>
                         
-                        <div v-if="currentPlayer.id" class="w-full md:w-2/5">
-                            <Card>
-                                <CardContent class="pt-6">
-                                    <USTAPlayer :player="currentPlayer" @change="refreshPlayer"/>
-                                </CardContent>
-                            </Card>
+                        <div v-else-if="tab === 'matches'" class="p-2">
+                            <USTATeamMatches :team="team" v-model:matches="matches" @change="changeTeam" />
                         </div>
                         
-                        <div v-else class="w-full md:w-2/5 flex items-center justify-center">
-                            <div class="text-center p-8 text-muted-foreground border rounded-md bg-muted/10">
-                                <p>Select a player from the list to view details</p>
-                            </div>
+                        <div v-else-if="tab === 'lines'" class="p-2">
+                            <USTATeamLinesStat :team="team"/>
                         </div>
+                    </CardContent>
+                </Card>
+            </div>
+            
+            <div class="lg:col-span-5">
+                <div v-if="currentPlayer.id" class="h-full">
+                    <Card class="h-full">
+                        <CardContent class="pt-6">
+                            <USTAPlayer :player="currentPlayer" @change="refreshPlayer"/>
+                        </CardContent>
+                    </Card>
+                </div>
+                
+                <div v-else class="flex items-center justify-center h-full">
+                    <div class="text-center p-8 text-muted-foreground border rounded-md bg-muted/10 h-full">
+                        <p>Select a player from the list to view details</p>
                     </div>
                 </div>
-                
-                <div v-else-if="tab === 'matches'" class="p-2">
-                    <USTATeamMatches :team="team" v-model:matches="matches" @change="changeTeam" />
-                </div>
-                
-                <div v-else-if="tab === 'lines'" class="p-2">
-                    <USTATeamLinesStat :team="team"/>
-                </div>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     </div>
 </template>

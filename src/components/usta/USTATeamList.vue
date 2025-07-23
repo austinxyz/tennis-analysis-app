@@ -1,104 +1,122 @@
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import axios from "axios";
+import Button from "../ui/button.vue";
+import Badge from "../ui/badge.vue";
+
+interface Team {
+    id?: string | number;
+    name?: string;
+    alias?: string;
+    areaCode?: string;
+    flight?: string;
+    captainName?: string;
+    captain?: {
+        ustaNorcalId?: string;
+    };
+    teamRating?: number;
+    tennisRecordLink?: string;
+    [key: string]: any;
+}
+
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
 
-export default {
+const props = defineProps({
+    teams: { type: Array as () => Team[], required: true },
+    team: { type: Object as () => Team, required: false }
+});
 
-    props: {
-        teams: {type: Array},
-        team: {type: Object},
-    },
+const emit = defineEmits(['update:team']);
 
-    emits: ["update:team"],
-
-    methods: {
-        getBaseURL() {
-            if (process.env.NODE_ENV === 'production') {
-                return BASE_URL_PROD;
-            } else {
-                return BASE_URL;
-            }
-        },
-
-        async getTeam(team) {
-            var url = this.getBaseURL() + "/usta/teams/" + team.id;
-            const res = await axios.get(url);
-            this.$emit('update:team', res.data);
-        },
-    },
-
-    data() {
-        return {
-
-        }
-    },
-
-    components: {
+const getBaseURL = () => {
+    if (process.env.NODE_ENV === 'production') {
+        return BASE_URL_PROD;
+    } else {
+        return BASE_URL;
     }
+};
+
+const getTeam = async (team: Team) => {
+    if (!team.id) return;
+    
+    try {
+        const url = getBaseURL() + "/usta/teams/" + team.id;
+        const res = await axios.get(url);
+        emit('update:team', res.data);
+    } catch (error) {
+        console.error("Error fetching team:", error);
+    }
+};
+
+// Helper function to open links in a new tab
+const openInNewTab = (url: string) => {
+    window.open(url, '_blank');
 };
 </script>
 
 <template>
-
-<div class="max-w-2xl mx-auto">
-    <table v-if="teams.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
-        <thead>
-            <tr>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    #
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Name
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Flight
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Captain
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Rating
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    TR
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(team, index) in teams" class="even:bg-slate-50 odd:bg-slate-400">
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ index+1 }}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <a href="#" class="underline" @click="getTeam(team)">
-                    <span v-if="team.alias">[{{ team.alias }}] </span> {{team.name}}
-                    </a>
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ team.areaCode}}-{{team.flight}}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                <a v-if="team.captain" :href="'/usta/player?ustaId=' + team.captain.ustaNorcalId" class="whitespace-no-wrap underline">
-                    {{ team.captainName}} </a>
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ team.teamRating.toFixed(2)}}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <a :href="team.tennisRecordLink" class="underline" target="_blank">
-                    TR Link
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div v-else>
-         <label class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="usta">
-           No Teams are found!
-         </label>
+    <div v-if="teams.length > 0" class="relative overflow-x-auto rounded-md border max-w-3xl mx-auto">
+        <table class="w-full text-sm text-left">
+            <thead class="text-xs uppercase bg-muted">
+                <tr>
+                    <th scope="col" class="px-4 py-3">#</th>
+                    <th scope="col" class="px-4 py-3">Name</th>
+                    <th scope="col" class="px-4 py-3">Flight</th>
+                    <th scope="col" class="px-4 py-3">Captain</th>
+                    <th scope="col" class="px-4 py-3">Rating</th>
+                    <th scope="col" class="px-4 py-3">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(team, index) in teams" :key="index" class="border-b hover:bg-muted/50">
+                    <td class="px-4 py-3">{{ index + 1 }}</td>
+                    <td class="px-4 py-3">
+                        <Button 
+                            variant="link" 
+                            class="p-0 h-auto text-primary"
+                            @click="getTeam(team)"
+                        >
+                            <span v-if="team.alias" class="text-muted-foreground">[{{ team.alias }}]</span>
+                            {{ team.name }}
+                        </Button>
+                    </td>
+                    <td class="px-4 py-3">
+                        <Badge variant="outline">
+                            {{ team.areaCode }}-{{ team.flight }}
+                        </Badge>
+                    </td>
+                    <td class="px-4 py-3">
+                        <Button 
+                            v-if="team.captain" 
+                            variant="link" 
+                            class="p-0 h-auto text-primary"
+                            @click="openInNewTab('/usta/player?ustaId=' + team.captain?.ustaNorcalId)"
+                        >
+                            {{ team.captainName }}
+                        </Button>
+                    </td>
+                    <td class="px-4 py-3 font-medium">
+                        {{ team.teamRating?.toFixed(2) }}
+                    </td>
+                    <td class="px-4 py-3">
+                        <Button 
+                            variant="outline" 
+                            size="sm"
+                            @click="openInNewTab(team.tennisRecordLink || '')"
+                            class="flex items-center justify-center"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                            TR Link
+                        </Button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-</div>
-
+    <div v-else class="text-center py-8 text-muted-foreground">
+        No teams found!
+    </div>
 </template>
-
