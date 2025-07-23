@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from "axios";
 import Players from "./Players.vue";
@@ -41,14 +41,9 @@ const md = ref<Pair[]>([]);
 const wd = ref<Pair[]>([]);
 const loading = ref(false);
 
-onMounted(async () => {
+const fetchTeamData = async (teamId: string) => {
   loading.value = true;
   
-  let teamId = route.query.team as string;
-  if (!teamId) {
-    teamId = "ZJU-HUQ-CMU";
-  }
-
   try {
     const response = await axios.get(`http://localhost:8080/team?team=${teamId}`);
     const data = response.data;
@@ -66,6 +61,23 @@ onMounted(async () => {
   } finally {
     loading.value = false;
   }
+};
+
+// Watch for route query changes to update the team data
+watch(
+  () => route.query.team,
+  (newTeamId) => {
+    if (newTeamId) {
+      fetchTeamData(newTeamId as string);
+    } else {
+      fetchTeamData("ZJU"); // Default team
+    }
+  }
+);
+
+onMounted(() => {
+  const teamId = route.query.team as string || "ZJU";
+  fetchTeamData(teamId);
 });
 </script>
 

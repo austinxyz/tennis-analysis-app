@@ -2,7 +2,7 @@
 
 A web application for advanced analysis of **UTR** and **USTA** players and matches — helping you scout players, compare teams, and predict outcomes with data-driven insights.
 
-Built with the **Vue.js framework** and **Tailwind CSS** for high performance and scalability.
+Built with the **Vue.js framework**, **Tailwind CSS**, and **shadcn/ui** components for high performance, scalability, and a beautiful user interface.
 
 ---
 
@@ -99,15 +99,37 @@ Built with the **Vue.js framework** and **Tailwind CSS** for high performance an
 
 ## 🛠️ Tech Stack
 
-| Technology       | Description                              |
-| ---------------- | ---------------------------------------- |
-| **Vue.js**       | Frontend framework for building the app  |         |
-| **Tailwind CSS** | Utility-first CSS framework for styling  |
-| **Pinia**        | Vue state management                     |
-| **Axios**        | HTTP client for API requests             |
-| **Chart.js**     | Data visualization and charts            |
-| **Node.js**      | Runtime environment                      |
-| **npm**          | Package manager                          |
+| Technology       | Description                                |
+| ---------------- | ------------------------------------------ |
+| **Vue.js**       | Frontend framework for building the app    |
+| **Tailwind CSS** | Utility-first CSS framework for styling    |
+| **shadcn/ui**    | Beautifully designed UI components         |
+| **Pinia**        | Vue state management                       |
+| **Axios**        | HTTP client for API requests               |
+| **Chart.js**     | Data visualization and charts              |
+| **Node.js**      | Runtime environment                        |
+| **npm**          | Package manager                            |
+| **Lucide Icons** | Beautiful & consistent icon set            |
+
+---
+
+## 🎨 UI Components
+
+The application uses **shadcn/ui** components, which are beautifully designed components built with Tailwind CSS and Radix UI. These components provide:
+
+- **Consistent Design**: A cohesive look and feel across the entire application
+- **Accessibility**: Built with accessibility in mind
+- **Customization**: Easily customizable to match your brand
+- **Dark Mode Support**: Seamless light/dark mode switching
+- **Responsive Design**: Works on all screen sizes
+
+Key components used include:
+- Cards for content organization
+- Buttons with various styles and states
+- Form elements like selects and inputs
+- Navigation components
+- Tables for data display
+- Badges for status indicators
 
 ---
 
