@@ -368,71 +368,31 @@ const toggleSelectAll = () => {
                             <Badge v-if="member.qualifiedPo" variant="secondary" class="ml-1">Q</Badge>
                         </td>
                         <td class="px-4 py-3">{{ member.dynamicRating }}</td>
-                        <td class="px-4 py-3">
+                        <td class="px-4 py-3 whitespace-nowrap">
                             <div class="flex items-center">
-                                <img v-if="member.utrrequriedRefresh" src="/Expired.svg" alt="Expired" class="h-5 w-5 mr-1"/>
-                                <div class="flex items-center">
-                                    <!-- Doubles UTR -->
-                                    <span 
-                                        :class="[
-                                            member.dutrstatus === 'Rated' ? 'font-semibold' : 'font-normal text-muted-foreground',
-                                            (showUpdateIndicator && updatedMemberId === member.playerId && 
-                                            (updatedUTRType === 'doubles' || updatedUTRType === 'both')) || 
-                                            (showUpdateIndicator && updatedMemberIds.includes(member.playerId) && 
-                                            (updatedTypes[member.playerId] === 'doubles' || updatedTypes[member.playerId] === 'both')) ? 
-                                            'bg-green-100 dark:bg-green-900 px-1 rounded animate-pulse' : ''
-                                        ]"
-                                    >
-                                        {{ member.dutr }} (D)
-                                    </span>
-                                    <span v-if="(showUpdateIndicator && updatedMemberId === member.playerId && 
-                                        (updatedUTRType === 'doubles' || updatedUTRType === 'both')) ||
-                                        (showUpdateIndicator && updatedMemberIds.includes(member.playerId) && 
-                                        (updatedTypes[member.playerId] === 'doubles' || updatedTypes[member.playerId] === 'both'))" 
-                                        class="ml-1 text-green-600 dark:text-green-400 text-xs"
-                                    >
-                                        Updated!
-                                    </span>
-                                    
-                                    <span class="mx-1">/</span>
-                                    
-                                    <!-- Singles UTR -->
-                                    <span 
-                                        :class="[
-                                            member.sutrstatus === 'Rated' ? 'font-semibold' : 'font-normal text-muted-foreground',
-                                            (showUpdateIndicator && updatedMemberId === member.playerId && 
-                                            (updatedUTRType === 'singles' || updatedUTRType === 'both')) || 
-                                            (showUpdateIndicator && updatedMemberIds.includes(member.playerId) && 
-                                            (updatedTypes[member.playerId] === 'singles' || updatedTypes[member.playerId] === 'both')) ? 
-                                            'bg-green-100 dark:bg-green-900 px-1 rounded animate-pulse' : ''
-                                        ]"
-                                    >
-                                        {{ member.sutr }} (S)
-                                    </span>
-                                    <span v-if="(showUpdateIndicator && updatedMemberId === member.playerId && 
-                                        (updatedUTRType === 'singles' || updatedUTRType === 'both')) ||
-                                        (showUpdateIndicator && updatedMemberIds.includes(member.playerId) && 
-                                        (updatedTypes[member.playerId] === 'singles' || updatedTypes[member.playerId] === 'both'))" 
-                                        class="ml-1 text-green-600 dark:text-green-400 text-xs"
-                                    >
-                                        Updated!
-                                    </span>
-                                </div>
+                                <img v-if="member.utrrequriedRefresh" src="/Expired.svg" alt="Expired" class="h-4 w-4 mr-1"/>
+                                <span :class="member.dutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                                    {{ member.dutr }}D
+                                </span>
+                                <span class="mx-1">/</span>
+                                <span :class="member.sutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                                    {{ member.sutr }}S
+                                </span>
                                 <Button 
                                     variant="ghost" 
                                     size="icon" 
-                                    class="ml-2 h-8 w-8" 
+                                    class="ml-1 h-6 w-6 p-0" 
                                     @click.prevent="openUTREdit(member)"
                                     title="Edit UTR"
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                     </svg>
                                 </Button>
                             </div>
                         </td>
-                        <td class="px-4 py-3">
-                            {{ ((member.successRate || 0) * 100).toFixed(2) }}% (Latest) / {{ ((member.wholeSuccessRate || 0) * 100).toFixed(2) }}%
+                        <td class="px-4 py-3 whitespace-nowrap">
+                            {{ ((member.successRate || 0) * 100).toFixed(0) }}% / {{ ((member.wholeSuccessRate || 0) * 100).toFixed(0) }}%
                         </td>
                     </tr>
                 </tbody>

@@ -208,7 +208,7 @@ const updateTeamMembers = (updatedMembers) => {
                 
                 <div v-else-if="tab === 'players'" class="p-2">
                     <div class="flex flex-col md:flex-row gap-6">
-                        <div class="w-full md:w-1/2">
+                        <div class="w-full md:w-3/5">
                             <USTATeamMemberList 
                                 v-if="team.players" 
                                 :members="team.players" 
@@ -219,7 +219,7 @@ const updateTeamMembers = (updatedMembers) => {
                             />
                         </div>
                         
-                        <div v-if="currentPlayer.id" class="w-full md:w-1/2">
+                        <div v-if="currentPlayer.id" class="w-full md:w-2/5">
                             <Card>
                                 <CardContent class="pt-6">
                                     <USTAPlayer :player="currentPlayer" @change="refreshPlayer"/>
@@ -227,7 +227,7 @@ const updateTeamMembers = (updatedMembers) => {
                             </Card>
                         </div>
                         
-                        <div v-else class="w-full md:w-1/2 flex items-center justify-center">
+                        <div v-else class="w-full md:w-2/5 flex items-center justify-center">
                             <div class="text-center p-8 text-muted-foreground border rounded-md bg-muted/10">
                                 <p>Select a player from the list to view details</p>
                             </div>
