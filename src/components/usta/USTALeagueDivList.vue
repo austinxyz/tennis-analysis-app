@@ -1,196 +1,233 @@
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import axios from "axios";
+import Button from "../ui/button.vue";
+import Badge from "../ui/badge.vue";
+
+interface Division {
+    id?: number;
+    name: string;
+    link?: string;
+    ustaleagueId?: string;
+    inDB?: boolean;
+    [key: string]: any;
+}
+
+interface Flight {
+    id?: number;
+    area?: string;
+    flightNo?: string;
+    link?: string;
+    [key: string]: any;
+}
+
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
 
-export default {
+const props = defineProps({
+    divisions: { type: Array as () => Division[], required: true },
+    teams: { type: Array, required: true },
+    leagueName: { type: String, required: true },
+    division: { type: Object, required: true }
+});
 
-    props: {
-        divisions: {type: Array},
-        teams: {type: Array},
-        leagueName: {type: String},
-        division: {type: Object}
-    },
+const emit = defineEmits(['update:teams', 'refresh', 'update:division']);
 
-    emits: ["update:teams", "refresh", "update:division"],
+const flights = ref<Flight[]>([]);
+const loading = ref(false);
 
-    methods: {
-        getBaseURL() {
-            if (process.env.NODE_ENV === 'production') {
-                return BASE_URL_PROD;
-            } else {
-                return BASE_URL;
+const getBaseURL = () => {
+    if (process.env.NODE_ENV === 'production') {
+        return BASE_URL_PROD;
+    } else {
+        return BASE_URL;
+    }
+};
+
+const getFlights = async (div: Division) => {
+    if (!div.id) return;
+    
+    loading.value = true;
+    try {
+        var url = getBaseURL() + "/usta/divisions/" + div.id + "/flights";
+        const res = await axios.get(url);
+        flights.value = res.data;
+        emit('update:division', div);
+    } catch (error) {
+        console.error("Error fetching flights:", error);
+    } finally {
+        loading.value = false;
+    }
+};
+
+const getDivision = async (div: Division) => {
+    if (!div.ustaleagueId) return;
+    
+    loading.value = true;
+    try {
+        var url = getBaseURL() + "/usta/site/divisions/" + div.ustaleagueId + "/teams";
+        const res = await axios.get(url);
+        emit('update:teams', res.data);
+        emit('update:division', div);
+        // Reset flights when a new division is selected
+        flights.value = [];
+    } catch (error) {
+        console.error("Error fetching division teams:", error);
+    } finally {
+        loading.value = false;
+    }
+};
+
+const importTeams = async (flight: Flight) => {
+    if (!flight.link || !flight.id) return;
+    
+    loading.value = true;
+    try {
+        var url = getBaseURL() + "/usta/site/flight/teams";
+        const res = await axios.post(url,
+            {
+                link: flight.link,
+                id: flight.id,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
             }
-        },
+        );
+        emit('update:teams', res.data);
+    } catch (error) {
+        console.error("Error importing teams:", error);
+    } finally {
+        loading.value = false;
+    }
+};
 
-        async getFlights(div) {
-            var url = this.getBaseURL() + "/usta/divisions/" + div.id + "/flights";
-            const res = await axios.get(url);
-            this.flights = res.data;
-            this.$emit('update:division', div);
-        },
-
-        async getDivision(div) {
-            var url = this.getBaseURL() + "/usta/site/divisions/" + div.ustaleagueId + "/teams";
-            const res = await axios.get(url);
-            this.$emit('update:teams', res.data);
-            this.$emit('update:division', div);
-            // Reset flights when a new division is selected
-            this.flights = [];
-        },
-
-        async importTeams(flight) {
-            this.loading = true;
-            var url = this.getBaseURL() + "/usta/site/flight/teams";
-            const res = await axios.post(url,
-                {
-                   link: flight.link,
-                   id: flight.id,
+const importDivision = async (div: Division) => {
+    if (!div.link) return;
+    
+    loading.value = true;
+    try {
+        var url = getBaseURL() + "/usta/site/divisions/";
+        const res = await axios.post(url,
+            {
+                link: div.link,
+                leagueName: props.leagueName,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
                 },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            this.$emit('update:teams', res.data);
-            this.loading = false;
-        },
-
-        async importDivision(div) {
-            this.loading = true;
-            var url = this.getBaseURL() + "/usta/site/divisions/";
-            const res = await axios.post(url,
-                {
-                   link: div.link,
-                   leagueName: this.leagueName,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            this.$emit('refresh', res.data);
-            this.loading = false;
-        },
-    },
-
-    data() {
-        return {
-            flights: [],
-            loading: false,
-        }
-    },
-
-    components: {
+            }
+        );
+        emit('refresh', res.data);
+    } catch (error) {
+        console.error("Error importing division:", error);
+    } finally {
+        loading.value = false;
     }
 };
 </script>
 
 <template>
-<div class="max-w-2xl mx-auto">
-    <table v-if="divisions.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
-        <thead>
-            <tr>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    #
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Name
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    USTA Link
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Status
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(division, index) in divisions" class="even:bg-slate-50 odd:bg-slate-400">
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ index+1 }}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <a href="#" class="underline" @click="getDivision(division)">
-                     {{division.name}}
-                    </a>
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <a :href="division.link" target="_blank" class="underline"> USTA Link</a>
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <button 
-                        v-if="!division.inDB" 
-                        @click="importDivision(division)" 
-                        class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded text-sm transition-colors duration-200"
-                    >
-                        Import
-                    </button>
-                    <button 
-                        v-else 
-                        @click="getFlights(division)" 
-                        class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm transition-colors duration-200"
-                    >
-                        View Flights
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div v-else class="bg-gray-50 p-4 rounded-md border border-gray-200 text-center">
-        <p class="text-gray-600">No divisions found for this league.</p>
-    </div>
-    <h3 v-if="division && division.name" class="text-lg font-semibold text-gray-800 mb-3 px-2">
-        {{division.name}} - Flights
-    </h3>
-    <table v-if="division && division.name && flights.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
-        <thead>
-            <tr>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    #
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Name
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    USTA Link
-                </th>
-                <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Import Teams
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(flight, index) in flights" class="even:bg-slate-50 odd:bg-slate-400">
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    {{ index+1 }}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                     {{flight.area}} - {{flight.flightNo}}
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <a :href="flight.link" target="_blank" class="underline"> USTA Link</a>
-                </td>
-                <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                    <button 
-                        v-if="flight.link" 
-                        @click="importTeams(flight)" 
-                        class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded text-sm transition-colors duration-200"
-                    >
-                        Import Teams
-                    </button>
-                    <span v-else> N/A </span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div v-if="loading" class="px-5 py-5">
-        <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
-          <span class="sr-only">Loading...</span>
+    <div class="w-full">
+        <div v-if="loading" class="flex justify-center py-4">
+            <div class="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" aria-label="loading"></div>
+        </div>
+        
+        <div v-else-if="divisions.length > 0" class="relative overflow-x-auto rounded-md border mb-6">
+            <table class="w-full text-sm text-left">
+                <thead class="text-xs uppercase bg-muted">
+                    <tr>
+                        <th scope="col" class="px-4 py-3">#</th>
+                        <th scope="col" class="px-4 py-3">Name</th>
+                        <th scope="col" class="px-4 py-3">USTA Link</th>
+                        <th scope="col" class="px-4 py-3">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(division, index) in divisions" :key="index" class="border-b hover:bg-muted/50">
+                        <td class="px-4 py-3">{{ index+1 }}</td>
+                        <td class="px-4 py-3">
+                            <button @click="getDivision(division)" class="text-primary hover:underline">
+                                {{ division.name }}
+                            </button>
+                        </td>
+                        <td class="px-4 py-3">
+                            <a :href="division.link" target="_blank" class="text-primary hover:underline">
+                                USTA Link
+                            </a>
+                        </td>
+                        <td class="px-4 py-3">
+                            <Button 
+                                v-if="!division.inDB" 
+                                variant="default" 
+                                size="sm"
+                                @click="importDivision(division)"
+                            >
+                                Import
+                            </Button>
+                            <Button 
+                                v-else 
+                                variant="outline" 
+                                size="sm"
+                                @click="getFlights(division)"
+                            >
+                                View Flights
+                            </Button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div v-else class="text-center py-8 text-muted-foreground border rounded-md bg-muted/10 mb-6">
+            No divisions found for this league.
+        </div>
+        
+        <div v-if="division && division.name">
+            <h3 class="text-lg font-semibold mb-4">{{ division.name }} - Flights</h3>
+            
+            <div v-if="flights.length > 0" class="relative overflow-x-auto rounded-md border">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-xs uppercase bg-muted">
+                        <tr>
+                            <th scope="col" class="px-4 py-3">#</th>
+                            <th scope="col" class="px-4 py-3">Name</th>
+                            <th scope="col" class="px-4 py-3">USTA Link</th>
+                            <th scope="col" class="px-4 py-3">Import Teams</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(flight, index) in flights" :key="index" class="border-b hover:bg-muted/50">
+                            <td class="px-4 py-3">{{ index+1 }}</td>
+                            <td class="px-4 py-3">
+                                {{ flight.area }} - {{ flight.flightNo }}
+                            </td>
+                            <td class="px-4 py-3">
+                                <a :href="flight.link" target="_blank" class="text-primary hover:underline">
+                                    USTA Link
+                                </a>
+                            </td>
+                            <td class="px-4 py-3">
+                                <Button 
+                                    v-if="flight.link" 
+                                    variant="default" 
+                                    size="sm"
+                                    @click="importTeams(flight)"
+                                >
+                                    Import Teams
+                                </Button>
+                                <span v-else class="text-muted-foreground">N/A</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div v-else-if="division.name" class="text-center py-8 text-muted-foreground border rounded-md bg-muted/10">
+                No flights found for this division.
+            </div>
         </div>
     </div>
-</div>
-
 </template>
