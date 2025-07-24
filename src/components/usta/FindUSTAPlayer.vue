@@ -1,255 +1,283 @@
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import axios from "axios";
 import USTAPlayer from "./USTAPlayer.vue";
 import USTAPlayerList from "./USTAPlayerList.vue";
+import Button from '../ui/button.vue';
+import Card from '../ui/card.vue';
+import CardHeader from '../ui/card-header.vue';
+import CardTitle from '../ui/card-title.vue';
+import CardContent from '../ui/card-content.vue';
 
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
 
-export default {
+const route = useRoute();
 
-    async mounted() {
-        let ustaId = this.$route.query.ustaId;
+const players = ref([]);
+const currentPlayer = ref({});
+const loading = ref(false);
+const ustaRating = ref('');
+const playertype = ref('double');
+const utr = ref('');
+const gender = ref('M');
+const start = ref(0);
+const pagesize = ref('10');
+const agerange = ref('18+');
+const ratedonly = ref(false);
+const utrlimit = ref('');
+const query = ref('');
+const asc = ref('false');
+const bayAreaOnly = ref('false');
 
-        if (ustaId == null) {
-            return;
-        }
-
-        var url = this.getBaseURL() + "/players/usta/" + ustaId;
-        try {
-            const res = await axios.get(url);
-            this.currentPlayer = res.data;
-            this.players.push(this.currentPlayer);
-            this.query=this.currentPlayer.name;
-        } catch (error) {
-        };
-
-    },
-
-    methods: {
-
-        getBaseURL() {
-            if (process.env.NODE_ENV === 'production') {
-                return BASE_URL_PROD;
-            } else {
-                return BASE_URL;
-            }
-        },
-
-        async searchPlayer() {
-            var url = this.getBaseURL() + "/players/search?name=" + this.query;
-            try {
-                const response = await axios.get(url);
-                this.players = response.data;
-                this.team = {};
-                this.teams = [];
-                this.currentPlayer = this.players[0];
-            } catch(error) {
-                this.players = [];
-                this.team = {};
-                this.teams = [];
-                this.currentPlayer = {};
-            };
-        },
-
-        async findPlayers() {
-            var url = this.getBaseURL() + "/players/searchUTR?" +
-                "gender=" + this.gender +
-                "&USTARating=" + this.ustaRating +
-                "&type=" + this.playertype +
-                "&utr=" + this.utr +
-                "&start=" + this.start +
-                "&ageRange=" + this.agerange +
-                "&ratedOnly=" + this.ratedonly +
-                "&asc=" + this.asc +
-                "&bayArea=" + this.bayAreaOnly +
-                "&size=" + this.pagesize;
-            if (this.utrlimit !=null && this.utrlimit != '') {
-                url = url + "&utrLimit=" + this.utrlimit;
-            }
-            try {
-                const response = await axios.get(url);
-                this.players = response.data;
-                this.team = {};
-                this.teams = [];
-                this.currentPlayer = {};
-            } catch(error) {
-                this.players = [];
-                this.team = {};
-                this.teams = [];
-                this.currentPlayer = {};
-            };
-        },
-
-        async refreshPlayer(player) {
-
-            this.currentPlayer = player;
-        },
-
-        async incPage() {
-            this.start = this.start+1;
-            this.findPlayers();
-        },
-
-        async decPage() {
-            this.start = this.start-1;
-            this.findPlayers();
-        },
-    },
-
-    data() {
-        return {
-            players: [],
-            currentPlayer: {},
-            loading: false,
-            ustaRating:'',
-            playertype:'double',
-            utr: '',
-            gender: 'M',
-            start:0,
-            pagesize:'10',
-            agerange:'18+',
-            ratedonly: false,
-            utrlimit:'',
-            query: '',
-            asc: 'false',
-            bayAreaOnly: 'false',
-        }
-    },
-
-    components: {
-        USTAPlayerList,
-        USTAPlayer,
+function getBaseURL() {
+    if (process.env.NODE_ENV === 'production') {
+        return BASE_URL_PROD;
+    } else {
+        return BASE_URL;
     }
 }
+
+async function searchPlayer() {
+    var url = getBaseURL() + "/players/search?name=" + query.value;
+    try {
+        const response = await axios.get(url);
+        players.value = response.data;
+        currentPlayer.value = players.value[0] || {};
+    } catch(error) {
+        players.value = [];
+        currentPlayer.value = {};
+    }
+}
+
+async function findPlayers() {
+    var url = getBaseURL() + "/players/searchUTR?" +
+        "gender=" + gender.value +
+        "&USTARating=" + ustaRating.value +
+        "&type=" + playertype.value +
+        "&utr=" + utr.value +
+        "&start=" + start.value +
+        "&ageRange=" + agerange.value +
+        "&ratedOnly=" + ratedonly.value +
+        "&asc=" + asc.value +
+        "&bayArea=" + bayAreaOnly.value +
+        "&size=" + pagesize.value;
+    if (utrlimit.value != null && utrlimit.value != '') {
+        url = url + "&utrLimit=" + utrlimit.value;
+    }
+    try {
+        const response = await axios.get(url);
+        players.value = response.data;
+        currentPlayer.value = {};
+    } catch(error) {
+        players.value = [];
+        currentPlayer.value = {};
+    }
+}
+
+function refreshPlayer(player) {
+    currentPlayer.value = player;
+}
+
+function incPage() {
+    start.value = start.value + 1;
+    findPlayers();
+}
+
+function decPage() {
+    start.value = start.value - 1;
+    findPlayers();
+}
+
+onMounted(async () => {
+    let ustaId = route.query.ustaId;
+
+    if (ustaId == null) {
+        return;
+    }
+
+    var url = getBaseURL() + "/players/usta/" + ustaId;
+    try {
+        const res = await axios.get(url);
+        currentPlayer.value = res.data;
+        players.value.push(currentPlayer.value);
+        query.value = currentPlayer.value.name;
+    } catch (error) {
+        // Handle error
+    }
+});
 </script>
 
 <template>
-    <div class="flex flow-row">
-        <div class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-            <label class="block text-gray-700 font-bold mb-2 px-2 ">
-              Quick search
-            </label>
-            <div class="py-2 border border-gray-300">
-                <div class="mb-2 flex flow-row">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="usta">
-                        Name/UTR:
-                    </label>
-                    <input v-model="query" class="border-b-2 border-gray-300 mb-2 text-sm" >
-                </div>
+  <div class="flex flex-row gap-4">
+    <div class="w-full max-w-2xl">
+      <Card class="mb-4">
+        <CardHeader>
+          <CardTitle>Quick search</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div class="grid gap-4">
+            <div class="flex items-center gap-2">
+              <label class="text-sm font-medium" for="quick-search">Name/UTR:</label>
+              <input 
+                id="quick-search"
+                v-model="query" 
+                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              />
             </div>
-            <button
-                    class="border border-indigo-500 bg-indigo-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-indigo-600 focus:outline-none focus:shadow-outline"
-                    @click="searchPlayer"
-            >
-             Search
-            </button>
-            <hr />
+            <Button @click="searchPlayer">Search</Button>
+          </div>
+        </CardContent>
+      </Card>
 
-            <label class="block text-gray-700 font-bold mb-2 px-2 ">
-              Advanced search
-            </label>
-            <hr />
-            <div class="py-2 border border-gray-300">
-                <div class="mb-2 flex flow-row">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="usta">
-                    USTA Rating:
-                  </label>
-                  <input class="border-b-2 border-gray-300 mb-2 text-sm"
-                    type="text" v-model="ustaRating" />
-                </div>
-                <div class="mb-2 flex flow-row">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">
-                    Match Type:
-                  </label>
-                  <input type="radio" v-model="playertype" value="single" /> <span class="px-2 text-sm">Single</span>
-                  <input type="radio" v-model="playertype" value="double" /> <span class="px-2 text-sm">Double</span>
-                </div>
-                <div class="mb-2 flex flow-row">
-                  <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="utr">
-                    UTR : &gt;=
-                  </span>
-                  <input class="border-b-2 border-gray-300 mb-2 text-sm"
-                    type="text" v-model="utr" />
-                  <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="utr">
-                    &lt;=
-                  </span>
-                  <input class="border-b-2 border-gray-300 mb-2 text-sm"
-                    type="text" v-model="utrlimit" />
-                </div>
-                <div class="mb-2 flex flow-row">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">
-                    Gender:
-                  </label>
-                  <input type="radio" v-model="gender" value="M" /> <span class="px-2 text-sm"> Male</span>
-                  <input type="radio" v-model="gender" value="F" /> <span class="px-2 text-sm">Female</span>
-                </div>
-                <div class="mb-2 flex flow-row">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">
-                    RatedOnly
-                  </label>
-                  <input type="radio" v-model="ratedonly" value="true" /> <span class="px-2 text-sm">Yes</span>
-                  <input type="radio" v-model="ratedonly" value="false" /> <span class="px-2 text-sm">No</span>
-                </div>
-                <div class="mb-2 flex flow-row">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">
-                    Age:
-                  </label>
-                  <input type="radio" v-model="agerange" value="18+" /> <span class="px-2 text-sm">18+</span>
-                  <input type="radio" v-model="agerange" value="40+" /> <span class="px-2 text-sm">40+</span>
-                </div>
-                <div class="mb-2 flex flow-row">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">
-                    Bay Area Only
-                  </label>
-                  <input type="radio" v-model="bayAreaOnly" value="true" /> <span class="px-2 text-sm">Yes</span>
-                  <input type="radio" v-model="bayAreaOnly" value="false" /> <span class="px-2 text-sm">No</span>
-                </div>
-                <div class="mb-2 flex flow-row">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 px-2" for="type">
-                    Order:
-                  </label>
-                  <input type="radio" v-model="asc" value="false" /> <span class="px-2 text-sm">DESC</span>
-                  <input type="radio" v-model="asc" value="true" /> <span class="px-2 text-sm">ASC</span>
-                </div>
-                <div class="mb-2 flex flow-row">
-                    <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="from">
-                      Page:
-                    </span>
-                    <a v-if="start>0" href="#" class="underline text-sm font-bold mb-2 px-2" @click="decPage">
-                       Prev
-                    </a>
-                    <input class="border-b-2 border-gray-300 mb-2 text-sm w-10"
-                        type="text" v-model="start"/>
-                    <a href="#" class="underline text-sm font-bold mb-2 px-2" @click="incPage">
-                       Next
-                    </a>
-                  <span class="block text-gray-700 text-sm font-bold mb-2 px-2 " for="utr">
-                    Total:
-                  </span>
-                  <input class="border-b-2 border-gray-300 mb-2 text-sm"
-                    type="text" v-model="pagesize"/>
-                </div>
+      <Card class="mb-4">
+        <CardHeader>
+          <CardTitle>Advanced search</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div class="grid gap-4">
+            <div class="grid grid-cols-3 items-center gap-2">
+              <label class="text-sm font-medium">USTA Rating:</label>
+              <input 
+                v-model="ustaRating" 
+                class="col-span-2 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              />
             </div>
-            <button
-                    class="border border-indigo-500 bg-indigo-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-indigo-600 focus:outline-none focus:shadow-outline"
-                    @click="findPlayers"
-            >
-             Search
-            </button>
-            <USTAPlayerList :players="players" v-model:currentPlayer="currentPlayer" showMode="parent" />
-        </div>
-        <div v-if="loading" class="px-5 py-5">
-            <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
-                <span class="sr-only">Loading...</span>
+
+            <div class="grid grid-cols-3 items-center gap-2">
+              <label class="text-sm font-medium">Match Type:</label>
+              <div class="col-span-2 flex items-center gap-4">
+                <div class="flex items-center gap-1.5">
+                  <input type="radio" id="single" v-model="playertype" value="single" class="h-4 w-4" />
+                  <label for="single" class="text-sm">Single</label>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <input type="radio" id="double" v-model="playertype" value="double" class="h-4 w-4" />
+                  <label for="double" class="text-sm">Double</label>
+                </div>
+              </div>
             </div>
-        </div>
 
-        <div v-if="currentPlayer.id">
-            <USTAPlayer :player="currentPlayer" @change="refreshPlayer"/>
-        </div>
+            <div class="grid grid-cols-3 items-center gap-2">
+              <label class="text-sm font-medium">UTR Range:</label>
+              <div class="col-span-2 flex items-center gap-2">
+                <span class="text-sm">≥</span>
+                <input 
+                  v-model="utr" 
+                  class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                />
+                <span class="text-sm">≤</span>
+                <input 
+                  v-model="utrlimit" 
+                  class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                />
+              </div>
+            </div>
 
+            <div class="grid grid-cols-3 items-center gap-2">
+              <label class="text-sm font-medium">Gender:</label>
+              <div class="col-span-2 flex items-center gap-4">
+                <div class="flex items-center gap-1.5">
+                  <input type="radio" id="male" v-model="gender" value="M" class="h-4 w-4" />
+                  <label for="male" class="text-sm">Male</label>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <input type="radio" id="female" v-model="gender" value="F" class="h-4 w-4" />
+                  <label for="female" class="text-sm">Female</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 items-center gap-2">
+              <label class="text-sm font-medium">Rated Only:</label>
+              <div class="col-span-2 flex items-center gap-4">
+                <div class="flex items-center gap-1.5">
+                  <input type="radio" id="rated-yes" v-model="ratedonly" value="true" class="h-4 w-4" />
+                  <label for="rated-yes" class="text-sm">Yes</label>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <input type="radio" id="rated-no" v-model="ratedonly" value="false" class="h-4 w-4" />
+                  <label for="rated-no" class="text-sm">No</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 items-center gap-2">
+              <label class="text-sm font-medium">Age:</label>
+              <div class="col-span-2 flex items-center gap-4">
+                <div class="flex items-center gap-1.5">
+                  <input type="radio" id="age-18" v-model="agerange" value="18+" class="h-4 w-4" />
+                  <label for="age-18" class="text-sm">18+</label>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <input type="radio" id="age-40" v-model="agerange" value="40+" class="h-4 w-4" />
+                  <label for="age-40" class="text-sm">40+</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 items-center gap-2">
+              <label class="text-sm font-medium">Bay Area Only:</label>
+              <div class="col-span-2 flex items-center gap-4">
+                <div class="flex items-center gap-1.5">
+                  <input type="radio" id="bay-yes" v-model="bayAreaOnly" value="true" class="h-4 w-4" />
+                  <label for="bay-yes" class="text-sm">Yes</label>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <input type="radio" id="bay-no" v-model="bayAreaOnly" value="false" class="h-4 w-4" />
+                  <label for="bay-no" class="text-sm">No</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 items-center gap-2">
+              <label class="text-sm font-medium">Order:</label>
+              <div class="col-span-2 flex items-center gap-4">
+                <div class="flex items-center gap-1.5">
+                  <input type="radio" id="desc" v-model="asc" value="false" class="h-4 w-4" />
+                  <label for="desc" class="text-sm">DESC</label>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <input type="radio" id="asc" v-model="asc" value="true" class="h-4 w-4" />
+                  <label for="asc" class="text-sm">ASC</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 items-center gap-2">
+              <label class="text-sm font-medium">Page:</label>
+              <div class="col-span-2 flex items-center gap-2">
+                <Button v-if="start > 0" variant="outline" size="sm" @click="decPage">Prev</Button>
+                <input 
+                  v-model="start" 
+                  class="flex h-10 w-16 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                />
+                <Button variant="outline" size="sm" @click="incPage">Next</Button>
+                <span class="text-sm font-medium">Total:</span>
+                <input 
+                  v-model="pagesize" 
+                  class="flex h-10 w-16 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                />
+              </div>
+            </div>
+
+            <Button @click="findPlayers">Search</Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <USTAPlayerList :players="players" v-model:currentPlayer="currentPlayer" showMode="parent" />
     </div>
 
-</template>
+    <div v-if="loading" class="flex items-center justify-center p-4">
+      <div class="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full" role="status" aria-label="loading">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
 
+    <div v-if="currentPlayer.id" class="flex-1">
+      <USTAPlayer :player="currentPlayer" @change="refreshPlayer" />
+    </div>
+  </div>
+</template>

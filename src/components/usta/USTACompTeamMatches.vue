@@ -1,51 +1,54 @@
-<script>
-import axios from "axios";
+<script setup>
 import MatchScore from "./MatchScore.vue";
-const BASE_URL = 'http://localhost:8080';
-const BASE_URL_PROD = 'http://localhost:8080';
+import Card from '../ui/card.vue';
+import CardHeader from '../ui/card-header.vue';
+import CardTitle from '../ui/card-title.vue';
+import CardContent from '../ui/card-content.vue';
+import { Calendar, History } from 'lucide-vue-next';
 
-
-export default {
-
-    props: {
-        result: { type: Object},
-    },
-
-    mounted() {
-    },
-
-    data() {
-        return {
-        }
-    },
-
-    components: {
-        MatchScore,
-    }
-};
+const props = defineProps({
+  result: { type: Object },
+});
 </script>
 
 <template>
-    <div v-if="result.team1" class="min-w-full  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-        <label class="block text-gray-700 font-bold mb-2 px-2 ">
-            Past Matches
-        </label>
-        <div v-for="match in result.pastScores" class="w-full border-collapse border-spacing-0 border border-slate-100">
-            <MatchScore :match="match" />
-        </div>
-        <hr/>
-        <label class="block text-gray-700 font-bold mb-2 px-2 ">
-            Matches with same team
-        </label>
-
-        <div v-for="(matches, key) in result.matchesWithSameTeam" class="w-full border-collapse border-spacing-0 border border-slate-100">
-            <label class="block text-gray-700 font-bold mb-2 px-2 ">
-                Team: {{key}}
-            </label>
-            <div v-for="match in matches">
+  <div v-if="result.team1" class="w-full">
+    <Card>
+      <CardHeader>
+        <CardTitle class="flex items-center">
+          <Calendar class="mr-2 h-5 w-5" />
+          Match History
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div class="space-y-8">
+          <div>
+            <h3 class="text-lg font-medium flex items-center mb-4">
+              <History class="mr-2 h-4 w-4" />
+              Past Matches
+            </h3>
+            <div class="space-y-4">
+              <div v-for="match in result.pastScores" :key="match.id" class="border border-border rounded-md overflow-hidden">
                 <MatchScore :match="match" />
+              </div>
             </div>
+          </div>
+          
+          <div class="border-t pt-6">
+            <h3 class="text-lg font-medium mb-4">Matches with same team</h3>
+            <div class="space-y-6">
+              <div v-for="(matches, key) in result.matchesWithSameTeam" :key="key" class="border border-border rounded-md p-6">
+                <h4 class="font-medium mb-2">Team: {{ key }}</h4>
+                <div class="space-y-4">
+                  <div v-for="match in matches" :key="match.id" class="border border-border rounded-md overflow-hidden">
+                    <MatchScore :match="match" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
+      </CardContent>
+    </Card>
+  </div>
 </template>
-

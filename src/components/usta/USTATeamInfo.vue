@@ -9,7 +9,6 @@ import axios from "axios";
 import Card from "../ui/card.vue";
 import CardContent from "../ui/card-content.vue";
 import Button from "../ui/button.vue";
-import Badge from "../ui/badge.vue";
 
 interface Team {
     id?: string | number;
@@ -211,9 +210,9 @@ const refreshTeamDRValue = async (team: Team) => {
                             
                             <div class="flex items-center">
                                 <span class="text-sm font-medium text-muted-foreground">Rating:</span>
-                                <Badge variant="outline" class="ml-1">
+                                <span class="ml-1 px-2 py-0.5 text-sm border border-gray-300 rounded-md">
                                     {{ team.teamRating?.toFixed(2) }}/{{ team.teamStrongestRating?.toFixed(2) }}
-                                </Badge>
+                                </span>
                             </div>
                         </div>
                         

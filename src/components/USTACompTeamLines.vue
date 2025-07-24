@@ -1,35 +1,33 @@
-<script>
-import axios from "axios";
-import USTACompTeamLinesStat from "./USTACompTeamLinesStat.vue";
-const BASE_URL = 'http://localhost:8080';
-const BASE_URL_PROD = 'http://localhost:8080';
+<script setup>
+import USTATeamLinesStat from "./usta/USTATeamLinesStat.vue";
+import Card from './ui/card.vue';
+import CardHeader from './ui/card-header.vue';
+import CardTitle from './ui/card-title.vue';
+import CardContent from './ui/card-content.vue';
+import { BarChart2 } from 'lucide-vue-next';
 
-
-export default {
-
-    props: {
-        team1: { type: Object},
-        team2: { type: Object},
-    },
-
-    mounted() {
-    },
-
-    data() {
-        return {
-        }
-    },
-
-    components: {
-        USTATeamBrief,
-    }
-};
+const props = defineProps({
+  team1: { type: Object },
+  team2: { type: Object },
+  matchType: { type: String },
+});
 </script>
 
 <template>
-    <div v-if="team1.id" class="m-2 flex flow-row min-w-full">
-        <USTACompTeamLinesStat :team="team1" :matchType="matchType"/>
-        <USTACompTeamLinesStat :team="team2" :matchType="matchType"/>
-    </div>
+  <div v-if="team1.id" class="w-full">
+    <Card>
+      <CardHeader>
+        <CardTitle class="flex items-center">
+          <BarChart2 class="mr-2 h-5 w-5" />
+          Team Lines Comparison
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <USTATeamLinesStat :team="team1" :matchType="matchType" />
+          <USTATeamLinesStat :team="team2" :matchType="matchType" />
+        </div>
+      </CardContent>
+    </Card>
+  </div>
 </template>
-

@@ -1,79 +1,117 @@
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
+import Button from "../ui/button.vue";
+import Badge from "../ui/badge.vue";
 
-export default {
+interface Winner {
+    name?: string;
+    utrId?: string;
+    info?: string;
+    [key: string]: any;
+}
 
-    props: {
-        matches: { type: Array},
-        singlemode: {tpye: String},
-        player: {type: String}
-    },
+interface Loser {
+    name?: string;
+    utrId?: string;
+    info?: string;
+    [key: string]: any;
+}
 
-    data() {
-        return {
-            rootPath: window.location.origin,
-        };
-    },
+interface Match {
+    name?: string;
+    matchDate?: string;
+    type?: string;
+    winnerInfo?: Winner[];
+    loserInfo?: Loser[];
+    matchScore?: string;
+    [key: string]: any;
+}
+
+const props = defineProps({
+    matches: { type: Array as () => Match[], required: true },
+    singlemode: { type: String, required: true },
+    player: { type: String, required: true }
+});
+
+// Helper function to open links in a new tab
+const openInNewTab = (url: string) => {
+    window.open(url, '_blank');
 };
 </script>
 
 <template>
-      <div  v-if="matches.length > 0" class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-        <table class="w-full border-collapse border-spacing-0 border border-slate-100">
-          <thead>
-            <tr>
-                <th class="w-1/3 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Match Name
-                </th>
-                <th class="w-1/9 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Time
-                </th>
-                <th class="w-2/9 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Winner
-                </th>
-                <th class="w-2/9 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Loser
-                </th>
-                <th class="w-1/9 px-3 py-2 bg-slate-700 border-b-2 border-gray-100 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                    Score
-                </th>
-            </tr>
-          </thead>
-          <tbody v-for="(match, index) in matches">
-             <tr v-if="(singlemode == 'all') || (singlemode == match.type)" class="even:bg-slate-50 odd:bg-slate-200">
-                <td class="w-1/3 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                    {{ match.name }}
-                </td>
-                <td class="w-1/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                    {{ match.matchDate }}
-                </td>
-                <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                    <span v-for="winner in match.winnerInfo">
-                       [<a :href="'/utr/player?utr=' + winner.utrId"
-                       v-if="player == winner.name" class="whitespace-no-wrap underline border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-400 font-medium z-10 shadow-lg" >
-                          {{winner.info}}
-                       </a>
-                       <a v-else :href="'/utr/player?utr=' + winner.utrId" class="whitespace-no-wrap underline">
-                           {{winner.info}}
-                      </a>]
-                    </span>
-                </td>
-                <td class="w-2/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                    <span v-for="loser in match.loserInfo">
-                       [<a :href="'/utr/player?utr=' + loser.utrId"
-                       v-if="player == loser.name" class="whitespace-no-wrap underline border-transparent rounded-lg text-center px-1 py-1 mx-auto md:mx-0 my-2 bg-gray-400 font-medium z-10 shadow-lg" >
-                            {{loser.info}}
-                       </a>
-                       <a v-else :href="'/utr/player?utr=' + loser.utrId" class="whitespace-no-wrap underline">
-                           {{loser.info}}
-                      </a>]
-                    </span>
-                </td>
-                <td class="w-1/9 px-3 py-2 whitespace-no-wrap border-b text-blue-700 border-gray-300 text-sm leading-5">
-                    {{ match.matchScore }}
-                </td>
-              </tr>
-          </tbody>
+    <div v-if="matches.length > 0" class="relative overflow-x-auto rounded-md border">
+        <table class="w-full text-sm text-left">
+            <thead class="text-xs uppercase bg-muted">
+                <tr>
+                    <th scope="col" class="px-4 py-3 w-1/4">Match Name</th>
+                    <th scope="col" class="px-4 py-3 w-1/8">Time</th>
+                    <th scope="col" class="px-4 py-3 w-1/4">Winner</th>
+                    <th scope="col" class="px-4 py-3 w-1/4">Loser</th>
+                    <th scope="col" class="px-4 py-3 w-1/8">Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(match, index) in matches" :key="index" 
+                    v-show="(singlemode === 'all') || (singlemode === match.type)"
+                    class="border-b hover:bg-muted/50"
+                >
+                    <td class="px-4 py-3">{{ match.name }}</td>
+                    <td class="px-4 py-3 whitespace-nowrap">{{ match.matchDate }}</td>
+                    <td class="px-4 py-3">
+                        <div class="flex flex-wrap gap-1">
+                            <div v-for="(winner, wIndex) in match.winnerInfo" :key="wIndex" class="inline-flex">
+                                <Button 
+                                    v-if="player === winner.name"
+                                    variant="default" 
+                                    size="sm"
+                                    class="text-xs"
+                                    @click="openInNewTab('/utr/player?utr=' + winner.utrId)"
+                                >
+                                    {{ winner.info }}
+                                </Button>
+                                <Button 
+                                    v-else
+                                    variant="outline" 
+                                    size="sm"
+                                    class="text-xs"
+                                    @click="openInNewTab('/utr/player?utr=' + winner.utrId)"
+                                >
+                                    {{ winner.info }}
+                                </Button>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex flex-wrap gap-1">
+                            <div v-for="(loser, lIndex) in match.loserInfo" :key="lIndex" class="inline-flex">
+                                <Button 
+                                    v-if="player === loser.name"
+                                    variant="secondary" 
+                                    size="sm"
+                                    class="text-xs"
+                                    @click="openInNewTab('/utr/player?utr=' + loser.utrId)"
+                                >
+                                    {{ loser.info }}
+                                </Button>
+                                <Button 
+                                    v-else
+                                    variant="outline" 
+                                    size="sm"
+                                    class="text-xs"
+                                    @click="openInNewTab('/utr/player?utr=' + loser.utrId)"
+                                >
+                                    {{ loser.info }}
+                                </Button>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3 font-medium">{{ match.matchScore }}</td>
+                </tr>
+            </tbody>
         </table>
-      </div>
+    </div>
+    <div v-else class="text-center py-8 text-muted-foreground">
+        No match results found!
+    </div>
 </template>
-
