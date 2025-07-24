@@ -3,6 +3,12 @@ import { ref } from 'vue';
 import axios from "axios";
 import Button from "../ui/button.vue";
 import Badge from "../ui/badge.vue";
+import Table from "../ui/table.vue";
+import TableHeader from "../ui/table-header.vue";
+import TableBody from "../ui/table-body.vue";
+import TableRow from "../ui/table-row.vue";
+import TableHead from "../ui/table-head.vue";
+import TableCell from "../ui/table-cell.vue";
 
 interface Team {
     id?: string | number;
@@ -56,66 +62,64 @@ const openInNewTab = (url: string) => {
 </script>
 
 <template>
-    <div v-if="teams.length > 0" class="relative overflow-x-auto rounded-md border max-w-3xl mx-auto">
-        <table class="w-full text-sm text-left">
-            <thead class="text-xs uppercase bg-muted">
-                <tr>
-                    <th scope="col" class="px-4 py-3">#</th>
-                    <th scope="col" class="px-4 py-3">Name</th>
-                    <th scope="col" class="px-4 py-3">Flight</th>
-                    <th scope="col" class="px-4 py-3">Captain</th>
-                    <th scope="col" class="px-4 py-3">Rating</th>
-                    <th scope="col" class="px-4 py-3">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(team, index) in teams" :key="index" class="border-b hover:bg-muted/50">
-                    <td class="px-4 py-3">{{ index + 1 }}</td>
-                    <td class="px-4 py-3">
-                        <Button 
-                            variant="link" 
-                            class="p-0 h-auto text-primary"
-                            @click="getTeam(team)"
-                        >
-                            <span v-if="team.alias" class="text-muted-foreground">[{{ team.alias }}]</span>
-                            {{ team.name }}
-                        </Button>
-                    </td>
-                    <td class="px-4 py-3">
-                        <Badge variant="outline">
-                            {{ team.areaCode }}-{{ team.flight }}
-                        </Badge>
-                    </td>
-                    <td class="px-4 py-3">
-                        <Button 
-                            v-if="team.captain" 
-                            variant="link" 
-                            class="p-0 h-auto text-primary"
-                            @click="openInNewTab('/usta/player?ustaId=' + team.captain?.ustaNorcalId)"
-                        >
-                            {{ team.captainName }}
-                        </Button>
-                    </td>
-                    <td class="px-4 py-3 font-medium">
-                        {{ team.teamRating?.toFixed(2) }}
-                    </td>
-                    <td class="px-4 py-3">
-                        <Button 
-                            variant="outline" 
-                            size="sm"
-                            @click="openInNewTab(team.tennisRecordLink || '')"
-                            class="flex items-center justify-center"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                            TR Link
-                        </Button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <Table v-if="teams.length > 0" class="max-w-3xl mx-auto">
+        <TableHeader class="text-xs uppercase bg-muted">
+            <TableRow>
+                <TableHead>#</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Flight</TableHead>
+                <TableHead>Captain</TableHead>
+                <TableHead>Rating</TableHead>
+                <TableHead>Actions</TableHead>
+            </TableRow>
+        </TableHeader>
+        <TableBody>
+            <TableRow v-for="(team, index) in teams" :key="index">
+                <TableCell>{{ index + 1 }}</TableCell>
+                <TableCell>
+                    <Button 
+                        variant="link" 
+                        class="p-0 h-auto text-primary"
+                        @click="getTeam(team)"
+                    >
+                        <span v-if="team.alias" class="text-muted-foreground">[{{ team.alias }}]</span>
+                        {{ team.name }}
+                    </Button>
+                </TableCell>
+                <TableCell>
+                    <Badge variant="outline">
+                        {{ team.areaCode }}-{{ team.flight }}
+                    </Badge>
+                </TableCell>
+                <TableCell>
+                    <Button 
+                        v-if="team.captain" 
+                        variant="link" 
+                        class="p-0 h-auto text-primary"
+                        @click="openInNewTab('/usta/player?ustaId=' + team.captain?.ustaNorcalId)"
+                    >
+                        {{ team.captainName }}
+                    </Button>
+                </TableCell>
+                <TableCell class="font-medium">
+                    {{ team.teamRating?.toFixed(2) }}
+                </TableCell>
+                <TableCell>
+                    <Button 
+                        variant="outline" 
+                        size="sm"
+                        @click="openInNewTab(team.tennisRecordLink || '')"
+                        class="flex items-center justify-center"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                        TR Link
+                    </Button>
+                </TableCell>
+            </TableRow>
+        </TableBody>
+    </Table>
     <div v-else class="text-center py-8 text-muted-foreground">
         No teams found!
     </div>

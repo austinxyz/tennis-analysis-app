@@ -7,6 +7,12 @@ import CardHeader from "../ui/card-header.vue";
 import CardTitle from "../ui/card-title.vue";
 import CardContent from "../ui/card-content.vue";
 import Badge from "../ui/badge.vue";
+import Table from "../ui/table.vue";
+import TableHeader from "../ui/table-header.vue";
+import TableBody from "../ui/table-body.vue";
+import TableRow from "../ui/table-row.vue";
+import TableHead from "../ui/table-head.vue";
+import TableCell from "../ui/table-cell.vue";
 
 interface Team {
     id?: string | number;
@@ -103,48 +109,46 @@ const showScores = (scoreData: any[], names: string) => {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <div class="relative overflow-x-auto rounded-md border">
-                            <table class="w-full text-sm text-left">
-                                <thead class="text-xs uppercase bg-muted">
-                                    <tr>
-                                        <th scope="col" class="px-4 py-3 w-1/2">Pair</th>
-                                        <th scope="col" class="px-4 py-3 w-1/6">W/L</th>
-                                        <th scope="col" class="px-4 py-3 w-1/6">Win Matches</th>
-                                        <th scope="col" class="px-4 py-3 w-1/6">Lost Matches</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(pair, pairIndex) in linestat.pairs" :key="`pair-${pairIndex}`" class="border-b hover:bg-muted/50">
-                                        <td class="px-4 py-3 w-1/2">
-                                            <LinePlayerInfo :player1="pair.player1" :player2="pair.player2" matchType="D" />
-                                        </td>
-                                        <td class="px-4 py-3 w-1/6">
-                                            <Badge variant="outline">
-                                                {{ pair.winMatchNo }} / {{ pair.lostMatchNo }}
-                                            </Badge>
-                                        </td>
-                                        <td class="px-4 py-3 w-1/6">
-                                            <button 
-                                                v-if="pair.winMatchNo > 0" 
-                                                class="text-primary hover:underline"
-                                                @click="showScores(pair.winScores, pair.playerNames)"
-                                            >
-                                                Win Matches
-                                            </button>
-                                        </td>
-                                        <td class="px-4 py-3 w-1/6">
-                                            <button 
-                                                v-if="pair.lostMatchNo > 0" 
-                                                class="text-primary hover:underline"
-                                                @click="showScores(pair.lostScores, pair.playerNames)"
-                                            >
-                                                Lost Matches
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <Table>
+                            <TableHeader class="text-xs uppercase bg-muted">
+                                <TableRow>
+                                    <TableHead class="w-1/2">Pair</TableHead>
+                                    <TableHead class="w-1/6">W/L</TableHead>
+                                    <TableHead class="w-1/6">Win Matches</TableHead>
+                                    <TableHead class="w-1/6">Lost Matches</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                <TableRow v-for="(pair, pairIndex) in linestat.pairs" :key="`pair-${pairIndex}`">
+                                    <TableCell class="w-1/2">
+                                        <LinePlayerInfo :player1="pair.player1" :player2="pair.player2" matchType="D" />
+                                    </TableCell>
+                                    <TableCell class="w-1/6">
+                                        <Badge variant="outline">
+                                            {{ pair.winMatchNo }} / {{ pair.lostMatchNo }}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell class="w-1/6">
+                                        <button 
+                                            v-if="pair.winMatchNo > 0" 
+                                            class="text-primary hover:underline"
+                                            @click="showScores(pair.winScores, pair.playerNames)"
+                                        >
+                                            Win Matches
+                                        </button>
+                                    </TableCell>
+                                    <TableCell class="w-1/6">
+                                        <button 
+                                            v-if="pair.lostMatchNo > 0" 
+                                            class="text-primary hover:underline"
+                                            @click="showScores(pair.lostScores, pair.playerNames)"
+                                        >
+                                            Lost Matches
+                                        </button>
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
                     </CardContent>
                 </Card>
             </div>
@@ -167,48 +171,46 @@ const showScores = (scoreData: any[], names: string) => {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <div class="relative overflow-x-auto rounded-md border">
-                            <table class="w-full text-sm text-left">
-                                <thead class="text-xs uppercase bg-muted">
-                                    <tr>
-                                        <th scope="col" class="px-4 py-3 w-1/2">Player</th>
-                                        <th scope="col" class="px-4 py-3 w-1/6">W/L</th>
-                                        <th scope="col" class="px-4 py-3 w-1/6">Win Matches</th>
-                                        <th scope="col" class="px-4 py-3 w-1/6">Lost Matches</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(single, singleIndex) in linestat.singlers" :key="`single-${singleIndex}`" class="border-b hover:bg-muted/50">
-                                        <td class="px-4 py-3 w-1/2">
-                                            <LinePlayerInfo :player1="single.player" matchType="S" />
-                                        </td>
-                                        <td class="px-4 py-3 w-1/6">
-                                            <Badge variant="outline">
-                                                {{ single.winMatchNo }} / {{ single.lostMatchNo }}
-                                            </Badge>
-                                        </td>
-                                        <td class="px-4 py-3 w-1/6">
-                                            <button 
-                                                v-if="single.winMatchNo > 0" 
-                                                class="text-primary hover:underline"
-                                                @click="showScores(single.winScores, single.playerName)"
-                                            >
-                                                Win Matches
-                                            </button>
-                                        </td>
-                                        <td class="px-4 py-3 w-1/6">
-                                            <button 
-                                                v-if="single.lostMatchNo > 0" 
-                                                class="text-primary hover:underline"
-                                                @click="showScores(single.lostScores, single.playerName)"
-                                            >
-                                                Lost Matches
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <Table>
+                            <TableHeader class="text-xs uppercase bg-muted">
+                                <TableRow>
+                                    <TableHead class="w-1/2">Player</TableHead>
+                                    <TableHead class="w-1/6">W/L</TableHead>
+                                    <TableHead class="w-1/6">Win Matches</TableHead>
+                                    <TableHead class="w-1/6">Lost Matches</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                <TableRow v-for="(single, singleIndex) in linestat.singlers" :key="`single-${singleIndex}`">
+                                    <TableCell class="w-1/2">
+                                        <LinePlayerInfo :player1="single.player" matchType="S" />
+                                    </TableCell>
+                                    <TableCell class="w-1/6">
+                                        <Badge variant="outline">
+                                            {{ single.winMatchNo }} / {{ single.lostMatchNo }}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell class="w-1/6">
+                                        <button 
+                                            v-if="single.winMatchNo > 0" 
+                                            class="text-primary hover:underline"
+                                            @click="showScores(single.winScores, single.playerName)"
+                                        >
+                                            Win Matches
+                                        </button>
+                                    </TableCell>
+                                    <TableCell class="w-1/6">
+                                        <button 
+                                            v-if="single.lostMatchNo > 0" 
+                                            class="text-primary hover:underline"
+                                            @click="showScores(single.lostScores, single.playerName)"
+                                        >
+                                            Lost Matches
+                                        </button>
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
                     </CardContent>
                 </Card>
             </div>
@@ -221,24 +223,22 @@ const showScores = (scoreData: any[], names: string) => {
                     <CardTitle class="text-base">{{ playerNames }}'s Matches</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div class="relative overflow-x-auto rounded-md border">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-xs uppercase bg-muted">
-                                <tr>
-                                    <th scope="col" class="px-4 py-3">Match Type</th>
-                                    <th scope="col" class="px-4 py-3">Home Players</th>
-                                    <th scope="col" class="px-4 py-3">Visit Players</th>
-                                    <th scope="col" class="px-4 py-3">Winners Score</th>
-                                    <th scope="col" class="px-4 py-3">Comment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(lineScore, index) in scores" :key="`score-${index}`" class="border-b hover:bg-muted/50">
-                                    <LineScore :lineScore="lineScore" />
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <Table>
+                        <TableHeader class="text-xs uppercase bg-muted">
+                            <TableRow>
+                                <TableHead>Match Type</TableHead>
+                                <TableHead>Home Players</TableHead>
+                                <TableHead>Visit Players</TableHead>
+                                <TableHead>Winners Score</TableHead>
+                                <TableHead>Comment</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow v-for="(lineScore, index) in scores" :key="`score-${index}`">
+                                <LineScore :lineScore="lineScore" />
+                            </TableRow>
+                        </TableBody>
+                    </Table>
                 </CardContent>
             </Card>
         </div>

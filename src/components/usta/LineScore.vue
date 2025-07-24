@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import LinePlayerInfo from "./LinePlayerInfo.vue";
 import LineScoreForm from "./LineScoreForm.vue";
 import LineScoreView from "./LineScoreView.vue";
+import TableCell from "../ui/table-cell.vue";
 
 const props = defineProps({
   lineScore: { type: Object },
@@ -25,29 +26,29 @@ const getBaseURL = () => {
 </script>
 
 <template>
-  <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+  <TableCell>
     {{ lineScore.name }}
-  </td>
-  <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+  </TableCell>
+  <TableCell>
     <LinePlayerInfo 
       :player1="lineScore.homePlayer1" 
       :player2="lineScore.homePlayer2" 
       :winner="lineScore.homeTeamWin" 
       :matchType="lineScore.type" 
     />
-  </td>
-  <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+  </TableCell>
+  <TableCell>
     <LinePlayerInfo 
       :player1="lineScore.guestPlayer1" 
       :player2="lineScore.guestPlayer2" 
       :winner="!lineScore.homeTeamWin" 
       :matchType="lineScore.type" 
     />
-  </td>
-  <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+  </TableCell>
+  <TableCell>
     {{ lineScore.score }}
-  </td>
-  <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+  </TableCell>
+  <TableCell>
     <div class="flex items-center justify-center space-x-2">
       <div v-if="lineScore.comment" class="hover:text-primary transition-colors">
         <LineScoreView :comment="lineScore.comment" />
@@ -61,5 +62,5 @@ const getBaseURL = () => {
         </a>
       </div>
     </div>
-  </td>
+  </TableCell>
 </template>

@@ -7,6 +7,12 @@ import CardHeader from "../ui/card-header.vue";
 import CardTitle from "../ui/card-title.vue";
 import Button from "../ui/button.vue";
 import Badge from "../ui/badge.vue";
+import Table from "../ui/table.vue";
+import TableHeader from "../ui/table-header.vue";
+import TableBody from "../ui/table-body.vue";
+import TableRow from "../ui/table-row.vue";
+import TableHead from "../ui/table-head.vue";
+import TableCell from "../ui/table-cell.vue";
 
 interface Member {
     playerId: string | number;
@@ -320,84 +326,81 @@ const toggleSelectAll = () => {
             <div class="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" aria-label="loading"></div>
         </div>
         
-        <div v-else-if="members.length > 0" class="relative overflow-x-auto rounded-md border">
-            <table class="w-full text-sm text-left">
-                <thead class="text-xs uppercase bg-muted">
-                    <tr>
-                        <th scope="col" class="px-4 py-3">
-                            <input 
-                                type="checkbox" 
-                                class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                                :checked="selectedMembers.length === members.length"
-                                @click="toggleSelectAll"
-                            />
-                        </th>
-                        <th scope="col" class="px-4 py-3">#</th>
-                        <th scope="col" class="px-4 py-3">Team member</th>
-                        <th scope="col" class="px-4 py-3">NTRP</th>
-                        <th scope="col" class="px-4 py-3">W/L</th>
-                        <th scope="col" class="px-4 py-3">DR</th>
-                        <th scope="col" class="px-4 py-3">UTR</th>
-                        <th scope="col" class="px-4 py-3">UTR WPct</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(member, index) in members" :key="member.playerId" 
-                        class="border-b hover:bg-muted/50">
-                        <td class="px-4 py-3">
-                            <input 
-                                type="checkbox" 
-                                class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                                :checked="selectedMembers.some(m => m.playerId === member.playerId)"
-                                @click="toggleMemberSelection(member)"
-                            />
-                        </td>
-                        <td class="px-4 py-3">{{ index+1 }}</td>
-                        <td class="px-4 py-3">
-                            <a v-if="showMode=='parent'" href="#" class="text-primary hover:underline" @click.prevent="setPlayer(member)">
-                                {{ member.name }}
-                            </a>
-                            <a v-else-if="showMode=='jump'" :href="'/usta/player?ustaId=' + member.ustaNorcalId" class="text-primary hover:underline">
-                                {{ member.name }} ({{ member.gender }})
-                            </a>
-                            <span v-else>{{ member.name }} {{ member.gender }}</span>
-                        </td>
-                        <td class="px-4 py-3">{{ member.rating }}</td>
-                        <td class="px-4 py-3">
-                            {{ member.winNo }} / {{ member.lostNo }}
-                            <Badge v-if="member.qualifiedPo" variant="secondary" class="ml-1">Q</Badge>
-                        </td>
-                        <td class="px-4 py-3">{{ member.dynamicRating }}</td>
-                        <td class="px-4 py-3 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <img v-if="member.utrrequriedRefresh" src="/Expired.svg" alt="Expired" class="h-4 w-4 mr-1"/>
-                                <span :class="member.dutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
-                                    {{ member.dutr }}D
-                                </span>
-                                <span class="mx-1">/</span>
-                                <span :class="member.sutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
-                                    {{ member.sutr }}S
-                                </span>
-                                <Button 
-                                    variant="ghost" 
-                                    size="icon" 
-                                    class="ml-1 h-6 w-6 p-0" 
-                                    @click.prevent="openUTREdit(member)"
-                                    title="Edit UTR"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                    </svg>
-                                </Button>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3 whitespace-nowrap">
-                            {{ ((member.successRate || 0) * 100).toFixed(0) }}% / {{ ((member.wholeSuccessRate || 0) * 100).toFixed(0) }}%
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <Table v-else-if="members.length > 0">
+            <TableHeader class="text-xs uppercase bg-muted">
+                <TableRow>
+                    <TableHead>
+                        <input 
+                            type="checkbox" 
+                            class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                            :checked="selectedMembers.length === members.length"
+                            @click="toggleSelectAll"
+                        />
+                    </TableHead>
+                    <TableHead>#</TableHead>
+                    <TableHead>Team member</TableHead>
+                    <TableHead>NTRP</TableHead>
+                    <TableHead>W/L</TableHead>
+                    <TableHead>DR</TableHead>
+                    <TableHead>UTR</TableHead>
+                    <TableHead>UTR WPct</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                <TableRow v-for="(member, index) in members" :key="member.playerId">
+                    <TableCell>
+                        <input 
+                            type="checkbox" 
+                            class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                            :checked="selectedMembers.some(m => m.playerId === member.playerId)"
+                            @click="toggleMemberSelection(member)"
+                        />
+                    </TableCell>
+                    <TableCell>{{ index+1 }}</TableCell>
+                    <TableCell>
+                        <a v-if="showMode=='parent'" href="#" class="text-primary hover:underline" @click.prevent="setPlayer(member)">
+                            {{ member.name }}
+                        </a>
+                        <a v-else-if="showMode=='jump'" :href="'/usta/player?ustaId=' + member.ustaNorcalId" class="text-primary hover:underline">
+                            {{ member.name }} ({{ member.gender }})
+                        </a>
+                        <span v-else>{{ member.name }} {{ member.gender }}</span>
+                    </TableCell>
+                    <TableCell>{{ member.rating }}</TableCell>
+                    <TableCell>
+                        {{ member.winNo }} / {{ member.lostNo }}
+                        <Badge v-if="member.qualifiedPo" variant="secondary" class="ml-1">Q</Badge>
+                    </TableCell>
+                    <TableCell>{{ member.dynamicRating }}</TableCell>
+                    <TableCell class="whitespace-nowrap">
+                        <div class="flex items-center">
+                            <img v-if="member.utrrequriedRefresh" src="/Expired.svg" alt="Expired" class="h-4 w-4 mr-1"/>
+                            <span :class="member.dutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                                {{ member.dutr }}D
+                            </span>
+                            <span class="mx-1">/</span>
+                            <span :class="member.sutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                                {{ member.sutr }}S
+                            </span>
+                            <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                class="ml-1 h-6 w-6 p-0" 
+                                @click.prevent="openUTREdit(member)"
+                                title="Edit UTR"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                            </Button>
+                        </div>
+                    </TableCell>
+                    <TableCell class="whitespace-nowrap">
+                        {{ ((member.successRate || 0) * 100).toFixed(0) }}% / {{ ((member.wholeSuccessRate || 0) * 100).toFixed(0) }}%
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
         
         <div v-else class="text-center py-8 text-muted-foreground">
             No members found!

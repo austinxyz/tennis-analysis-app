@@ -4,6 +4,12 @@ import axios from "axios";
 import MatchScore from "./MatchScore.vue";
 import Button from "../ui/button.vue";
 import Badge from "../ui/badge.vue";
+import Table from "../ui/table.vue";
+import TableHeader from "../ui/table-header.vue";
+import TableBody from "../ui/table-body.vue";
+import TableRow from "../ui/table-row.vue";
+import TableHead from "../ui/table-head.vue";
+import TableCell from "../ui/table-cell.vue";
 
 interface Team {
     id?: string | number;
@@ -117,84 +123,82 @@ const showScoreDetail = (matchData: Match) => {
             <div class="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" aria-label="loading"></div>
         </div>
         
-        <div class="relative overflow-x-auto rounded-md border">
-            <table class="w-full text-sm text-left">
-                <thead class="text-xs uppercase bg-muted">
-                    <tr>
-                        <th scope="col" class="px-4 py-3">#</th>
-                        <th scope="col" class="px-4 py-3">Match Date</th>
-                        <th scope="col" class="px-4 py-3">Opposite Team</th>
-                        <th scope="col" class="px-4 py-3">Home/Away</th>
-                        <th scope="col" class="px-4 py-3">
-                            <div class="flex items-center space-x-2">
-                                <span>Score</span>
-                                <Button 
-                                    variant="ghost" 
-                                    size="icon" 
-                                    class="h-6 w-6" 
-                                    title="Refresh Score"
-                                    @click="refreshScores(team)"
-                                >
-                                    <img src="/updates-30.png" width="16" height="16" alt="Refresh Score" />
-                                </Button>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-4 py-3">Compare</th>
-                    </tr>
-                </thead>
-                <tbody v-if="matches.length > 0">
-                    <tr v-for="(match, index) in matches" :key="index" class="border-b hover:bg-muted/50">
-                        <td class="px-4 py-3">{{ index+1 }}</td>
-                        <td class="px-4 py-3">{{ match.matchDate }}</td>
-                        <td class="px-4 py-3">
+        <Table>
+            <TableHeader class="text-xs uppercase bg-muted">
+                <TableRow>
+                    <TableHead>#</TableHead>
+                    <TableHead>Match Date</TableHead>
+                    <TableHead>Opposite Team</TableHead>
+                    <TableHead>Home/Away</TableHead>
+                    <TableHead>
+                        <div class="flex items-center space-x-2">
+                            <span>Score</span>
                             <Button 
-                                variant="link" 
-                                class="p-0 h-auto text-primary"
-                                @click="changeTeam(match.homeTeamId === team.id ? match.guestTeamId! : match.homeTeamId!)"
+                                variant="ghost" 
+                                size="icon" 
+                                class="h-6 w-6" 
+                                title="Refresh Score"
+                                @click="refreshScores(team)"
                             >
-                                {{ match.homeTeamId === team.id ? match.guestTeamName : match.homeTeamName }}
+                                <img src="/updates-30.png" width="16" height="16" alt="Refresh Score" />
                             </Button>
-                        </td>
-                        <td class="px-4 py-3">
-                            <Badge :variant="match.homeTeamId === team.id ? 'default' : 'secondary'">
-                                {{ match.homeTeamId === team.id ? 'Home' : 'Away' }}
-                            </Badge>
-                        </td>
-                        <td class="px-4 py-3">
-                            <Button 
-                                v-if="match.lines && match.lines.length > 0" 
-                                variant="link" 
-                                class="p-0 h-auto text-primary"
-                                @click="showScoreDetail(match)"
-                                href="#score_anchor"
-                            >
-                                {{ match.homeTeamId === team.id ? 
-                                    `${match.homePoint} - ${match.guestPoint}` : 
-                                    `${match.guestPoint} - ${match.homePoint}` 
-                                }}
-                            </Button>
-                            <span v-else class="text-muted-foreground">-</span>
-                        </td>
-                        <td class="px-4 py-3">
-                            <a 
-                                :href="'/usta/teamanalysis?team1=' + match.homeTeamId + '&team2=' + match.guestTeamId" 
-                                class="text-primary hover:underline" 
-                                target="_blank"
-                            >
-                                Analysis
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-                <tbody v-else>
-                    <tr>
-                        <td colspan="6" class="px-4 py-6 text-center text-muted-foreground">
-                            No matches found
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                        </div>
+                    </TableHead>
+                    <TableHead>Compare</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody v-if="matches.length > 0">
+                <TableRow v-for="(match, index) in matches" :key="index">
+                    <TableCell>{{ index+1 }}</TableCell>
+                    <TableCell>{{ match.matchDate }}</TableCell>
+                    <TableCell>
+                        <Button 
+                            variant="link" 
+                            class="p-0 h-auto text-primary"
+                            @click="changeTeam(match.homeTeamId === team.id ? match.guestTeamId! : match.homeTeamId!)"
+                        >
+                            {{ match.homeTeamId === team.id ? match.guestTeamName : match.homeTeamName }}
+                        </Button>
+                    </TableCell>
+                    <TableCell>
+                        <Badge :variant="match.homeTeamId === team.id ? 'default' : 'secondary'">
+                            {{ match.homeTeamId === team.id ? 'Home' : 'Away' }}
+                        </Badge>
+                    </TableCell>
+                    <TableCell>
+                        <Button 
+                            v-if="match.lines && match.lines.length > 0" 
+                            variant="link" 
+                            class="p-0 h-auto text-primary"
+                            @click="showScoreDetail(match)"
+                            href="#score_anchor"
+                        >
+                            {{ match.homeTeamId === team.id ? 
+                                `${match.homePoint} - ${match.guestPoint}` : 
+                                `${match.guestPoint} - ${match.homePoint}` 
+                            }}
+                        </Button>
+                        <span v-else class="text-muted-foreground">-</span>
+                    </TableCell>
+                    <TableCell>
+                        <a 
+                            :href="'/usta/teamanalysis?team1=' + match.homeTeamId + '&team2=' + match.guestTeamId" 
+                            class="text-primary hover:underline" 
+                            target="_blank"
+                        >
+                            Analysis
+                        </a>
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+            <TableBody v-else>
+                <TableRow>
+                    <TableCell colspan="6" class="text-center py-6 text-muted-foreground">
+                        No matches found
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
         
         <div id="score_anchor" class="mt-6">
             <MatchScore :match="match" @change="refreshScoreCard" />

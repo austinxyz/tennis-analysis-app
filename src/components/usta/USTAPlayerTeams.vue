@@ -2,6 +2,12 @@
 import { ref } from 'vue';
 import Button from "../ui/button.vue";
 import Badge from "../ui/badge.vue";
+import Table from "../ui/table.vue";
+import TableHeader from "../ui/table-header.vue";
+import TableBody from "../ui/table-body.vue";
+import TableRow from "../ui/table-row.vue";
+import TableHead from "../ui/table-head.vue";
+import TableCell from "../ui/table-cell.vue";
 
 interface TeamMember {
     teamId?: string | number;
@@ -27,41 +33,39 @@ const openInNewTab = (url: string) => {
 </script>
 
 <template>
-    <div v-if="teammembers.length > 0" class="relative overflow-x-auto rounded-md border">
-        <table class="w-full text-sm text-left">
-            <thead class="text-xs uppercase bg-muted">
-                <tr>
-                    <th scope="col" class="px-4 py-3">#</th>
-                    <th scope="col" class="px-4 py-3">Division Name</th>
-                    <th scope="col" class="px-4 py-3">Flight Name</th>
-                    <th scope="col" class="px-4 py-3">Team Name</th>
-                    <th scope="col" class="px-4 py-3">W/L</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(member, index) in teammembers" :key="index" class="border-b hover:bg-muted/50">
-                    <td class="px-4 py-3">{{ index + 1 }}</td>
-                    <td class="px-4 py-3">{{ member.divisionName }}</td>
-                    <td class="px-4 py-3">{{ member.flightName }}</td>
-                    <td class="px-4 py-3">
-                        <Button 
-                            variant="link" 
-                            class="p-0 h-auto text-primary"
-                            @click="openInNewTab('/usta/team?teamId=' + member.teamId)"
-                        >
-                            <span v-if="member.teamAlias" class="text-muted-foreground">[{{ member.teamAlias }}]</span>
-                            {{ member.teamName }}
-                        </Button>
-                    </td>
-                    <td class="px-4 py-3">
-                        <Badge variant="outline">
-                            {{ member.winNo }} / {{ member.lostNo }}
-                        </Badge>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <Table v-if="teammembers.length > 0">
+        <TableHeader class="text-xs uppercase bg-muted">
+            <TableRow>
+                <TableHead>#</TableHead>
+                <TableHead>Division Name</TableHead>
+                <TableHead>Flight Name</TableHead>
+                <TableHead>Team Name</TableHead>
+                <TableHead>W/L</TableHead>
+            </TableRow>
+        </TableHeader>
+        <TableBody>
+            <TableRow v-for="(member, index) in teammembers" :key="index">
+                <TableCell>{{ index + 1 }}</TableCell>
+                <TableCell>{{ member.divisionName }}</TableCell>
+                <TableCell>{{ member.flightName }}</TableCell>
+                <TableCell>
+                    <Button 
+                        variant="link" 
+                        class="p-0 h-auto text-primary"
+                        @click="openInNewTab('/usta/team?teamId=' + member.teamId)"
+                    >
+                        <span v-if="member.teamAlias" class="text-muted-foreground">[{{ member.teamAlias }}]</span>
+                        {{ member.teamName }}
+                    </Button>
+                </TableCell>
+                <TableCell>
+                    <Badge variant="outline">
+                        {{ member.winNo }} / {{ member.lostNo }}
+                    </Badge>
+                </TableCell>
+            </TableRow>
+        </TableBody>
+    </Table>
     <div v-else class="text-center py-8 text-muted-foreground">
         No team memberships found!
     </div>

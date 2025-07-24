@@ -2,6 +2,7 @@
 import LinePlayerInfo from "./LinePlayerInfo.vue";
 import LineScoreView from "./LineScoreView.vue";
 import Button from "../ui/button.vue";
+import Badge from "../ui/badge.vue";
 
 interface Score {
     matchDate?: string;

@@ -1,50 +1,105 @@
-<script>
+<script setup lang="ts">
+import Card from "../ui/card.vue";
+import CardHeader from "../ui/card-header.vue";
+import CardTitle from "../ui/card-title.vue";
+import CardContent from "../ui/card-content.vue";
+import Badge from "../ui/badge.vue";
 
-export default {
-
-    props: {
-        player1: { type: Object},
-        player2: { type: Object},
-    },
-
+interface Player {
+    name: string;
+    sUTR: number;
+    dUTR: number;
+    sUTRStatus: string;
+    dUTRStatus: string;
+    [key: string]: any;
 }
+
+defineProps<{
+    player1: Player;
+    player2: Player;
+}>();
 </script>
 
 <template>
-    <div class="flex flex-col md:flex-row md:transform md:scale-75 lg:scale-100 ">
-        <div class="border-transparent rounded-lg text-center p-5 mx-auto md:mx-0 my-2 bg-gray-100 font-medium z-10 shadow-lg">
-           <div class="font-bold text-2xl"> Player 1 {{ player1.name }} </div>
-           <hr />
-           <div class="text-sm my-3 flex flex-row">
-                <div>
-                    <img v-if="player1.sUTR > player2.sUTR" src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
+    <div class="flex flex-col md:flex-row gap-6">
+        <!-- Player 1 Card -->
+        <Card class="w-full md:w-1/2">
+            <CardHeader class="bg-background">
+                <CardTitle>{{ player1.name }}</CardTitle>
+            </CardHeader>
+            <CardContent class="pt-6">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium">Single UTR:</span>
+                        <div class="flex items-center">
+                            <img 
+                                v-if="player1.sUTR > player2.sUTR" 
+                                src="/cert.svg" 
+                                alt="Win" 
+                                class="h-5 w-5 mr-2"
+                            />
+                            <Badge variant="outline" :class="player1.sUTRStatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                                {{ player1.sUTR }} ({{ player1.sUTRStatus }})
+                            </Badge>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium">Double UTR:</span>
+                        <div class="flex items-center">
+                            <img 
+                                v-if="player1.dUTR > player2.dUTR" 
+                                src="/cert.svg" 
+                                alt="Win" 
+                                class="h-5 w-5 mr-2"
+                            />
+                            <Badge variant="outline" :class="player1.dUTRStatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                                {{ player1.dUTR }} ({{ player1.dUTRStatus }})
+                            </Badge>
+                        </div>
+                    </div>
                 </div>
-           Single UTR : {{player1.sUTR}} ({{ player1.sUTRStatus}})</div>
-           <hr />
-           <div class="text-sm my-3 flex flex-row">
-                <div>
-                    <img v-if="player1.dUTR > player2.dUTR" src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
+            </CardContent>
+        </Card>
+        
+        <!-- Player 2 Card -->
+        <Card class="w-full md:w-1/2">
+            <CardHeader class="bg-muted">
+                <CardTitle>{{ player2.name }}</CardTitle>
+            </CardHeader>
+            <CardContent class="pt-6 bg-muted">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium">Single UTR:</span>
+                        <div class="flex items-center">
+                            <img 
+                                v-if="player2.sUTR > player1.sUTR" 
+                                src="/cert.svg" 
+                                alt="Win" 
+                                class="h-5 w-5 mr-2"
+                            />
+                            <Badge variant="outline" :class="player2.sUTRStatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                                {{ player2.sUTR }} ({{ player2.sUTRStatus }})
+                            </Badge>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium">Double UTR:</span>
+                        <div class="flex items-center">
+                            <img 
+                                v-if="player2.dUTR > player1.dUTR" 
+                                src="/cert.svg" 
+                                alt="Win" 
+                                class="h-5 w-5 mr-2"
+                            />
+                            <Badge variant="outline" :class="player2.dUTRStatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                                {{ player2.dUTR }} ({{ player2.dUTRStatus }})
+                            </Badge>
+                        </div>
+                    </div>
                 </div>
-           Double UTR : {{player1.dUTR}} ({{ player1.dUTRStatus}})</div>
-           <hr />
-         </div>
-         <div class="border-transparent rounded-lg text-center p-5 mx-auto md:mx-0 my-2 bg-gray-700 text-white font-medium z-10 shadow-lg">
-           <div class="font-bold text-2xl"> Player 2 {{ player2.name }} </div>
-           <hr />
-           <div class="text-sm my-3 flex flex-row">
-                <div>
-                    <img v-if="player2.sUTR > player1.sUTR " src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
-                </div>
-           Single UTR : {{player2.sUTR}} ({{ player2.sUTRStatus}})</div>
-              <hr />
-              <div class="text-sm my-3 flex flex-row">
-                <div>
-                    <img v-if="player2.dUTR > player1.dUTR " src="/cert.svg" alt="Win" class="h-8 w-10 pr-2"/>
-                </div>
-           Double UTR : {{player2.dUTR}} ({{ player2.dUTRStatus}})</div>
-              <hr />
-         </div>
+            </CardContent>
+        </Card>
     </div>
-
 </template>
-

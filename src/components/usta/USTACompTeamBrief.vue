@@ -6,6 +6,12 @@ import Card from '../ui/card.vue';
 import CardHeader from '../ui/card-header.vue';
 import CardTitle from '../ui/card-title.vue';
 import CardContent from '../ui/card-content.vue';
+import Table from "../ui/table.vue";
+import TableHeader from "../ui/table-header.vue";
+import TableBody from "../ui/table-body.vue";
+import TableRow from "../ui/table-row.vue";
+import TableHead from "../ui/table-head.vue";
+import TableCell from "../ui/table-cell.vue";
 
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
@@ -163,125 +169,121 @@ const teamRefresh = (team) => {
               <div class="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" aria-label="loading"></div>
             </div>
             
-            <div v-else-if="team.players.length > 0" class="relative rounded-md border mb-8">
-              <table class="w-full text-sm text-left table-fixed">
-                <thead class="text-xs uppercase bg-muted">
-                  <tr>
-                    <th scope="col" class="px-4 py-4 w-[5%]">#</th>
-                    <th scope="col" class="px-4 py-4 w-[25%]">Player</th>
-                    <th scope="col" class="px-4 py-4 w-[8%]">NTRP</th>
-                    <th scope="col" class="px-4 py-4 w-[8%]">DR</th>
-                    <th scope="col" class="px-4 py-4 w-[8%]">W/L</th>
-                    <th scope="col" class="px-4 py-4 w-[18%]">UTR</th>
-                    <th scope="col" class="px-4 py-4 w-[13%]">UTR WPct</th>
-                    <th scope="col" class="px-4 py-4 w-[15%]">Lineup</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(player, index) in team.players" :key="index" class="border-b hover:bg-muted/50">
-                    <td class="px-4 py-4">{{ index+1 }}</td>
-                    <td class="px-4 py-4">
-                      <div class="flex items-center">
-                        <a :href="'/usta/player?ustaId=' + player.ustaNorcalId" class="text-primary hover:underline">
-                          {{ player.name }} ({{ player.gender }})
-                        </a>
-                        <div v-if="player.summary" class="ml-2 transform hover:text-purple-500 hover:scale-110">
-                          <USTAPlayerSummary :summary="player.summary" />
-                        </div>
+            <Table v-else-if="team.players.length > 0" class="mb-8">
+              <TableHeader class="text-xs uppercase bg-muted">
+                <TableRow>
+                  <TableHead class="w-[5%]">#</TableHead>
+                  <TableHead class="w-[25%]">Player</TableHead>
+                  <TableHead class="w-[8%]">NTRP</TableHead>
+                  <TableHead class="w-[8%]">DR</TableHead>
+                  <TableHead class="w-[8%]">W/L</TableHead>
+                  <TableHead class="w-[18%]">UTR</TableHead>
+                  <TableHead class="w-[13%]">UTR WPct</TableHead>
+                  <TableHead class="w-[15%]">Lineup</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow v-for="(player, index) in team.players" :key="index">
+                  <TableCell>{{ index+1 }}</TableCell>
+                  <TableCell>
+                    <div class="flex items-center">
+                      <a :href="'/usta/player?ustaId=' + player.ustaNorcalId" class="text-primary hover:underline">
+                        {{ player.name }} ({{ player.gender }})
+                      </a>
+                      <div v-if="player.summary" class="ml-2 transform hover:text-purple-500 hover:scale-110">
+                        <USTAPlayerSummary :summary="player.summary" />
                       </div>
-                    </td>
-                    <td class="px-4 py-4">{{ player.ustaRating }}</td>
-                    <td class="px-4 py-4">{{ player.dynamicRating }}</td>
-                    <td class="px-4 py-4">{{ player.winNo }}/{{ player.lostNo }}</td>
-                    <td class="px-4 py-4">
-                      <div class="flex items-center">
-                        <span :class="player.dutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
-                          {{ player.dutr }}D
+                    </div>
+                  </TableCell>
+                  <TableCell>{{ player.ustaRating }}</TableCell>
+                  <TableCell>{{ player.dynamicRating }}</TableCell>
+                  <TableCell>{{ player.winNo }}/{{ player.lostNo }}</TableCell>
+                  <TableCell>
+                    <div class="flex items-center">
+                      <span :class="player.dutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                        {{ player.dutr }}D
+                      </span>
+                      <span class="mx-1">/</span>
+                      <span :class="player.sutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                        {{ player.sutr }}S
+                      </span>
+                      <span v-if="!player.refreshedUTR && player.utrId!=null" class="ml-2">
+                        <a href="#" class="text-primary hover:underline text-xs" @click="refreshUTR(player)">
+                          Refresh
+                        </a>
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {{ (player.successRate * 100).toFixed(0) }}% / {{ (player.wholeSuccessRate * 100).toFixed(0) }}%
+                  </TableCell>
+                  <TableCell>
+                    <select v-model="selectPlayers[index]" @change="setLineup"
+                      class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-sm">
+                      <option value="d1">D1</option>
+                      <option value="d2">D2</option>
+                      <option value="d3">D3</option>
+                      <option v-if="props.matchType == '40+Adult'" value="s1">S1</option>
+                      <option v-if="props.matchType == '18+Adult'" value="s1">S1</option>
+                      <option v-if="props.matchType == '18+Adult'" value="s2">S2</option>
+                      <option value="None">None</option>
+                    </select>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+
+            <Table class="mt-8">
+              <TableHeader class="text-xs uppercase bg-muted">
+                <TableRow>
+                  <TableHead class="w-[10%]">Line</TableHead>
+                  <TableHead class="w-[35%]">Player 1</TableHead>
+                  <TableHead class="w-[35%]">Player 2</TableHead>
+                  <TableHead class="w-[20%]">Total UTR</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow v-for="lineup in lineups" :key="lineup.name">
+                  <TableCell class="font-medium">{{ lineup.name }}</TableCell>
+                  <TableCell>
+                    <span v-if="lineup.player1.id">
+                      {{ lineup.player1.name }}
+                      <div class="flex items-center text-xs mt-2">
+                        <span :class="lineup.player1.dutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                          {{ lineup.player1.dutr }}D
                         </span>
                         <span class="mx-1">/</span>
-                        <span :class="player.sutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
-                          {{ player.sutr }}S
-                        </span>
-                        <span v-if="!player.refreshedUTR && player.utrId!=null" class="ml-2">
-                          <a href="#" class="text-primary hover:underline text-xs" @click="refreshUTR(player)">
-                            Refresh
-                          </a>
+                        <span :class="lineup.player1.sutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                          {{ lineup.player1.sutr }}S
                         </span>
                       </div>
-                    </td>
-                    <td class="px-4 py-4">
-                      {{ (player.successRate * 100).toFixed(0) }}% / {{ (player.wholeSuccessRate * 100).toFixed(0) }}%
-                    </td>
-                    <td class="px-4 py-4">
-                      <select v-model="selectPlayers[index]" @change="setLineup"
-                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-sm">
-                        <option value="d1">D1</option>
-                        <option value="d2">D2</option>
-                        <option value="d3">D3</option>
-                        <option v-if="props.matchType == '40+Adult'" value="s1">S1</option>
-                        <option v-if="props.matchType == '18+Adult'" value="s1">S1</option>
-                        <option v-if="props.matchType == '18+Adult'" value="s2">S2</option>
-                        <option value="None">None</option>
-                      </select>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="relative rounded-md border mt-8">
-              <table class="w-full text-sm text-left table-fixed">
-                <thead class="text-xs uppercase bg-muted">
-                  <tr>
-                    <th scope="col" class="px-4 py-4 w-[10%]">Line</th>
-                    <th scope="col" class="px-4 py-4 w-[35%]">Player 1</th>
-                    <th scope="col" class="px-4 py-4 w-[35%]">Player 2</th>
-                    <th scope="col" class="px-4 py-4 w-[20%]">Total UTR</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="lineup in lineups" :key="lineup.name" class="border-b hover:bg-muted/50">
-                    <td class="px-4 py-4 font-medium">{{ lineup.name }}</td>
-                    <td class="px-4 py-4">
-                      <span v-if="lineup.player1.id">
-                        {{ lineup.player1.name }}
-                        <div class="flex items-center text-xs mt-2">
-                          <span :class="lineup.player1.dutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
-                            {{ lineup.player1.dutr }}D
-                          </span>
-                          <span class="mx-1">/</span>
-                          <span :class="lineup.player1.sutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
-                            {{ lineup.player1.sutr }}S
-                          </span>
-                        </div>
-                      </span>
-                    </td>
-                    <td class="px-4 py-4">
-                      <span v-if="lineup.player2.id">
-                        {{ lineup.player2.name }}
-                        <div class="flex items-center text-xs mt-2">
-                          <span :class="lineup.player2.dutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
-                            {{ lineup.player2.dutr }}D
-                          </span>
-                          <span class="mx-1">/</span>
-                          <span :class="lineup.player2.sutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
-                            {{ lineup.player2.sutr }}S
-                          </span>
-                        </div>
-                      </span>
-                    </td>
-                    <td class="px-4 py-4">
-                      <span v-if="lineup.player2.id" class="font-medium">
-                        {{ (lineup.player2.dutr + lineup.player1.dutr).toFixed(2) }}
-                      </span>
-                      <span v-else-if="props.matchType == '40+Adult' && lineup.player1.id" class="font-medium">
-                        {{ lineup.player1.sutr }}
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span v-if="lineup.player2.id">
+                      {{ lineup.player2.name }}
+                      <div class="flex items-center text-xs mt-2">
+                        <span :class="lineup.player2.dutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                          {{ lineup.player2.dutr }}D
+                        </span>
+                        <span class="mx-1">/</span>
+                        <span :class="lineup.player2.sutrstatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                          {{ lineup.player2.sutr }}S
+                        </span>
+                      </div>
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span v-if="lineup.player2.id" class="font-medium">
+                      {{ (lineup.player2.dutr + lineup.player1.dutr).toFixed(2) }}
+                    </span>
+                    <span v-else-if="props.matchType == '40+Adult' && lineup.player1.id" class="font-medium">
+                      {{ lineup.player1.sutr }}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>

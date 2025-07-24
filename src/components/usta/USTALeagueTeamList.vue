@@ -3,6 +3,12 @@ import { ref } from 'vue';
 import axios from "axios";
 import Button from "../ui/button.vue";
 import Badge from "../ui/badge.vue";
+import Table from "../ui/table.vue";
+import TableHeader from "../ui/table-header.vue";
+import TableBody from "../ui/table-body.vue";
+import TableRow from "../ui/table-row.vue";
+import TableHead from "../ui/table-head.vue";
+import TableCell from "../ui/table-cell.vue";
 
 interface Team {
     id?: number;
@@ -68,59 +74,57 @@ const importTeam = async (team: Team) => {
             <div class="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" aria-label="loading"></div>
         </div>
         
-        <div v-else-if="teams.length > 0" class="relative overflow-x-auto rounded-md border">
-            <table class="w-full text-sm text-left">
-                <thead class="text-xs uppercase bg-muted">
-                    <tr>
-                        <th scope="col" class="px-4 py-3">#</th>
-                        <th scope="col" class="px-4 py-3">Name</th>
-                        <th scope="col" class="px-4 py-3">Area</th>
-                        <th scope="col" class="px-4 py-3">Captain</th>
-                        <th scope="col" class="px-4 py-3">USTA Link</th>
-                        <th scope="col" class="px-4 py-3">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(team, index) in teams" :key="index" class="border-b hover:bg-muted/50">
-                        <td class="px-4 py-3">{{ index+1 }}</td>
-                        <td class="px-4 py-3">
-                            <a v-if="team.id && team.id > 0" :href="'/usta/team?teamId=' + team.id" class="text-primary hover:underline" target="_blank">
-                                {{ team.name }}
-                            </a>
-                            <span v-else>{{ team.name }}</span>
-                        </td>
-                        <td class="px-4 py-3">
-                            <a v-if="team.flightLink" :href="team.flightLink" class="text-primary hover:underline" target="_blank">
-                                {{ team.area }}
-                            </a>
-                            <span v-else>{{ team.area }}</span>
-                        </td>
-                        <td class="px-4 py-3">{{ team.captainName }}</td>
-                        <td class="px-4 py-3">
-                            <a :href="team.link" class="text-primary hover:underline" target="_blank">
-                                USTA Link
-                            </a>
-                        </td>
-                        <td class="px-4 py-3">
-                            <Badge v-if="team.inDB" variant="success" class="flex items-center w-fit">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                                Imported
-                            </Badge>
-                            <Button 
-                                v-else-if="division.inDB" 
-                                variant="default" 
-                                size="sm"
-                                @click="importTeam(team)"
-                            >
-                                Import
-                            </Button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <Table v-else-if="teams.length > 0">
+            <TableHeader class="text-xs uppercase bg-muted">
+                <TableRow>
+                    <TableHead>#</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Area</TableHead>
+                    <TableHead>Captain</TableHead>
+                    <TableHead>USTA Link</TableHead>
+                    <TableHead>Status</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                <TableRow v-for="(team, index) in teams" :key="index">
+                    <TableCell>{{ index+1 }}</TableCell>
+                    <TableCell>
+                        <a v-if="team.id && team.id > 0" :href="'/usta/team?teamId=' + team.id" class="text-primary hover:underline" target="_blank">
+                            {{ team.name }}
+                        </a>
+                        <span v-else>{{ team.name }}</span>
+                    </TableCell>
+                    <TableCell>
+                        <a v-if="team.flightLink" :href="team.flightLink" class="text-primary hover:underline" target="_blank">
+                            {{ team.area }}
+                        </a>
+                        <span v-else>{{ team.area }}</span>
+                    </TableCell>
+                    <TableCell>{{ team.captainName }}</TableCell>
+                    <TableCell>
+                        <a :href="team.link" class="text-primary hover:underline" target="_blank">
+                            USTA Link
+                        </a>
+                    </TableCell>
+                    <TableCell>
+                        <Badge v-if="team.inDB" variant="success" class="flex items-center w-fit">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Imported
+                        </Badge>
+                        <Button 
+                            v-else-if="division.inDB" 
+                            variant="default" 
+                            size="sm"
+                            @click="importTeam(team)"
+                        >
+                            Import
+                        </Button>
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
         
         <div v-else class="text-center py-8 text-muted-foreground border rounded-md bg-muted/10">
             No teams found for this division.

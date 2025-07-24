@@ -1,75 +1,99 @@
-<script>
-
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import axios from "axios";
 import Division from "./Division.vue";
+import Card from "../ui/card.vue";
+import CardHeader from "../ui/card-header.vue";
+import CardTitle from "../ui/card-title.vue";
+import CardContent from "../ui/card-content.vue";
+import Button from "../ui/button.vue";
 
-export default {
-
-    mounted() {
-
-        let eventId = this.$route.query.event;
-
-        if (eventId == null) {
-            eventId = "123233";
-        }
-
-        this.eventId = eventId;
-
-        axios.get("http://localhost:8080/event/" + eventId)
-            .then(response => {
-                this.event = response.data;
-                this.team = this.event.divisions[0];
-            })
-
-    },
-
-    methods: {
-        selectTeam(team) {
-            this.team = team;
-        },
-    },
-
-    data() {
-  	    return {
-	        event: {},
-	        eventId: '',
-	        team: {},
-  	    }
-    },
-
-    components: {
-        Division,
-    }
+interface Team {
+    name: string;
+    displayName?: string;
+    players: any[];
+    [key: string]: any;
 }
+
+interface Event {
+    name: string;
+    divisions: Team[];
+    [key: string]: any;
+}
+
+const route = useRoute();
+const event = ref<Event>({} as Event);
+const eventId = ref('');
+const team = ref<Team>({} as Team);
+const loading = ref(false);
+
+const selectTeam = (selectedTeam: Team) => {
+    team.value = selectedTeam;
+};
+
+onMounted(() => {
+    let id = route.query.event as string;
+    
+    if (!id) {
+        id = "123233"; // Default event ID
+    }
+    
+    eventId.value = id;
+    loading.value = true;
+    
+    axios.get("http://localhost:8080/event/" + id)
+        .then(response => {
+            event.value = response.data;
+            if (event.value.divisions && event.value.divisions.length > 0) {
+                team.value = event.value.divisions[0];
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching event:", error);
+        })
+        .finally(() => {
+            loading.value = false;
+        });
+});
 </script>
 
 <template>
-    <div class="flex flex-row min-h-screen w-full bg-gray-100 text-gray-700" x-data="layout">
-        <div class="bg-white shadow-dashboard px-2 py-2 rounded-lg m-2">
-            <span class="flex w-60 font-medium text-sm bg-slate-700 text-blue-500 text-center"> {{ event.name}} </span>
-            <nav class="flex flex-col bg-slate-700 w-60 px-2 py-2 text-gray-900 border border-purple-900">
-                <ul class="ml-1">
-                  <li v-for="team in event.divisions" class="mb-1 px-0 py-2 text-gray-100 flex flex-row  border-gray-300 hover:text-black   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
-                    <span>
-                       <svg class="fill-current h-5 w-5 " viewBox="0 0 24 24">
-                       <path
-                           d="M16 20h4v-4h-4m0-2h4v-4h-4m-6-2h4V4h-4m6
-                                        4h4V4h-4m-6 10h4v-4h-4m-6 4h4v-4H4m0 10h4v-4H4m6
-                                        4h4v-4h-4M4 8h4V4H4v4z"
-                           ></path>
-                       </svg>
-                    </span>
-                    <a href="#" @click="selectTeam(team)">
-                        <span class="ml-1" v-if="team.displayName">{{ team.displayName }}</span>
-                        <span class="ml-1" v-else>{{ team.name }}</span>
-                    </a>
-                  </li>
-              </ul>
-            </nav>
+    <div class="flex flex-col md:flex-row gap-6">
+        <div v-if="loading" class="flex justify-center py-4 w-full">
+            <div class="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" aria-label="loading"></div>
         </div>
-        <div v-if="team" class="m-2 flex flow-row">
-            <Division :team="team" />
+        
+        <div v-else class="flex flex-col md:flex-row gap-6 w-full">
+            <!-- Event Card -->
+            <Card class="w-full md:w-96">
+                <CardHeader>
+                    <CardTitle>{{ event.name || 'Event' }}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div class="space-y-1">
+                        <h3 class="text-sm font-medium">Teams</h3>
+                        <ul class="space-y-1">
+                            <li v-for="(divTeam, index) in event.divisions" :key="index">
+                                <Button 
+                                    variant="ghost" 
+                                    class="w-full justify-start text-left h-auto py-1.5"
+                                    @click="selectTeam(divTeam)"
+                                >
+                                    <span class="truncate">
+                                        {{ divTeam.displayName || divTeam.name }}
+                                    </span>
+                                </Button>
+                            </li>
+                        </ul>
+                    </div>
+                </CardContent>
+            </Card>
+            
+            <!-- Team Details -->
+            <div v-if="team.name" class="flex-1">
+                <Division :team="team" />
+            </div>
         </div>
     </div>
 </template>
-

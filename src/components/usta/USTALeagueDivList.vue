@@ -3,6 +3,12 @@ import { ref } from 'vue';
 import axios from "axios";
 import Button from "../ui/button.vue";
 import Badge from "../ui/badge.vue";
+import Table from "../ui/table.vue";
+import TableHeader from "../ui/table-header.vue";
+import TableBody from "../ui/table-body.vue";
+import TableRow from "../ui/table-row.vue";
+import TableHead from "../ui/table-head.vue";
+import TableCell from "../ui/table-cell.vue";
 
 interface Division {
     id?: number;
@@ -135,51 +141,49 @@ const importDivision = async (div: Division) => {
             <div class="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" aria-label="loading"></div>
         </div>
         
-        <div v-else-if="divisions.length > 0" class="relative overflow-x-auto rounded-md border mb-6">
-            <table class="w-full text-sm text-left">
-                <thead class="text-xs uppercase bg-muted">
-                    <tr>
-                        <th scope="col" class="px-4 py-3">#</th>
-                        <th scope="col" class="px-4 py-3">Name</th>
-                        <th scope="col" class="px-4 py-3">USTA Link</th>
-                        <th scope="col" class="px-4 py-3">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(division, index) in divisions" :key="index" class="border-b hover:bg-muted/50">
-                        <td class="px-4 py-3">{{ index+1 }}</td>
-                        <td class="px-4 py-3">
-                            <button @click="getDivision(division)" class="text-primary hover:underline">
-                                {{ division.name }}
-                            </button>
-                        </td>
-                        <td class="px-4 py-3">
-                            <a :href="division.link" target="_blank" class="text-primary hover:underline">
-                                USTA Link
-                            </a>
-                        </td>
-                        <td class="px-4 py-3">
-                            <Button 
-                                v-if="!division.inDB" 
-                                variant="default" 
-                                size="sm"
-                                @click="importDivision(division)"
-                            >
-                                Import
-                            </Button>
-                            <Button 
-                                v-else 
-                                variant="outline" 
-                                size="sm"
-                                @click="getFlights(division)"
-                            >
-                                View Flights
-                            </Button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <Table v-else-if="divisions.length > 0" class="mb-6">
+            <TableHeader class="text-xs uppercase bg-muted">
+                <TableRow>
+                    <TableHead>#</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>USTA Link</TableHead>
+                    <TableHead>Status</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                <TableRow v-for="(division, index) in divisions" :key="index">
+                    <TableCell>{{ index+1 }}</TableCell>
+                    <TableCell>
+                        <button @click="getDivision(division)" class="text-primary hover:underline">
+                            {{ division.name }}
+                        </button>
+                    </TableCell>
+                    <TableCell>
+                        <a :href="division.link" target="_blank" class="text-primary hover:underline">
+                            USTA Link
+                        </a>
+                    </TableCell>
+                    <TableCell>
+                        <Button 
+                            v-if="!division.inDB" 
+                            variant="default" 
+                            size="sm"
+                            @click="importDivision(division)"
+                        >
+                            Import
+                        </Button>
+                        <Button 
+                            v-else 
+                            variant="outline" 
+                            size="sm"
+                            @click="getFlights(division)"
+                        >
+                            View Flights
+                        </Button>
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
         
         <div v-else class="text-center py-8 text-muted-foreground border rounded-md bg-muted/10 mb-6">
             No divisions found for this league.
@@ -188,42 +192,40 @@ const importDivision = async (div: Division) => {
         <div v-if="division && division.name">
             <h3 class="text-lg font-semibold mb-4">{{ division.name }} - Flights</h3>
             
-            <div v-if="flights.length > 0" class="relative overflow-x-auto rounded-md border">
-                <table class="w-full text-sm text-left">
-                    <thead class="text-xs uppercase bg-muted">
-                        <tr>
-                            <th scope="col" class="px-4 py-3">#</th>
-                            <th scope="col" class="px-4 py-3">Name</th>
-                            <th scope="col" class="px-4 py-3">USTA Link</th>
-                            <th scope="col" class="px-4 py-3">Import Teams</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(flight, index) in flights" :key="index" class="border-b hover:bg-muted/50">
-                            <td class="px-4 py-3">{{ index+1 }}</td>
-                            <td class="px-4 py-3">
-                                {{ flight.area }} - {{ flight.flightNo }}
-                            </td>
-                            <td class="px-4 py-3">
-                                <a :href="flight.link" target="_blank" class="text-primary hover:underline">
-                                    USTA Link
-                                </a>
-                            </td>
-                            <td class="px-4 py-3">
-                                <Button 
-                                    v-if="flight.link" 
-                                    variant="default" 
-                                    size="sm"
-                                    @click="importTeams(flight)"
-                                >
-                                    Import Teams
-                                </Button>
-                                <span v-else class="text-muted-foreground">N/A</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <Table v-if="flights.length > 0">
+                <TableHeader class="text-xs uppercase bg-muted">
+                    <TableRow>
+                        <TableHead>#</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>USTA Link</TableHead>
+                        <TableHead>Import Teams</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    <TableRow v-for="(flight, index) in flights" :key="index">
+                        <TableCell>{{ index+1 }}</TableCell>
+                        <TableCell>
+                            {{ flight.area }} - {{ flight.flightNo }}
+                        </TableCell>
+                        <TableCell>
+                            <a :href="flight.link" target="_blank" class="text-primary hover:underline">
+                                USTA Link
+                            </a>
+                        </TableCell>
+                        <TableCell>
+                            <Button 
+                                v-if="flight.link" 
+                                variant="default" 
+                                size="sm"
+                                @click="importTeams(flight)"
+                            >
+                                Import Teams
+                            </Button>
+                            <span v-else class="text-muted-foreground">N/A</span>
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
             
             <div v-else-if="division.name" class="text-center py-8 text-muted-foreground border rounded-md bg-muted/10">
                 No flights found for this division.

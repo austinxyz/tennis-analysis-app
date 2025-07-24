@@ -1,77 +1,72 @@
-<script>
-
+<script setup>
+import { ref, onMounted } from 'vue';
 import axios from "axios";
 import USTACandidateTeam from "./USTACandidateTeam.vue";
 import 'vue-select/dist/vue-select.css';
+import Table from "../ui/table.vue";
+import TableHeader from "../ui/table-header.vue";
+import TableBody from "../ui/table-body.vue";
+import TableRow from "../ui/table-row.vue";
+import TableHead from "../ui/table-head.vue";
+import TableCell from "../ui/table-cell.vue";
+import Button from "../ui/button.vue";
+
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
 
-export default {
+const leagues = ref([]);
+const league = ref({});
+const divisions = ref([]);
+const division = ref({});
+const candidateTeams = ref([]);
+const candidateTeam = ref({});
+const loading = ref(false);
 
-    async mounted() {
+onMounted(async () => {
+    var url = "http://localhost:8080/usta/open/leagues";
+    const response = await axios.get(url);
+    leagues.value = response.data;
+    leagues.value.map(function (x){
+        return x.label = x.name;
+    });
+    divisions.value = [];
+    candidateTeams.value = [];
+});
 
-        var url = "http://localhost:8080/usta/open/leagues";
-        const response = await axios.get(url);
-        this.leagues = response.data;
-        this.leagues.map(function (x){
-           return x.label = x.name;
-        });
-        this.divisions=[];
-        this.candidateTeams = [];
-    },
-
-    methods: {
-
-        getBaseURL() {
-            if (process.env.NODE_ENV === 'production') {
-                return BASE_URL_PROD;
-            } else {
-                return BASE_URL;
-            }
-        },
-
-        async selectLeague(league) {
-            var url = "http://localhost:8080/usta/leagues/" + league.id + "/divisions";
-            const response = await axios.get(url);
-            this.divisions = response.data;
-            this.divisions.map(function (x){
-               return x.label = x.name;
-            });
-            this.candidateTeams=[];
-            this.candidateTeam={};
-        },
-
-        async selectDiv(div) {
-            this.loading = true;
-            var url = "http://localhost:8080/usta/divisions/" + div.id + "/candidateTeams";
-            const response = await axios.get(url);
-            this.candidateTeams = response.data;
-            this.candidateTeams.map(function (x){
-               return x.label = x.name;
-            });
-            this.candidateTeam=this.candidateTeams[0];
-            this.loading = false;
-        },
-
-        getTeam(candidateTeam) {
-            this.candidateTeam = candidateTeam;
-        },
-    },
-    data() {
-  	    return {
-            leagues:[],
-            league: {},
-  	        divisions: [],
-  	        division: {},
-  	        candidateTeams: [],
-  	        candidateTeam: {},
-  	        loading: false,
-  	    }
-    },
-    components: {
-        USTACandidateTeam,
+const getBaseURL = () => {
+    if (process.env.NODE_ENV === 'production') {
+        return BASE_URL_PROD;
+    } else {
+        return BASE_URL;
     }
-}
+};
+
+const selectLeague = async (selectedLeague) => {
+    var url = "http://localhost:8080/usta/leagues/" + selectedLeague.id + "/divisions";
+    const response = await axios.get(url);
+    divisions.value = response.data;
+    divisions.value.map(function (x){
+        return x.label = x.name;
+    });
+    candidateTeams.value = [];
+    candidateTeam.value = {};
+};
+
+const selectDiv = async (div) => {
+    loading.value = true;
+    var url = "http://localhost:8080/usta/divisions/" + div.id + "/candidateTeams";
+    const response = await axios.get(url);
+    candidateTeams.value = response.data;
+    candidateTeams.value.map(function (x){
+        return x.label = x.name;
+    });
+    candidateTeam.value = candidateTeams.value[0];
+    loading.value = false;
+};
+
+const getTeam = (team) => {
+    candidateTeam.value = team;
+};
 </script>
 
 <template>
@@ -108,37 +103,29 @@ export default {
             <label class="block text-gray-700 font-bold mb-2 px-2 ">
                 Team
             </label>
-            <table v-if="candidateTeams.length >0" class="min-w-full border-collapse border-spacing-0 border border-slate-400">
-                <thead>
-                    <tr>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            #
-                        </th>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            Name
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(candidateTeam, index) in candidateTeams" class="even:bg-slate-50 odd:bg-slate-400">
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            {{ index+1 }}
-                        </td>
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            <a href="#" class="underline" @click="getTeam(candidateTeam)">
-                                {{candidateTeam.name}}
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <Table v-if="candidateTeams.length > 0" class="border">
+                <TableHeader class="bg-muted">
+                    <TableRow>
+                        <TableHead>#</TableHead>
+                        <TableHead>Name</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    <TableRow v-for="(team, index) in candidateTeams" :key="index" class="even:bg-muted/10">
+                        <TableCell>{{ index+1 }}</TableCell>
+                        <TableCell>
+                            <Button variant="link" class="p-0 h-auto" @click="getTeam(team)">
+                                {{ team.name }}
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
 
         </div>
 
-        <div v-if="loading" class="px-5 py-5">
-            <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
-              <span class="sr-only">Loading...</span>
-            </div>
+        <div v-if="loading" class="flex justify-center py-4">
+            <div class="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" aria-label="loading"></div>
         </div>
         <div class="m-2 flex flow-row">
             <USTACandidateTeam v-model:candidateTeam="candidateTeam"/>
@@ -147,4 +134,3 @@ export default {
     </div>
 
 </template>
-

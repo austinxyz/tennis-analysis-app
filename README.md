@@ -123,13 +123,25 @@ The application uses **shadcn/ui** components, which are beautifully designed co
 - **Dark Mode Support**: Seamless light/dark mode switching
 - **Responsive Design**: Works on all screen sizes
 
-Key components used include:
-- Cards for content organization
-- Buttons with various styles and states
-- Form elements like selects and inputs
-- Navigation components
-- Tables for data display
-- Badges for status indicators
+### Key Components
+
+- **Cards**: For organized content presentation with headers, titles, and content sections
+- **Tables**: Enhanced data display with sortable columns, pagination, and responsive layouts
+  - TableHeader, TableBody, TableRow, TableHead, and TableCell components for structured data presentation
+  - Consistent styling across all table-based views
+- **Buttons**: Various styles (primary, secondary, outline, ghost) and states
+- **Form Elements**: Selects, inputs, and other interactive controls
+- **Navigation**: Sidebar navigation with active state indicators
+- **Badges**: Status indicators with different variants (default, outline, success)
+- **Loading Spinners**: Consistent loading indicators throughout the application
+
+### Recent UI Improvements
+
+- **Expanded Card Widths**: Increased space for club, division, team, and player lists for better information display
+- **Standardized Tables**: Converted all tables to use shadcn components for consistent styling
+- **Improved Player Information Layout**: Optimized player data display with inline UTR ratings
+- **Responsive Design Enhancements**: Better layout on various screen sizes
+- **Consistent Loading States**: Unified loading spinner design across all components
 
 ---
 
@@ -147,3 +159,52 @@ git clone https://github.com/austinxyz/tennis-analysis-app.git
 cd tennis-analysis-app
 npm install
 npm run dev
+```
+
+The application will be available at `http://localhost:5173` (or the port specified by Vite).
+
+### Building for Production
+
+```bash
+npm run build
+```
+
+This will generate optimized production files in the `dist` directory.
+
+---
+
+## 📱 Responsive Design
+
+The application is fully responsive and works seamlessly across:
+
+- **Desktop**: Full-featured experience with expanded views
+- **Tablet**: Optimized layouts for medium-sized screens
+- **Mobile**: Condensed views with touch-friendly controls
+
+Key responsive features include:
+- Flexible card layouts that adapt to screen width
+- Tables that remain readable on smaller screens
+- Navigation that collapses appropriately on mobile devices
+- Touch-optimized controls for mobile users
+
+---
+
+## 🔄 Recent Updates
+
+- **UI Enhancement**: Implemented shadcn table components across all USTA-related pages
+- **Layout Improvements**: Expanded space for club, division, team, and player lists
+- **Player Information**: Optimized player data display with inline UTR ratings
+- **Performance Optimization**: Improved loading times for data-heavy pages
+- **Responsive Design**: Enhanced mobile and tablet experiences
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+## 👥 Contributors
+
+- Austin Xu - Project Lead & Developer

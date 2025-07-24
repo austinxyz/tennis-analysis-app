@@ -1,113 +1,125 @@
-<script>
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import axios from "axios";
 import PlayerResult from "./PlayerResult.vue";
+import Card from "../ui/card.vue";
+import CardHeader from "../ui/card-header.vue";
+import CardTitle from "../ui/card-title.vue";
+import CardContent from "../ui/card-content.vue";
+import Button from "../ui/button.vue";
+import Badge from "../ui/badge.vue";
+import Table from "../ui/table.vue";
+import TableHeader from "../ui/table-header.vue";
+import TableBody from "../ui/table-body.vue";
+import TableRow from "../ui/table-row.vue";
+import TableHead from "../ui/table-head.vue";
+import TableCell from "../ui/table-cell.vue";
+
+interface Player {
+    id: string;
+    name: string;
+    gender: string;
+    sUTR: number;
+    dUTR: number;
+    sUTRStatus: string;
+    dUTRStatus: string;
+    [key: string]: any;
+}
+
+interface Team {
+    name: string;
+    players: Player[];
+    [key: string]: any;
+}
+
+const props = defineProps<{
+    team: Team;
+}>();
 
 const BASE_URL = 'http://localhost:8080';
 const BASE_URL_PROD = 'http://localhost:8080';
 
-export default {
+const player = ref<Record<string, any>>({});
+const playerName = ref('');
+const loading = ref(false);
 
-    props: {
-        team: {type: Object}
-    },
-
-    methods: {
-
-        async setPlayerResult(playerId, playerName) {
-            this.loading = true;
-            this.playerName = playerName;
-
-            var url = this.getBaseURL() + "/playerresult/?id=" + playerId;
-            const response = await axios.get(url);
-
-            this.player = response.data;
-            this.loading = false;
-        },
-
-        getBaseURL() {
-            if (process.env.NODE_ENV === 'production') {
-                return BASE_URL_PROD;
-            } else {
-                return BASE_URL;
-            }
-
-        },
-    },
-
-    data() {
-        return {
-            player: {},
-            playerName: '',
-            loading: false,
-        }
-    },
-
-    mounted() {
-        this.player={};
-        this.playerName="";
-    },
-
-    components: {
-        PlayerResult
+const getBaseURL = () => {
+    if (process.env.NODE_ENV === 'production') {
+        return BASE_URL_PROD;
+    } else {
+        return BASE_URL;
     }
-}
+};
+
+const setPlayerResult = async (playerId: string, name: string) => {
+    loading.value = true;
+    playerName.value = name;
+
+    const url = getBaseURL() + "/playerresult/?id=" + playerId;
+    try {
+        const response = await axios.get(url);
+        player.value = response.data;
+    } catch(error) {
+        console.error("Error fetching player result:", error);
+    } finally {
+        loading.value = false;
+    }
+};
+
+onMounted(() => {
+    player.value = {};
+    playerName.value = "";
+});
 </script>
 
 <template>
-        <div class="flex flow-row">
-              <div class="w-50  min-w-max  align-middle inline-block shadow overflow-hidden bg-white shadow-dashboard px-2 py-2 rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg shadow-lg">
-                <table  class="border-collapse border-spacing-0 border border-slate-400">
-                  <thead>
-                    <tr>
-                        <th colspan="2" class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            {{ team.name }}
-                        </th>
-                    </tr>
-                    <tr>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            #
-                        </th>
-                        <th class="px-3 py-2 bg-slate-700 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">
-                            Player
-                        </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                     <tr v-for="(player, index) in team.players" class="even:bg-slate-50 odd:bg-slate-400">
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            {{ index+1 }}
-                        </td>
-                        <td class="px-3 py-2 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            <a href="#" class="underline" @click="setPlayerResult(player.id, player.name)">
-                            {{ player.name }}
-                            </a>
-                            {{ player.gender }}
-                            <span v-if="player.sUTRStatus === 'Rated'" class="font-semibold" >
-                                {{ player.sUTR }} (S)
-                            </span>
-                            <span v-else class="font-light" >
-                                {{ player.sUTR }} (S)
-                            </span>  /
-                            <span v-if="player.dUTRStatus === 'Rated'" class="font-semibold" >
-                                {{ player.dUTR }} (D)
-                            </span>
-                            <span v-else class="font-light" >
-                                {{ player.dUTR }} (D)
-                            </span>
-                        </td>
-                      </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div v-if="loading" class="px-5 py-5">
-                <div class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
-                  <span class="sr-only">Loading...</span>
-                </div>
-              </div>
-              <div v-else>
-                  <PlayerResult :result="player" :player="playerName"/>
-              </div>
+    <div class="flex flex-col md:flex-row gap-6">
+        <Card class="w-full md:w-[32rem]">
+            <CardHeader>
+                <CardTitle>{{ team.name }}</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <Table>
+                    <TableHeader class="text-xs uppercase bg-muted">
+                        <TableRow>
+                            <TableHead class="w-1/6">#</TableHead>
+                            <TableHead>Player</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow v-for="(teamPlayer, index) in team.players" :key="index">
+                            <TableCell>{{ index+1 }}</TableCell>
+                            <TableCell>
+                                <div class="flex items-center gap-2">
+                                    <Button 
+                                        variant="link" 
+                                        class="p-0 h-auto text-primary"
+                                        @click="setPlayerResult(teamPlayer.id, teamPlayer.name)"
+                                    >
+                                        {{ teamPlayer.name }}
+                                    </Button>
+                                    <span>{{ teamPlayer.gender }}</span>
+                                    <Badge variant="outline" :class="teamPlayer.sUTRStatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                                        {{ teamPlayer.sUTR }} (S)
+                                    </Badge>
+                                    <Badge variant="outline" :class="teamPlayer.dUTRStatus === 'Rated' ? 'font-semibold' : 'text-muted-foreground'">
+                                        {{ teamPlayer.dUTR }} (D)
+                                    </Badge>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+        
+        <div class="flex-1">
+            <div v-if="loading" class="flex justify-center py-4">
+                <div class="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" aria-label="loading"></div>
+            </div>
+            <div v-else-if="Object.keys(player).length > 0" class="w-full">
+                <PlayerResult :result="player" :player="playerName"/>
+            </div>
         </div>
-
+    </div>
 </template>
-
