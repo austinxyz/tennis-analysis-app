@@ -5,6 +5,7 @@ A web application for advanced analysis of **UTR** and **USTA** players and matc
 Built with the **Vue.js framework** and **Tailwind CSS** for high performance and scalability.
 
 ---
+(Latest - create a new branch with shadcn UI - https://github.com/austinxyz/tennis-analysis-app/tree/feature-shadcn)
 
 ## ✨ Features
 
